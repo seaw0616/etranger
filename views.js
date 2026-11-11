@@ -282,7 +282,7 @@
     if (id === 'net') return say(p[1] === 'files' && WHO[p[2]] ? WHO[p[2]] : SAY[p[1]]);
   };
   var TERM = { help: 'ls  whoami  cat 파일  eggs  clear', ls: 'roster.txt  orders.txt  toutou.jpg', whoami: function () { return user.id; }, eggs: function () { return '달성한 업적 ' + Object.keys(eggs).length + ' / ' + ACH.length; }, 'cat roster.txt': 'PHANTOM DARLING CHASE HYDE — 전원 기록 말소', 'cat orders.txt': '권한 없음.', 'cat toutou.jpg': function () { show(); egg('cat', '투투 발견'); return '샴 짬타이거 투투.'; }, sebby: function () { egg('sebby', '건드리면 안 되는 이름'); return '거기까지 해라.'; }, sudo: '이 부대는 없는 부대.' };
-  function show() { setTimeout(function () { var o = $('#tout'); if (!o) return; var i = new Image(); i.src = '../assets/toutou.png'; i.alt = '투투'; i.className = 'tcat'; o.appendChild(i); }, 0); }
+  function show() { setTimeout(function () { var o = $('#tout'); if (!o) return; var i = new Image(); i.src = 'assets/toutou.png'; i.alt = '투투'; i.className = 'tcat'; o.appendChild(i); }, 0); }
   window.__sayA = function (k) { setTimeout(function () { say(SAYA[k]); }, 60); };
 
   document.addEventListener('submit', function (e) {
