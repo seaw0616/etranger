@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net data:; img-src 'self' data:; media-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>ÉTRANGER : FRONTLINE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquareNeo@1.0/nanumsquareneo.css" rel="stylesheet">
+<link rel="icon" href="favicon.svg?v=105" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png?v=105" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon.ico?v=105" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=105">
+<link rel="stylesheet" href="style.css?v=105">
+</head>
+<body>
+<div id="bgx" aria-hidden="true"></div>
+<div id="boot">
+  <pre id="term"></pre>
+  <aside id="side"><pre id="conn"></pre><div id="bars"></div></aside>
+  <div id="granted" hidden><b>ACCESS GRANTED</b><button id="enter">접속</button></div>
+</div>
+<div id="app" hidden>
+  <header class="top">
+    <a class="logo" href="#home" translate="no">ÉTRANGER<span> : FRONTLINE</span></a>
+    <div class="player">
+      <button id="pp" aria-label="재생과 일시정지">
+        <svg class="ipa" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1" width="3" height="10"/><rect x="7" y="1" width="3" height="10"/></svg>
+        <svg class="ipl" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg>
+      </button>
+      <div class="pm"><button id="song" aria-expanded="false" aria-controls="lyrics" translate="no">FRONTLINE</button><div class="bar"><i id="prog"></i></div></div>
+      <span id="tc">0:00</span>
+      <div class="vol"><button id="vb" aria-label="음소거"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path class="vs" d="M1 4h2.5L7 1v10L3.5 8H1z"/><path class="vw" d="M9.5 3.5a3.2 3.2 0 0 1 0 5"/><path class="vx" d="M10 4l4 4M14 4l-4 4"/></svg></button><input id="vl" type="range" min="0" max="1" step="0.01" aria-label="음량"></div>
+      <button id="lyb">가사</button>
+    </div>
+    <nav class="menu">
+      <a href="#net/notice">공지</a><a href="#camp">캠프 <span translate="no">SIMOUN</span></a><a href="#net">사내망</a><a href="#me">내 정보</a><a href="#ach">업적</a><a href="#net" id="auth">로그인</a>
+    </nav>
+  </header>
+  <main id="view"></main>
+  <div id="lyrics" hidden></div>
+  <div id="radio" aria-live="off"><div class="rl"><em id="rx">CH.03 대기</em><b id="rn" translate="no"></b><span id="rt"></span></div><canvas id="wf" aria-hidden="true"></canvas></div>
+  <div class="mq" aria-hidden="true"><span id="mqi"></span></div>
+</div>
+<div id="wipe" aria-hidden="true"><i></i></div>
+<audio id="bgm" src="../assets/frontline.mp3" preload="auto" loop></audio>
+<canvas id="tr" aria-hidden="true"></canvas>
+<div id="cur" aria-hidden="true"><div class="cs"><svg viewBox="0 0 64 64">
+  <g class="rg"><g class="rg2">
+    <circle class="r1" cx="32" cy="32" r="17"/>
+    <path class="tk" d="M32 11v4M32 49v4M11 32h4M49 32h4M17.2 17.2l2 2M44.8 44.8l2 2M46.8 17.2l-2 2M17.2 46.8l2-2"/>
+    <path class="ar" d="M20 21.5a17 17 0 0 1 9-4.3M44 42.5a17 17 0 0 1-9 4.3"/>
+    <circle class="mil" cx="32" cy="24" r=".9"/><circle class="mil" cx="32" cy="40" r=".9"/><circle class="mil" cx="24" cy="32" r=".9"/><circle class="mil" cx="40" cy="32" r=".9"/>
+  </g></g>
+  <g class="ch">
+    <path class="po" d="M32 4v14M32 46v14M4 32h14M46 32h14"/>
+    <path class="ha" d="M32 18v10M32 36v10M18 32h10M36 32h10"/>
+  </g>
+  <circle class="ce" cx="32" cy="32" r="1.3"/>
+  <path class="br" d="M20 26v-6h6M38 20h6v6M44 38v6h-6M26 44h-6v-6"/>
+</svg><i></i></div></div>
+<script src="data.js?v=105"></script>
+<script src="timing.js?v=105"></script>
+<script src="app.js?v=105"></script>
+<script src="lock.js?v=105"></script><script src="views.js?v=105"></script>
+</body>
+</html>
