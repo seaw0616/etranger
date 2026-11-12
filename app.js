@@ -21,7 +21,7 @@
   function logl() { var r = Math.random(); if (r < .28) return '<i class="ok">root@comms03</i>:<i class="t">~</i># ' + CMD[Math.floor(Math.random() * CMD.length)]; var l = LOG[Math.floor(Math.random() * LOG.length)]; return '<i class="' + l[0] + '">[' + (l[1] + '    ').slice(0, 4) + ']</i> ' + l[2]; }
   function code(n) { for (var i = 0; i < n; i++) { var r = Math.random(); bln.push(r < .18 ? hexl() : r < .44 ? logl() : hl(CODE[ci++ % CODE.length])); } var m = Math.floor((innerHeight - 40) / 22); if (bln.length > m) bln = bln.slice(-m); term.innerHTML = bln.join('\n'); }
   function panel(p) {
-    $('#conn').innerHTML = ['PNE-INTRANET', row('릴레이', 'COMMS-03'), row('지점', 'CAMP SIMOUN'), row('채널', 'MEUTE'), row('추적', Math.min(99, Math.floor(p * 99)) + '%'), '', row('PHANTOM', p > .3 ? '말소' : '검색 중'), row('DARLING', p > .5 ? '말소' : '검색 중'), row('CHASE', p > .7 ? '말소' : '검색 중'), row('HYDE', p > .9 ? '말소' : '검색 중')].join('\n').replace(/말소/g, '<i class="er">말소</i>').replace(/검색 중/g, '<i class="wa">검색 중</i>').replace('PNE-INTRANET', '<i class="ok">PNE-INTRANET</i>');
+    $('#conn').innerHTML = ['PNE-INTRADEF', row('릴레이', 'COMMS-03'), row('지점', 'CAMP SIMOUN'), row('채널', 'MEUTE'), row('추적', Math.min(99, Math.floor(p * 99)) + '%'), '', row('PHANTOM', p > .3 ? '말소' : '검색 중'), row('DARLING', p > .5 ? '말소' : '검색 중'), row('CHASE', p > .7 ? '말소' : '검색 중'), row('HYDE', p > .9 ? '말소' : '검색 중')].join('\n').replace(/말소/g, '<i class="er">말소</i>').replace(/검색 중/g, '<i class="wa">검색 중</i>').replace('PNE-INTRADEF', '<i class="ok">PNE-INTRADEF</i>');
     $('#bars').innerHTML = STEP.map(function (s, i) { var v = Math.max(0, Math.min(1, p * 4 - i)); return '<div><span>' + s + '</span><i style="width:' + v * 100 + '%"></i></div>'; }).join('');
   }
   function bootStep() {
@@ -58,23 +58,31 @@
   // ---------- 무전 한 줄 ----------
   // 장면마다 몇 줄씩 이어서 말하고, 장면 사이에는 오래 조용하다. 다 쓰면 멈춘다
   var SC = [
-    [['PHANTOM', '선두 진입. 모래 밑에 탄피.'], ['DARLING', '탄피? 어제 내 파스타보다 적네.'], ['CHASE', 'x9#Lq 2v@Rk T0!mZ', '퇴로 하나 비었다. 왜 비었는지 알아?'], ['HYDE', 'Fz0k Yy3p Rc Mn4', '알아. 재밌잖아.'], ['PHANTOM', '입 닫고 따라와.']],
-    [['CHASE', '보급 트럭 안 온다. 사흘째.'], ['DARLING', '내 초콜릿은?'], ['PHANTOM', '그런 거 애초에 없었다.'], ['DARLING', '있었어. 네가 먹었잖아.'], ['PHANTOM', '증거 있나.']],
-    [['PHANTOM', '서쪽에 모래 벽. 20분 뒤 도착.'], ['HYDE', '잘됐네. 소리가 안 들리겠어.'], ['CHASE', '뭘 하려고.'], ['HYDE', '아무것도.']],
+    [['PHANTOM', '여기 팬텀. 선두 진입. 모래 밑에 탄피.'], ['DARLING', '탄피? 어제 내 파스타보다 적네.'], ['CHASE', 'x9#Lq 2v@Rk T0!mZ', '퇴로 하나 비었다. 왜 비었는지 알아?'], ['HYDE', 'Fz0k Yy3p Rc Mn4', '알아. 재밌잖아.'], ['PHANTOM', '입 닫고 따라와.']],
+    [['CHASE', '여기 체이스. 보급 트럭 안 온다. 사흘째.'], ['DARLING', '내 초콜릿은?'], ['PHANTOM', '그런 거 애초에 없었다.'], ['DARLING', '있었어. 네가 먹었잖아.'], ['PHANTOM', '증거 있나.']],
+    [['PHANTOM', '여기 팬텀. 서쪽에서 모래폭풍 온다. 20분 뒤.'], ['HYDE', '잘됐네. 소리가 안 들리겠어.'], ['CHASE', '뭘 하려고.'], ['HYDE', '아무것도.']],
     [['DARLING', '투투가 내 군화에 쥐를 넣었어.'], ['CHASE', '선물이야.'], ['HYDE', '내 쪽엔 안 오던데.'], ['PHANTOM', '고양이도 사람을 가린다.']],
-    [['CHASE', '초소 이상 없음. 별이 많다.'], ['DARLING', '시 쓰냐?'], ['CHASE', '보고서 쓴다.'], ['DARLING', '누구한테?'], ['CHASE', 'k2#Vn Qe8!p Lo', '받을 사람 없어.']],
+    [['CHASE', '여기 체이스. 초소 이상 없음. 별이 많다.'], ['DARLING', '시 쓰냐?'], ['CHASE', '보고서 쓴다.'], ['DARLING', '누구한테?'], ['CHASE', 'k2#Vn Qe8!p Lo', '받을 사람 없어.']],
     [['DARLING', '오늘 파스타 남았다. 먹을 사람?'], ['HYDE', '면이 왜 반이야.'], ['DARLING', '네가 부러뜨렸잖아!'], ['HYDE', '그래야 냄비에 들어가지.']],
     [['DARLING', '문 하나 여는 데 폭약 얼마나 쓰지?'], ['PHANTOM', '손잡이로 열어.'], ['DARLING', '재미없게.'], ['PHANTOM', '방금 그 소리 뭐냐.'], ['DARLING', '문 열렸어!']],
     [['HYDE', '포로가 말을 안 해.'], ['CHASE', '언제부터.'], ['HYDE', '30분 전부터. 못 하게 됐거든.'], ['CHASE', '내가 의무 담당인 거 알지.']],
     [['CHASE', '진통제 세 알 남았다.'], ['PHANTOM', '나는 됐다.'], ['CHASE', '너 갈비뼈 금 갔어.'], ['PHANTOM', '원래 그랬다.']],
     [['CHASE', '체스 둘 사람?'], ['DARLING', '저번에 보드카 걸고 속였잖아.'], ['CHASE', '내가? 나는 진 사람인데.'], ['HYDE', '거짓말 잘하네.']],
-    [['PHANTOM', '지휘소에서 또 정찰 지시.'], ['CHASE', '퇴로는?'], ['PHANTOM', '없다.'], ['HYDE', '평소대로네.']],
-    [['HYDE', 'Tr9x Bq2! mW', '누가 내 짐을 뒤졌어.'], ['DARLING', '나 아니야.'], ['CHASE', '나도.'], ['PHANTOM', '입 닫아. 채널 열려 있다.']],
-    [['DARLING', '시장에 담배 왔대!'], ['PHANTOM', '해 지면 닫는다.'], ['DARLING', '지금 몇 시야?'], ['CHASE', '해 졌어.']],
+    [['PHANTOM', '전원, 여기 팬텀. 지휘소에서 또 정찰 지시.'], ['CHASE', '확인. 퇴로는?'], ['PHANTOM', '없다.'], ['HYDE', '평소대로네.']],
+    [['HYDE', 'Tr9x Bq2! mW', '여기 하이드. 누가 내 짐을 뒤졌어.'], ['DARLING', '나 아니야.'], ['CHASE', '나도 아니야.'], ['PHANTOM', '입 닫아. 채널 열려 있다.']],
+    [['DARLING', '시장에 담배 들어왔다!'], ['PHANTOM', '해 지면 닫는다.'], ['DARLING', '지금 몇 시야?'], ['CHASE', '해 졌어.']],
     [['DARLING', '다들 집에 가면 뭐 할 거야?'], ['HYDE', '집?'], ['PHANTOM', '그런 거 없다.'], ['DARLING', '분위기 참 좋네.']],
-    [['PHANTOM', '물 배급 또 줄었다.'], ['DARLING', '하이드, 네 몫 나 줘.'], ['HYDE', '줄게. 대신 뭐 줄래?'], ['DARLING', '됐어. 그냥 말라 죽을래.']],
+    [['PHANTOM', '여기 팬텀. 물 배급 또 줄었다.'], ['DARLING', '하이드, 네 몫 나 줘.'], ['HYDE', '줄게. 대신 뭐 줄래?'], ['DARLING', '됐어. 그냥 말라 죽을래.']],
     [['CHASE', '신입 왔다며.'], ['DARLING', '얼굴 봤어?'], ['HYDE', '금방 없어지겠네.'], ['PHANTOM', '건드리지 마.']],
-    [['PHANTOM', '오늘 교신 끝.'], ['DARLING', '잘 자, 유령들.'], ['HYDE', '내일 봐. 있으면.'], ['PHANTOM', '채널 닫는다.']]
+    [['CHASE', 'Kx4q ?ZeR0 m7 vV', '관리자 서랍 이름, 넷이 나눠 가졌어.'], ['CHASE', 'Mb2# lsN0 p!9', '메일함 확인해. ls로는 안 보여.'], ['DARLING', '체이스, 방금 뭐라고 했어?'], ['CHASE', '아무 말도 안 했어.']],
+    [['CHASE', '여기 체이스. 팬텀 다리에 파편 박혔다.'], ['PHANTOM', '조금 따끔하군.'], ['DARLING', '방금 저게 영국식 비명이야.'], ['HYDE', '조용해서 좋네.']],
+    [['DARLING', '영국 놈들은 왜 음식에 간을 안 해?'], ['PHANTOM', '소금은 사치다.'], ['CHASE', '차에 우유는 넣으면서.'], ['DARLING', '그건 차가 아니라 수프야.'], ['PHANTOM', '시칠리아 놈한테 들을 소리는 아니군.']],
+    [['HYDE', '여기 하이드. 낮 기온 48도.'], ['CHASE', '시원하네.'], ['DARLING', '러시아 놈 온도계 고장 났다.'], ['CHASE', '시베리아는 영하 48도거든. 숫자는 똑같잖아.']],
+    [['HYDE', '이 동네엔 햄버거도 없냐.'], ['DARLING', '파스타 8분이면 돼. 기다려.'], ['HYDE', '미국이면 8분에 햄버거 두 개 먹어.'], ['DARLING', '알 덴테는 기다려야 나오는 거야!'], ['PHANTOM', '둘 다 입 닫아. 채널 열려 있다.']],
+    [['CHASE', '달링, 손 그만 흔들어. 무전이야.'], ['DARLING', '손 안 쓰면 말이 안 나와.'], ['HYDE', '묶어 줄까?'], ['DARLING', '…말로 할게.']],
+    [['HYDE', '오늘 밤 soccer 중계.'], ['PHANTOM', 'football이다.'], ['HYDE', 'football은 손으로 하는 거고.'], ['PHANTOM', '그건 럭비 흉내지.'], ['CHASE', '둘 다 틀렸어. 체스가 진짜 운동이야.']],
+    [['DARLING', '보드카 남은 사람?'], ['CHASE', '물으면 없다.'], ['HYDE', '안 물으면?'], ['CHASE', '그럼 없어진다.']],
+    [['PHANTOM', '전원, 여기 팬텀. 오늘 교신 끝.'], ['DARLING', '잘 자, 유령들.'], ['HYDE', '내일 봐. 있으면.'], ['PHANTOM', '채널 닫는다.']]
   ];
   var RQ = [];
   (function () {
@@ -225,7 +233,7 @@
   // ---------- 화면 전환 ----------
   var view = $('#view');
   var BGN = { sky: 3, camp: 6, front: 4 }, BGC = {};
-  function bgPick(k, nw) { if (!BGC[k] || nw) { var o = BGC[k]; do { BGC[k] = 1 + Math.floor(Math.random() * BGN[k]); } while (nw && BGN[k] > 1 && BGC[k] === o); } var u = 'bg/' + k + BGC[k] + (k === 'sky' ? '.jpg' : '.webp'); if (k === 'sky') { var x = document.getElementById('bgx'); if (x) x.style.backgroundImage = 'url(' + u + ')'; } return u; }
+  function bgPick(k, nw) { if (!BGC[k] || nw) { var o = BGC[k]; do { BGC[k] = 1 + Math.floor(Math.random() * BGN[k]); } while (nw && BGN[k] > 1 && BGC[k] === o); } var u = 'bg/' + k + BGC[k] + (k === 'sky' ? '.jpg' : '.webp'); if (k === 'sky') { var x = document.getElementById('bgx'); if (x) { var bb = u.replace(/\.jpg$/, ''); x.style.setProperty('--bgi', 'url(' + bb + '_i.jpg)'); x.style.setProperty('--bgh', 'url(' + bb + '_h.jpg)'); } } return u; }
   bgPick('sky');
   setInterval(function () { var h = document.querySelector('.home'); if (document.hidden || !h) return; h.classList.add('bgswap'); setTimeout(function () { var L = { 10: 'sky', 22: 'camp', 46: 'front' }; Object.keys(L).forEach(function (d) { var el = h.querySelector('.layer[data-d="' + d + '"]'); if (el) el.style.backgroundImage = 'url(' + bgPick(L[d], 1) + ')'; }); h.classList.remove('bgswap'); }, 900); }, 90000);
   var V = {
@@ -266,7 +274,7 @@
   function pick(x, y) { var d = document.elementFromPoint(x, y), h = d && d.closest ? d.closest(SEL) : null; return h && !h.disabled ? h : null; }
   function findAim(x, y) {
     var h = pick(x, y); if (h) return h;
-    for (var r = 10; r <= 20; r += 10) for (var i = 0; i < 8; i++) { h = pick(x + Math.cos(i * .785) * r, y + Math.sin(i * .785) * r); if (h) return h; }
+    for (var i = 0; i < 8; i++) { h = pick(x + Math.cos(i * .785) * 14, y + Math.sin(i * .785) * 14); if (h) return h; }
     return null;
   }
   function aim(x, y) {
@@ -275,7 +283,7 @@
     root.classList.toggle('c-txt', !!h && h.matches('input:not([type=range]),textarea'));
     root.classList.toggle('c-hot', !!h && !h.matches('input:not([type=range]),textarea'));
   }
-  addEventListener('mousemove', function (e) { aim(e.clientX, e.clientY); });
+  var aq = 0, ax = 0, ay = 0; addEventListener('mousemove', function (e) { ax = e.clientX; ay = e.clientY; if (!aq) { aq = 1; requestAnimationFrame(function () { aq = 0; if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 4) return; aim.x = ax; aim.y = ay; aim(ax, ay); }); } });
   document.addEventListener('click', function (e) {
     if (aimBusy || !assist || !e.isTrusted || !assist.isConnected) return;
     var t = e.target; if (t.closest && t.closest(SEL)) return;
@@ -378,23 +386,26 @@
     var us = ps[i].querySelectorAll('u'), w = LT[i];
     for (k = 0; k < us.length && k < w.length; k++) us[k].classList.toggle('now', t >= w[k][1] && t < (w[k + 1] ? w[k + 1][1] : w[k][2] + .15));
   }
+  var DD = [], ddT = -1e9; addEventListener('hashchange', function () { ddT = -1e9; });
   (function loop(now) {
     requestAnimationFrame(loop);
     var x = mx, y = my;
+    var g = $('.g2'); if (g !== loop.g || now - (loop.gt || 0) > 200) { loop.g = g; loop.gt = now; loop.gr = g ? g.getBoundingClientRect() : null; } var gr = loop.gr;
+    if (now - ddT > 500) { DD = document.querySelectorAll('[data-d]'); ddT = now; }
     if (now - last > 2500 && !reduce) { x = innerWidth * (.5 + .3 * Math.sin(now / 1900)); y = innerHeight * (.47 + .1 * Math.cos(now / 1300)); }
     sx += ((x / innerWidth - .5) - sx) * .08; sy += ((y / innerHeight - .5) - sy) * .08;
     var tx = x / innerWidth - .5, ty = y / innerHeight - .5;
-    document.querySelectorAll('[data-d]').forEach(function (el) {
-      var q = el.dataset, d = +q.d, m = +(q.m || 1), k = +(q.k || .08), r = +(q.r || 0), base = el.classList.contains('big') ? ' translateY(-56%)' : '';
+    DD.forEach(function (el) {
+      var P = el._p || (el._p = { q: { v: el.dataset.v, s: el.dataset.s }, d: +el.dataset.d, m: +(el.dataset.m || 1), k: +(el.dataset.k || .08), r: +(el.dataset.r || 0), base: el.classList.contains('big') ? ' translateY(-56%)' : '' }), q = P.q, d = P.d, m = P.m, k = P.k, r = P.r, base = P.base;
       el._x = (el._x || 0) + (tx - (el._x || 0)) * k; el._y = (el._y || 0) + (ty - (el._y || 0)) * k;
-      el.style.transform = 'translate3d(' + (el._x * d * 2 * m) + 'px,' + (el._y * d * 2 * m * +(q.v || 1)) + 'px,0)' + (r ? ' rotateY(' + (el._x * r) + 'deg) rotateX(' + (-el._y * r) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
+      var tf = 'translate3d(' + (el._x * d * 2 * m).toFixed(1) + 'px,' + (el._y * d * 2 * m * +(q.v || 1)).toFixed(1) + 'px,0)' + (r ? ' rotateY(' + (el._x * r).toFixed(2) + 'deg) rotateX(' + (-el._y * r).toFixed(2) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
+      if (el._tf !== tf) { el.style.transform = tf; el._tf = tf; }
     });
     var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) curR.setAttribute('transform', 'translate(' + Math.max(-26, Math.min(26, lagX - mx)) + ' ' + Math.max(-26, Math.min(26, lagY - my)) + ') rotate(' + tilt + ' 32 32)');
     trail();
     sync();
     wave(now);
-    var g = $('.g2');
-    if (g) { var r = g.getBoundingClientRect(); g.style.setProperty('--x', x - r.left + 'px'); g.style.setProperty('--y', y - r.top + 'px'); }
+    if (g && gr) { var gx = Math.round(x - gr.left) + 'px', gy = Math.round(y - gr.top) + 'px'; if (g._gx !== gx || g._gy !== gy) { g.style.setProperty('--x', gx); g.style.setProperty('--y', gy); g._gx = gx; g._gy = gy; } }
   })(0);
   document.querySelector('#mqi').innerHTML = Array(20).join('DEUX FOIS RAYÉS &nbsp;·&nbsp; ENCORE VIVANTS &nbsp;·&nbsp; ');
 })();

@@ -82,7 +82,7 @@ html.tx #rx,html.tx #rn{color:var(--ac)}
 #rt.tail{opacity:.7}
 #rt.ci,#rt .ci{font-weight:400;font-size:14px;letter-spacing:.14em;color:var(--t3)}
 #rt i{font-style:normal;animation:sig .36s cubic-bezier(.16,1,.3,1) both}
-@keyframes sig{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:blur(0)}}
+@keyframes sig{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:none}}
 #wf{display:block;width:100%;height:56px}
 html.inner #radio{background:linear-gradient(transparent,var(--bg) 42%)}
 html.inner #rt{font-size:16px}html.inner #rn{font-size:16px}
@@ -115,7 +115,7 @@ html.c-txt #cur svg{opacity:0}
 html.c-txt #cur i{opacity:1}
 html.c-down #cur .f2{fill:var(--ac)}
 .cw{position:fixed;z-index:97;pointer-events:none;font:900 14px/1 var(--st);letter-spacing:.24em;color:var(--ac);white-space:nowrap;animation:cw 1s cubic-bezier(.16,1,.3,1) both}
-@keyframes cw{0%{opacity:0;transform:translateY(6px);filter:blur(3px);letter-spacing:.4em}30%{opacity:1;transform:none;filter:blur(0);letter-spacing:.24em}100%{opacity:0;transform:translateY(-6px)}}
+@keyframes cw{0%{opacity:0;transform:translateY(6px);filter:blur(3px);letter-spacing:.4em}30%{opacity:1;transform:none;filter:none;letter-spacing:.24em}100%{opacity:0;transform:translateY(-6px)}}
 @media (pointer:fine){input{cursor:none}}
 @media (pointer:coarse){#cur{display:none}}
 
@@ -210,8 +210,8 @@ table{border-top:1px solid var(--ln)}
 #toast.off{visibility:visible;animation:bandout .36s cubic-bezier(.4,0,1,1) both}
 @keyframes band{from{opacity:0;clip-path:inset(46% 0)}to{opacity:1;clip-path:inset(0 0)}}
 @keyframes bandl{from{opacity:0;transform:scaleX(.2)}to{opacity:1;transform:none}}
-@keyframes rise2{from{opacity:0;transform:translateY(8px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes track{from{opacity:0;letter-spacing:.34em;filter:blur(6px)}to{opacity:1;letter-spacing:.06em;filter:blur(0)}}
+@keyframes rise2{from{opacity:0;transform:translateY(8px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes track{from{opacity:0;letter-spacing:.34em;filter:blur(6px)}to{opacity:1;letter-spacing:.06em;filter:none}}
 @keyframes shine{to{background-position:0 0}}
 @keyframes bandout{to{opacity:0;transform:translateY(-8px)}}
 .ach{margin-top:26px;border-top:1px solid var(--ln)}
@@ -453,7 +453,7 @@ html:not(.clr) .rd:hover,html:not(.clr) .rd:focus{background:var(--s2);color:tra
 .cmw .cmap{filter:saturate(.78) brightness(.74) contrast(1.08)}
 .cmw::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 52%,rgba(10,11,15,.6) 100%)}
 .pin{position:absolute;z-index:1;width:0;height:0;animation:pinin .7s cubic-bezier(.16,1,.3,1) both;transition:opacity .2s}
-@keyframes pinin{from{opacity:0;filter:blur(4px)}to{opacity:1;filter:blur(0)}}
+@keyframes pinin{from{opacity:0;filter:blur(4px)}to{opacity:1;filter:none}}
 .cmw:hover .pin{opacity:.5}
 .cmw .pin:hover{opacity:1}
 .pin i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border:1px solid var(--ac);background:rgba(10,11,15,.5);transform:rotate(45deg);transition:background-color .15s,transform .2s cubic-bezier(.16,1,.3,1)}
@@ -717,7 +717,7 @@ html:not(.inner) #radio,html:not(.inner) .mq{display:none}
 /* 내 정보 연동 */
 .mest{margin-top:48px;padding-top:28px;border-top:1px solid var(--ln)}
 
-/* 사내망 묶음 가독성 */
+/* 내부망 묶음 가독성 */
 .mgb b{color:transparent;-webkit-text-stroke:1.5px rgba(230,232,238,.55)}
 .mgb small{font-size:17px;font-weight:700;color:var(--t2);letter-spacing:.04em}
 .mgb:hover b{color:rgba(230,232,238,.22);-webkit-text-stroke-color:rgba(230,232,238,.85)}
@@ -919,3 +919,84 @@ html:not(.inner) .top a:hover,html:not(.inner) .top button:hover{color:#fff}
 /* 단체 글자 105 */
 .gh small{padding:0;background:none;font:800 13px/1 var(--go);letter-spacing:.08em;color:#f6c453;text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.75)}
 .gh i::after{height:48%;background:linear-gradient(180deg,rgba(10,8,12,0),rgba(10,8,12,.55) 55%,rgba(10,8,12,.85))}
+
+/* 제목 고딕 106 */
+.home .title .t1,.home .title b,.home .title .t2,.home .title .t3,.home .title em,.home .title s{font-family:'Gothic A1','NanumSquareNeo',sans-serif;font-weight:900;letter-spacing:.03em}
+
+
+
+/* 서류철 셋째 118 */
+.pst figure:nth-of-type(3){left:22%;top:20%;transform:rotate(-1deg)}
+.pst:hover figure:nth-of-type(3){transform:translate(2px,-50%) rotate(1.5deg)}
+
+/* 서류철 넷째 120 */
+.pst figure:nth-of-type(4){left:12%;top:14%;transform:rotate(2deg)}
+.pst:hover figure:nth-of-type(4){transform:translate(-8px,-60%) rotate(-3deg)}
+
+/* 서류철 위층 121 */
+.pst{z-index:3}
+
+/* 사진 크게 122 */
+.pst figure{cursor:zoom-in}
+#plb{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:18px;padding:24px;background:rgba(8,6,10,.9);animation:plbin .25s ease-out}
+@keyframes plbin{from{opacity:0}to{opacity:1}}
+#plb .plb-in{position:relative;margin:0;width:min(1100px,82vw);padding:10px 10px 40px;background:#e6e0d3;box-shadow:0 30px 60px -20px rgba(0,0,0,.9)}
+#plb .plb-ph{position:relative;overflow:hidden}
+#plb .plb-ph img{display:block;width:100%;height:auto}
+#plb .scr.hv path{stroke-width:8px}
+#plb .scr.lt path{stroke-width:3.5px}
+#plb .plb-cap{position:absolute;left:14px;right:14px;bottom:11px;display:flex;align-items:baseline;gap:10px;font:900 13px/1 var(--st);letter-spacing:.22em;color:#2a251f}
+#plb .plb-cap span{font:700 14px/1 var(--my);letter-spacing:.04em;color:#5a5044}
+#plb .plb-cap em{margin-left:auto;font:700 12px/1 var(--go);font-style:normal;letter-spacing:.1em;color:#5a5044}
+#plb button{border:0;background:none;color:#ece9f1;cursor:pointer;font:300 46px/1 var(--go);padding:8px 12px;opacity:.8;transition:opacity .2s}
+#plb button:hover,#plb button:focus-visible{opacity:1;color:#f6c453}
+#plb .plb-x{position:absolute;top:14px;right:20px;font-size:38px}
+@media (max-width:760px){#plb{gap:4px;padding:10px}#plb .plb-in{width:100%}#plb .plb-nav{font-size:34px;padding:4px}}
+@media (prefers-reduced-motion:reduce){#plb{animation:none}}
+
+/* 크게 보기 넓힘 123 */
+.ttp figure{cursor:zoom-in}
+.gzoom{position:absolute;right:10px;top:10px;z-index:5;padding:6px 10px 5px;border:1px solid rgba(236,233,241,.5);background:rgba(12,10,14,.7);color:#ece9f1;font:700 12px/1 var(--go);letter-spacing:.08em;cursor:zoom-in;transition:background .2s,color .2s}
+.gzoom:hover,.gzoom:focus-visible{background:#f6c453;color:#1a1612}
+#plb.one .plb-nav{visibility:hidden}
+
+/* 신체 특징 사진 126 */
+.bfx{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px}
+.bf{position:relative;display:block;width:min(230px,46%);padding:5px 5px 24px;background:#e6e0d3;box-shadow:0 10px 18px -10px rgba(0,0,0,.85);cursor:zoom-in;transform:rotate(-1.2deg);transition:transform .3s cubic-bezier(.23,1,.32,1)}
+.bf:nth-child(2){transform:rotate(1.4deg)}
+.bf:hover{transform:rotate(0) scale(1.03)}
+.bf img{display:block;width:100%;height:auto;pointer-events:none}
+.bf em{position:absolute;left:8px;bottom:6px;font:900 11px/1 var(--st);font-style:normal;letter-spacing:.2em;color:#2a251f}
+.bf em i{margin-left:7px;font:700 12px/1 var(--my);font-style:normal;letter-spacing:.04em;color:#5a5044}
+
+/* 소지품 낙서 128 */
+.pb .pbw{position:relative;display:block}
+.pb .pbw .scr.hv path{stroke-width:4px}
+
+/* 제목 글꼴 132 */
+@font-face{font-family:'Paperlogy';src:url(https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2) format('woff2');font-weight:900;font-display:swap}
+@font-face{font-family:'ONE-Mobile-Title';src:url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff) format('woff');font-weight:900;font-display:swap}
+.home .title .t1,.home .title b{font-family:'Paperlogy','Gothic A1',sans-serif;font-weight:900}
+.home .title .t2,.home .title .t2 u,.home .title s,.home .title .t3,.home .title em{font-family:'ONE-Mobile-Title','Gothic A1',sans-serif;font-weight:900}
+
+/* 배경 미리 흐림 134 */
+#bgx{filter:none!important;background-image:var(--bgi)}
+html:not(.inner) #bgx{filter:none!important;background-image:var(--bgh)}
+
+/* 입자 가볍게 135 */
+body::after{background-image:url(img/grain.png)!important;background-size:220px 220px!important;mix-blend-mode:normal!important;inset:-10%!important;opacity:.09!important}
+
+/* 남의 가린 글자 138 */
+.rd.lk:hover,.rd.lk:focus,html.clr .rd.lk:hover,html.clr .rd.lk:focus{background:var(--s2)!important;color:transparent!important;cursor:not-allowed}
+
+/* 메신저 날 구분 150 */
+.msg .mday{display:flex;align-items:center;gap:12px;margin:22px 4px 14px;color:var(--t3,#8a8f99);font-size:11px;letter-spacing:.12em}
+.msg .mday::before,.msg .mday::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.msg .mday:first-child{margin-top:4px}
+.msg .mgap{height:18px}
+
+/* 제목 테두리 158 */
+.home .title .t1,.home .title b,.home .title .t2,.home .title .t2 u,.home .title s,.home .title .t3,.home .title em{-webkit-text-stroke:.8px rgba(30,16,30,.55);text-shadow:none!important;filter:drop-shadow(0 2px 5px rgba(20,10,24,.45))!important}
+
+/* 메신저 바로 뜸 159 */
+.msg{animation:none!important}
