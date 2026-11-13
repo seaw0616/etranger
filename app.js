@@ -31,7 +31,11 @@
   timer = setInterval(bootStep, 70);
   addEventListener('keydown', function () { if (!booted && !$('#boot').hidden) { code(6); tick += 2; } });
 
+  // 11-13 누님 «여기서 홈페이지로 가면 다시 터미널 뜨는데 이거 번거로워»: 이 탭에서 한 번 접속했으면(신병 등록부에서 돌아올 때 등) 터미널 연출을 건너뛴다. 탭을 닫았다 새로 열면 다시 나온다
+  var seen = false;
+  try { seen = sessionStorage.getItem('etr-entered') === '1'; } catch (e) { seen = false; /* 저장소가 막힌 브라우저는 예전처럼 터미널부터 보여 준다 */ }
   function enter() {
+    try { sessionStorage.setItem('etr-entered', '1'); } catch (e) { /* 저장소가 막혀도 접속은 그대로 진행. 다음 방문에 터미널이 다시 나올 뿐 */ }
     $('#boot').hidden = true; $('#app').hidden = false;
     setV();
     audio.play().then(function () { root.classList.add('playing'); }).catch(function () {});
@@ -40,6 +44,7 @@
     setTimeout(function () { E('stay10'); }, 6e5); setTimeout(function () { E('stay30'); }, 18e5);
   }
   $('#enter').addEventListener('click', enter);
+  if (seen) setTimeout(function () { clearInterval(timer); booted = true; enter(); }, 0);
 
   // ---------- 플레이어와 가사 ----------
   $('#pp').addEventListener('click', function () {

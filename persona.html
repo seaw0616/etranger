@@ -1,0 +1,248 @@
+<!doctype html>
+<!-- 11-13 누님 «페르소나 만드는거 html만들어봐» → «너무 따라하는것같잖아», «외형 성격은 빼고», «우리만의 특징을», «외인부대만의 특징을», «디자인도 독창적으로»
+     → «폰트가 좀 구린데», «종이인쇄된 느낌», «5랑 6사이», «말투도 직접 쓸 수 있으면», «사진도 약간 보정 인쇄된것처럼 너무 보정된것말고», «신병등록부 UI도 더 디자인틱하게»
+     짜임: 어두운 책상 위 종이 입대 서류(왼쪽) + 두 쪽짜리 군인 수첩(오른쪽) + 타자 쪽지(페르소나 글). 청명 사이트의 탭 · 칩 · 완성본 상자는 쓰지 않음
+     외인부대 고증(출처 확인한 것만): 신고 이름 identité déclarée → 정정 régularisation(국회 답변 QANR5L13QE71243 · 국방부 공보 BOC 48346),
+       흰 케피 4e RE 카스텔노다리 기초 훈련 → 약 60km 행군 → 선서(theatrum-belli · foreignlegion.info), 오바뉴 본대 선발(국방부 자료). 부대 색 · 휘장 · 표어는 출처 못 찾아 넣지 않음
+     한글 글꼴은 한 곳(KF)에서 바꿈. 주소 뒤 ?kf=글꼴이름 으로 비교 가능. 사진은 브라우저 안에서만 -->
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ÉTRANGER : FRONTLINE · 신병 등록부</title>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--desk:#0f1114;--paper:#e8e1cf;--paper2:#ded6c1;--ink:#2a2419;--ink2:#5e5442;--rule:rgba(42,36,25,.28);--ac:#a8642a;--st:'Big Shoulders Stencil Display',sans-serif;--tw:'Courier Prime',monospace;--kr:'Hahmlet',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+.lead,.hint,label,#out{word-break:keep-all;overflow-wrap:anywhere}
+body{background:radial-gradient(ellipse 90% 70% at 50% 30%,#1a1d22,var(--desk) 70%);color:#e6e8ee;font:400 16px/1.6 var(--kr);min-height:100vh}
+.wrap{max-width:1300px;margin:0 auto;padding:0 24px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid #262a31}
+.logo{font:900 24px var(--st);letter-spacing:.04em;text-decoration:none;color:#e6e8ee}.logo span{font-size:14px;letter-spacing:.2em;color:#868994}
+.home{color:#aeb1ba;font:400 14px var(--kr);text-decoration:none;border-bottom:1px solid #dd9d4c;padding:6px 0}
+.desk{display:grid;grid-template-columns:minmax(0,500px) minmax(0,1fr);gap:44px;padding:40px 0 90px;align-items:start}
+/* 종이 서류 */
+.sheet{position:relative;background:var(--paper);color:var(--ink);padding:34px 34px 30px;box-shadow:0 1px 0 #fff6 inset,0 24px 48px rgba(0,0,0,.55)}
+.sheet::before{content:'';position:absolute;inset:0;background:url(img/grain.png);opacity:.35;mix-blend-mode:multiply;pointer-events:none}
+.sheet::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 100% at 50% 40%,transparent 60%,rgba(70,50,20,.18));pointer-events:none}
+.sheet>*{position:relative;z-index:1}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:14px;border-bottom:3px double var(--ink)}
+.hd small{display:block;font:700 13px var(--tw);letter-spacing:.06em;color:var(--ink2)}
+.hd h1{font:900 46px/.9 var(--st);letter-spacing:.03em}
+.hd h1 span{display:block;margin-top:8px;font:700 21px var(--kr);letter-spacing:0}
+.hd .no{font:700 13px var(--tw);color:var(--ink2);text-align:right;white-space:nowrap}
+.lead{margin-top:14px;font-size:14.5px;line-height:1.75;color:var(--ink2)}
+fieldset{border:0;margin-top:26px}
+legend{display:flex;align-items:baseline;gap:10px;width:100%;padding-bottom:6px;border-bottom:1px solid var(--ink);font:900 19px var(--st);letter-spacing:.1em}
+legend small{font:400 14px var(--kr);letter-spacing:0;color:var(--ink2)}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-top:14px}
+.f .w{grid-column:1/-1}
+label{display:block;font:400 13px var(--kr);color:var(--ink2)}
+input[type=text],input[type=number],select{display:block;width:100%;margin-top:2px;height:40px;padding:0 2px;background:transparent;border:0;border-bottom:1.5px dotted var(--ink);border-radius:0;color:var(--ink);font:500 18px var(--kr);appearance:none}
+select{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232a2419' stroke-width='1.6'/%3E%3C/svg%3E") right 4px center no-repeat;padding-right:22px;cursor:pointer}
+select option{background:var(--paper);color:var(--ink)}
+input::placeholder{color:#8a8070;opacity:1}
+input:focus-visible,select:focus-visible{outline:0;border-bottom:2px solid var(--ac);background:rgba(168,100,42,.06)}
+button:focus-visible,.up:focus-visible,.ck input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.ck{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;margin-top:10px}
+.ck label,.tg{display:flex;align-items:center;gap:10px;min-height:38px;font:400 16px var(--kr);color:var(--ink);cursor:pointer}
+.ck input,.tg input{appearance:none;width:18px;height:18px;border:1.5px solid var(--ink);display:grid;place-content:center;cursor:pointer;flex:none}
+.ck input:checked::after,.tg input:checked::after{content:'';width:12px;height:12px;background:linear-gradient(45deg,transparent 42%,var(--ink) 42% 58%,transparent 58%),linear-gradient(-45deg,transparent 42%,var(--ink) 42% 58%,transparent 58%)}
+.hint{margin-top:8px;font-size:13.5px;line-height:1.7;color:var(--ink2)}
+.ph{display:grid;grid-template-columns:120px 1fr;gap:18px;margin-top:14px;align-items:start}
+.up{display:flex;align-items:center;justify-content:center;text-align:center;width:120px;height:156px;border:1.5px dashed var(--ink);font:400 14px/1.5 var(--kr);color:var(--ink2);cursor:pointer;padding:8px;background-size:cover;background-position:center}
+.up.has{border-style:solid;color:transparent}
+input[type=range]{width:100%;margin-top:6px;accent-color:var(--ink)}
+.sign{display:flex;justify-content:space-between;align-items:flex-end;margin-top:30px;padding-top:12px;border-top:1px solid var(--rule);font:700 13px var(--tw);color:var(--ink2)}
+/* 수첩 · 쪽지 */
+.view{position:sticky;top:20px}
+#cv{width:100%;height:auto;display:block;box-shadow:0 26px 54px rgba(0,0,0,.6)}
+.slip{position:relative;margin:26px 8px 0 18px;background:var(--paper2);color:var(--ink);padding:20px 22px 18px;transform:rotate(-.6deg);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.slip::before{content:'';position:absolute;inset:0;background:url(img/grain.png);opacity:.3;mix-blend-mode:multiply;pointer-events:none}
+.slip>*{position:relative}
+.slip h2{display:flex;justify-content:space-between;align-items:baseline;font:900 19px var(--st);letter-spacing:.12em;border-bottom:1px solid var(--ink);padding-bottom:6px}
+.slip h2 small{font:700 13px var(--tw);letter-spacing:0;color:var(--ink2)}
+#out{margin-top:12px;font:400 15px/1.85 var(--kr);white-space:pre-wrap;word-break:keep-all}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn{flex:1 1 150px;min-height:48px;padding:0 16px;border:1.5px solid #e6e8ee;background:transparent;color:#e6e8ee;font:700 16px var(--kr);cursor:pointer;transition:background .15s,color .15s}
+.btn:hover{background:#e6e8ee;color:var(--desk)}
+.btn.pri{background:#dd9d4c;border-color:#dd9d4c;color:#14110c}.btn.pri:hover{background:#e8b06a}
+.slip .btn{border-color:var(--ink);color:var(--ink)}.slip .btn:hover{background:var(--ink);color:var(--paper)}
+.slip .btn.pri{background:var(--ink);color:var(--paper)}.slip .btn.pri:hover{background:#463c2b}
+.btn:active{transform:scale(.97)}
+#msg{margin-top:8px;font-size:13.5px;color:var(--ink2);min-height:22px}
+@media (max-width:980px){.desk{grid-template-columns:1fr;gap:30px}.view{position:static;order:-1}.sheet{padding:26px 20px 24px}.hd h1{font-size:38px}.slip{margin:22px 0 0}}
+@media (max-width:440px){.f,.ck{grid-template-columns:1fr}.f .w{grid-column:auto}.ph{grid-template-columns:100px 1fr}.up{width:100px;height:130px}.hd{flex-direction:column;align-items:flex-start}.hd .no{text-align:left}}
+@media (prefers-reduced-motion:reduce){.btn:active{transform:none}.btn{transition:none}}
+</style></head><body>
+<header><div class="wrap"><a class="logo" href="index.html" translate="no">ÉTRANGER<span> : FRONTLINE</span></a><a class="home" href="index.html">홈페이지로</a></div></header>
+<main class="wrap"><div class="desk">
+ <form class="sheet" id="fm" onsubmit="return false">
+  <div class="hd"><div><small translate="no">PNE MEUTE · FICHE D'ENGAGEMENT</small><h1 translate="no">RECRUIT FILE<span>신병 등록부</span></h1></div><div class="no" translate="no">AUBAGNE<br>N° MT-01</div></div>
+  <p class="lead">오바뉴에서 받은 신병 서류입니다. 본명 대신 신고한 이름으로 계약할 수 있고, 진짜 신원을 증명하면 정정됩니다. 칸을 채우면 수첩과 페르소나 글이 같이 바뀝니다.</p>
+  <fieldset><legend translate="no">IDENTITÉ RÉELLE<small>본래 신원</small></legend><div class="f">
+   <label>본명<input type="text" id="rn" placeholder="비우면 {user}"></label>
+   <label>성별<select id="sx"><option>女</option><option>男</option><option>미정</option></select></label>
+   <label>나이 (성인)<input type="number" id="ag" min="19" max="60" value="24"></label>
+   <label>키 (cm)<input type="number" id="ht" min="140" max="210" value="168"></label>
+   <label>국적<select id="na"></select></label>
+   <label>생일<input type="text" id="bd" placeholder="예: 5.3"></label>
+   <label class="w" id="na-c-w" hidden>국적 직접 쓰기<input type="text" id="na-c"></label>
+  </div></fieldset>
+  <fieldset><legend translate="no">IDENTITÉ DÉCLARÉE<small>신고 이름</small></legend><div class="f">
+   <label class="w">부대에 신고한 이름<input type="text" id="dn" placeholder="비우면 본명으로 계약"></label>
+   <label class="w tg"><input type="checkbox" id="rg"> 신원 정정 끝 (서류에 본명이 드러남)</label>
+  </div><p class="hint">서류 없이 온 사람은 신고한 이름으로 계약합니다. 진짜 신원을 증명하기 전까지는 그 이름이 군 신원입니다.</p></fieldset>
+  <fieldset><legend translate="no">FORMATION<small>훈련</small></legend><div class="f">
+   <label>흰 케피<select id="kp"><option>받기 전 (훈련 중)</option><option>받음 (4e RE 선서)</option></select></label>
+   <label>주특기<select id="ms"></select></label>
+   <label class="w" id="ms-c-w" hidden>주특기 직접 쓰기<input type="text" id="ms-c"></label>
+  </div><p class="hint">카스텔노다리 4e RE에서 기초 훈련을 마치고 약 60km를 걸은 뒤, 선서 의식에서 흰 케피를 받습니다.</p></fieldset>
+  <fieldset><legend translate="no">AFFECTATION<small>배속</small></legend><div class="f">
+   <label>콜사인<input type="text" id="cs" placeholder="비우면 미정"></label>
+   <label>계급<select id="rk"></select></label>
+   <label>배속 사유<select id="wy"></select></label>
+   <label>기록 상태<select id="rc"><option>현역</option><option>기록 말소</option><option>서류상 사망</option></select></label>
+   <label class="w" id="wy-c-w" hidden>배속 사유 직접 쓰기<input type="text" id="wy-c"></label>
+   <label class="w">말투<select id="tn"></select></label>
+   <label class="w" id="tn-c-w" hidden>말투 직접 쓰기<input type="text" id="tn-c" placeholder="예: 평소엔 존댓말, 화나면 사투리"></label>
+  </div></fieldset>
+  <fieldset><legend translate="no">ANTÉCÉDENTS<small>입대 전 · 4개까지</small></legend>
+   <div class="ck" id="ex"></div>
+   <label style="margin-top:12px">직접 쓰기 (쉼표로 여러 개)<input type="text" id="ex-c"></label>
+  </fieldset>
+  <fieldset><legend translate="no">PHOTO<small>증명사진</small></legend>
+   <div class="ph"><span class="up" id="up" tabindex="0" role="button">사진 붙이기<br>(세로 사진)</span><input type="file" id="pf" accept="image/*" hidden>
+    <div><label>확대<input type="range" id="zm" min="100" max="250" value="100"></label><label style="margin-top:12px">위아래<input type="range" id="py" min="0" max="100" value="35"></label><p class="hint">사진은 이 브라우저 안에서만 쓰고 어디로도 보내지 않습니다.</p></div></div>
+  </fieldset>
+  <div class="sign" translate="no"><span>SIGNATURE DU LÉGIONNAIRE</span><span>CAMP SIMOUN</span></div>
+ </form>
+ <div class="view">
+  <canvas id="cv" width="1200" height="780" aria-label="군인 수첩 미리보기"></canvas>
+  <div class="btns"><button class="btn pri" id="save" type="button">수첩 그림 저장</button><button class="btn" id="rand" type="button">무작위로 채우기</button></div>
+  <div class="slip"><h2 translate="no">PERSONA<small id="cnt"></small></h2><div id="out"></div>
+   <div class="btns"><button class="btn pri" id="copy" type="button">페르소나 글 복사</button></div><p id="msg"></p></div>
+ </div>
+</div></main>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+/* 한글 글꼴은 여기 한 곳. 굵기마다 따로 불러야 없는 굵기 때문에 통째로 실패하지 않는다 */
+const KF = new URLSearchParams(location.search).get('kf') || 'Noto Serif KR'; // 11-13 누님이 A·B·C 비교본에서 B 고르심
+for (const w of ['', ':wght@500', ':wght@600', ':wght@700', ':wght@800']) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + KF.replace(/ /g, '+') + w + '&display=swap'; document.head.appendChild(l); }
+document.documentElement.style.setProperty('--kr', "'" + KF + "',serif");
+const NAT = ['대한민국', '일본', '중국', '미국', '영국', '프랑스', '독일', '러시아', '이탈리아', '스페인', '브라질', '직접입력'];
+const RANK = ['레지오네르 2등 (신병)', '레지오네르 1등', '카포랄', '카포랄 셰프', 'Sergent'];
+const MOS = ['소총수', '통신', '의무', '저격', '폭파 · 공병', '운전 · 정비', '통역', '정찰', '직접입력'];
+const WHY = ['징계 차출', '자원', '상부 명령', '미상', '직접입력'];
+const TONE = ['존댓말', '반말', '존반 혼용', '짧은 말투', '사투리', '무뚝뚝', '능글맞음', '직접입력'];
+const EX = ['외국어 능통', '전직 의료인', '전직 경찰', '범죄 기록', '신분 세탁', '빚 있음', '실종 처리', '운전 능숙', '사격 특기', '불면증', '비밀 있음', '단것 중독'];
+const opt = (id, a) => { $(id).innerHTML = a.map(v => '<option>' + v + '</option>').join(''); };
+opt('#na', NAT); opt('#rk', RANK); opt('#ms', MOS); opt('#wy', WHY); opt('#tn', TONE);
+$('#ex').innerHTML = EX.map(v => '<label><input type="checkbox" value="' + v + '">' + v + '</label>').join('');
+$('#ex').addEventListener('change', e => { if ($$('#ex input:checked').length > 4) e.target.checked = false; });
+const pick = (sel, wrap, cust) => { const v = $(sel).value, d = v === '직접입력'; $(wrap).hidden = !d; return d ? ($(cust).value.trim() || '-') : v; };
+function vals() {
+  return { rn: $('#rn').value.trim(), dn: $('#dn').value.trim(), rg: $('#rg').checked, sx: $('#sx').value, ag: $('#ag').value, ht: $('#ht').value, bd: $('#bd').value.trim(),
+    na: pick('#na', '#na-c-w', '#na-c'), kp: $('#kp').selectedIndex === 1, ms: pick('#ms', '#ms-c-w', '#ms-c'), cs: $('#cs').value.trim(), rk: $('#rk').value,
+    wy: pick('#wy', '#wy-c-w', '#wy-c'), rc: $('#rc').value, tn: pick('#tn', '#tn-c-w', '#tn-c'),
+    ex: [...$$('#ex input:checked').map(i => i.value), ...$('#ex-c').value.split(',').map(s => s.trim()).filter(Boolean)] };
+}
+function text(v) {
+  const real = v.rn || '{user}';
+  return '# ' + real + ' 프로필\n'
+    + '- 신원: 본명 ' + real + (v.dn ? ' / 신고 이름 ' + v.dn + (v.rg ? ' (정정 끝)' : ' (정정 전, 부대에선 신고 이름으로 불림)') : '') + '\n'
+    + '- 기본: ' + v.sx + ' / ' + (v.ag || '-') + '세 / ' + v.na + ' / ' + (v.ht ? v.ht + 'cm' : '-') + ' / 생일 ' + (v.bd || '-') + '\n'
+    + '- 소속: PNE MEUTE / ' + v.rk + ' / 주특기 ' + v.ms + ' / 콜사인 ' + (v.cs || '미정') + ' / 흰 케피 ' + (v.kp ? '받음' : '받기 전') + '\n'
+    + '- 배속 사유: ' + v.wy + ' / 기록 상태: ' + v.rc + '\n'
+    + '- 입대 전: ' + (v.ex.join(',') || '-') + '\n'
+    + '- 말투: ' + v.tn;
+}
+let photo = null;
+$('#up').addEventListener('click', () => $('#pf').click());
+$('#up').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#pf').click(); } });
+$('#pf').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { photo = im; const u = $('#up'); u.style.backgroundImage = 'url(' + r.result + ')'; u.classList.add('has'); upd(); }; im.src = r.result; }; r.readAsDataURL(f); });
+function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+/* 인쇄 질감: 종이 위 잉크(어두운 칸)만 농도를 고르지 않게. 사진 칸은 건너뛰고, 사진에는 아주 옅은 입자만 */
+function inkify(x, rx, ry, rw, rh, skip) {
+  const im = x.getImageData(rx, ry, rw, rh), d = im.data; let r = 1234567;
+  for (let yy = 0; yy < rh; yy++) for (let xx = 0; xx < rw; xx++) {
+    const i = (yy * rw + xx) * 4; r = (Math.imul(r, 1103515245) + 12345) >>> 0; const n = (r >>> 24) / 255;
+    const gx = rx + xx, gy = ry + yy, inPh = gx >= skip[0] && gx < skip[0] + skip[2] && gy >= skip[1] && gy < skip[1] + skip[3];
+    if (inPh) { const g = (n - .5) * 14; d[i] += g; d[i + 1] += g; d[i + 2] += g; continue; }
+    const lum = d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11;
+    if (lum < 160) { const lift = n < .04 ? 90 : n * 24; d[i] += lift; d[i + 1] += lift * .95; d[i + 2] += lift * .85; }
+  }
+  x.putImageData(im, rx, ry);
+}
+function stamp(x, cx, cy, rot, col, lines, round, seed) {
+  x.save(); x.translate(cx, cy); x.rotate(rot); x.globalAlpha = .82; x.strokeStyle = col; x.fillStyle = col; x.textAlign = 'center';
+  if (round) { x.lineWidth = 4; x.beginPath(); x.arc(0, 0, 74, 0, 7); x.stroke(); x.lineWidth = 1.5; x.beginPath(); x.arc(0, 0, 64, 0, 7); x.stroke(); }
+  x.font = '900 ' + (round ? 22 : 34) + 'px "Big Shoulders Stencil Display"';
+  if (!round) { const bw = Math.max(236, x.measureText(lines[0]).width + 40); x.lineWidth = 4; x.strokeRect(-bw / 2, -42, bw, 84); }
+  x.fillText(lines[0], 0, round ? -8 : 2);
+  x.font = '700 ' + (round ? 15 : 16) + 'px "' + KF + '"'; x.fillText(lines[1], 0, round ? 16 : 26);
+  /* 잉크가 덜 묻은 자리: 도장 안쪽에만 종이색 점을 찍는다(구멍을 뚫으면 바탕이 검게 비침) */
+  x.fillStyle = '#e6dfcc'; let r = seed; const hw = round ? 70 : 110, hh = round ? 70 : 38;
+  for (let i = 0; i < 110; i++) { r = Math.imul(r ^ (r >>> 15), 2246822507) >>> 0; const px = (r % (hw * 2)) - hw, py = ((r >>> 8) % (hh * 2)) - hh;
+    if (round && px * px + py * py > 70 * 70) continue; x.globalAlpha = .55; x.beginPath(); x.arc(px, py, .8 + (r >>> 20) % 3 * .6, 0, 7); x.fill(); }
+  x.restore();
+}
+const K = (w, s) => w + ' ' + s + 'px "' + KF + '"';
+function book(v) {
+  const x = $('#cv').getContext('2d'), W = 1200, H = 780, P = 40, mid = W / 2;
+  x.fillStyle = '#0d0f13'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#232a20'; x.fillRect(P - 14, P - 14, W - 2 * P + 28, H - 2 * P + 28);
+  for (const [x0, w0] of [[P, mid - P], [mid, mid - P]]) { const g = x.createLinearGradient(x0, 0, x0 + w0, 0), left = x0 === P;
+    g.addColorStop(0, left ? '#e7e0cd' : '#c9c1ab'); g.addColorStop(left ? .9 : .1, '#e9e2d0'); g.addColorStop(1, left ? '#c9c1ab' : '#e7e0cd'); x.fillStyle = g; x.fillRect(x0, P, w0, H - 2 * P); }
+  x.strokeStyle = 'rgba(60,50,30,.18)'; x.lineWidth = 1; for (let j = P + 130; j < H - P - 40; j += 34) { x.beginPath(); x.moveTo(mid + 40, j); x.lineTo(W - P - 40, j); x.stroke(); }
+  const ink = '#2a2419', faint = '#6d6350';
+  x.textAlign = 'left'; x.fillStyle = faint; x.font = '700 16px "Courier Prime"'; x.fillText('PNE MEUTE · LIVRET INDIVIDUEL', P + 36, P + 46);
+  x.fillStyle = ink; x.font = '900 40px "Big Shoulders Stencil Display"'; x.fillText('ÉTRANGER', P + 36, P + 90);
+  x.strokeStyle = ink; x.lineWidth = 2; x.beginPath(); x.moveTo(P + 36, P + 108); x.lineTo(mid - 36, P + 108); x.stroke(); x.lineWidth = 1;
+  const px = P + 36, py = P + 132, pw = 200, ph = 256;
+  x.fillStyle = '#cfc8b4'; x.fillRect(px, py, pw, ph);
+  if (photo) { const z = +$('#zm').value / 100, k = +$('#py').value / 100, s = Math.max(pw / photo.width, ph / photo.height) * z, dw = photo.width * s, dh = photo.height * s;
+    x.save(); x.beginPath(); x.rect(px, py, pw, ph); x.clip(); x.filter = 'saturate(.62) sepia(.16) contrast(.94) brightness(1.02)'; x.drawImage(photo, px + (pw - dw) / 2, py + (ph - dh) * k, dw, dh); x.restore(); x.filter = 'none';
+    x.fillStyle = 'rgba(232,225,207,.08)'; x.fillRect(px, py, pw, ph); }
+  else { x.fillStyle = faint; x.font = K(400, 16); x.textAlign = 'center'; x.fillText('증명사진', px + pw / 2, py + ph / 2); x.textAlign = 'left'; }
+  x.fillStyle = 'rgba(40,30,15,.5)'; for (const [a, b] of [[px - 4, py - 4], [px + pw - 22, py - 4], [px - 4, py + ph - 22], [px + pw - 22, py + ph - 22]]) x.fillRect(a, b, 26, 26);
+  const fx = px + pw + 30, decl = v.dn || v.rn || '이름 미기재', real = v.rn || '{user}';
+  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; const t1 = 'IDENTITÉ DÉCLARÉE · '; x.fillText(t1, fx, py + 14); const w1 = x.measureText(t1).width;
+  x.font = K(400, 14); x.fillText('신고 이름', fx + w1, py + 14);
+  x.fillStyle = ink; x.font = K(700, 34); x.fillText(decl, fx, py + 56);
+  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; const t2 = 'IDENTITÉ RÉELLE · '; x.fillText(t2, fx, py + 100); const w2 = x.measureText(t2).width; x.font = K(400, 14); x.fillText('본명', fx + w2, py + 100);
+  if (v.dn && !v.rg) { x.fillStyle = '#16120c'; x.fillRect(fx, py + 112, Math.min(260, Math.max(120, real.length * 26)), 30); }
+  else { x.fillStyle = ink; x.font = K(700, 24); x.fillText(real, fx, py + 136); }
+  [['국적', v.na], ['성별 · 나이', v.sx + ' · ' + (v.ag || '-') + '세'], ['키 · 생일', (v.ht ? v.ht + 'cm' : '-') + ' · ' + (v.bd || '-')]].forEach(([k, val], i) => {
+    const yy = py + 180 + i * 34; x.fillStyle = faint; x.font = K(400, 14); x.fillText(k, fx, yy); x.fillStyle = ink; x.font = K(700, 17); x.fillText(val, fx + 92, yy); });
+  const h = hash(decl + (v.cs || '')), mat = String(h % 9000000 + 1000000);
+  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; x.fillText('MATRICULE', P + 36, H - P - 78);
+  x.fillStyle = ink; x.font = '700 30px "Courier Prime"'; x.fillText(mat.replace(/(\d{3})(\d{4})/, '$1 $2'), P + 36, H - P - 44);
+  if (v.dn && v.rg) stamp(x, mid - 140, H - P - 70, -0.08, '#3d5a8a', ['RÉGULARISÉ', '신원 정정'], false, h ^ 7);
+  const rx = mid + 40;
+  x.fillStyle = faint; x.font = '700 16px "Courier Prime"'; x.fillText('AFFECTATION', rx, P + 46);
+  x.fillStyle = ink; x.font = '900 40px "Big Shoulders Stencil Display"'; x.fillText((v.cs || 'BLEU').toUpperCase(), rx, P + 90);
+  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; x.textAlign = 'right'; x.fillText('CALLSIGN', W - P - 40, P + 90); x.textAlign = 'left';
+  [['계급', v.rk], ['주특기', v.ms], ['배속', 'PNE MEUTE · Camp Simoun'], ['배속 사유', v.wy]].forEach(([k, val], i) => {
+    const yy = P + 154 + i * 34; x.fillStyle = faint; x.font = K(400, 14); x.fillText(k, rx, yy); x.fillStyle = ink; x.font = K(700, 18); x.fillText(val, rx + 100, yy); });
+  inkify(x, P, P, W - 2 * P, H - 2 * P, [px, py, pw, ph]);
+  stamp(x, rx + 110, H - P - 150, -0.18, '#5b3a2a', ['ENGAGÉ', 'AUBAGNE'], true, h ^ 3);
+  if (v.kp) stamp(x, rx + 330, H - P - 200, 0.1, '#2f4f6a', ['KÉPI BLANC', '4e RE · CASTELNAUDARY'], false, h ^ 5);
+  else { x.fillStyle = faint; x.font = '700 15px "Courier Prime"'; x.fillText('KÉPI BLANC : EN INSTRUCTION', rx + 210, H - P - 200); }
+  const red = v.rc !== '현역';
+  stamp(x, W - P - 190, H - P - 64, -0.06, red ? '#a3232c' : '#2f5a3a', [red ? (v.rc === '기록 말소' ? 'RAYÉ DES CONTRÔLES' : 'DÉCÉDÉ') : 'EN SERVICE', v.rc], false, h ^ 11);
+  const fg = x.createLinearGradient(mid - 18, 0, mid + 18, 0); fg.addColorStop(0, 'rgba(0,0,0,0)'); fg.addColorStop(.5, 'rgba(40,30,15,.35)'); fg.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = fg; x.fillRect(mid - 18, P, 36, H - 2 * P);
+}
+function upd() { const v = vals(), t = text(v); $('#out').textContent = t; $('#cnt').textContent = t.length + '자'; book(v); return t; }
+$('#fm').addEventListener('input', upd); $('#fm').addEventListener('change', upd);
+$('#rand').addEventListener('click', () => {
+  const r = a => a[Math.floor(Math.random() * a.length)];
+  $('#sx').value = r(['女', '男']); $('#ag').value = 20 + Math.floor(Math.random() * 12); $('#ht').value = 155 + Math.floor(Math.random() * 35);
+  $('#na').value = r(NAT.slice(0, -1)); $('#ms').value = r(MOS.slice(0, -1)); $('#wy').value = r(WHY.slice(0, -1)); $('#tn').value = r(TONE.slice(0, -1)); $('#rk').value = RANK[0];
+  $('#kp').selectedIndex = Math.random() < .5 ? 0 : 1;
+  const ks = $$('#ex input'); ks.forEach(k => k.checked = false); for (let i = 0; i < 2; i++) r(ks).checked = true; upd();
+});
+$('#copy').addEventListener('click', async () => { const t = upd(); try { await navigator.clipboard.writeText(t); $('#msg').textContent = '복사했습니다. 채팅방 페르소나 설정에 붙여 넣으세요.'; } catch (e) { $('#msg').textContent = '자동 복사가 막혔습니다. 글을 길게 눌러 직접 복사해 주세요.'; } });
+$('#save').addEventListener('click', () => { upd(); const a = document.createElement('a'); a.download = 'etranger_livret_' + ($('#cs').value.trim() || 'bleu') + '.png'; a.href = $('#cv').toDataURL('image/png'); a.click(); });
+upd(); document.fonts.ready.then(upd); setTimeout(upd, 1500);
+</script>
+</body></html>
