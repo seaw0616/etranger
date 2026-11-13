@@ -208,9 +208,12 @@ function book(v) {
   x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; const t1 = 'IDENTITÉ DÉCLARÉE · '; x.fillText(t1, fx, py + 14); const w1 = x.measureText(t1).width;
   x.font = K(400, 14); x.fillText('신고 이름', fx + w1, py + 14);
   x.fillStyle = ink; x.font = K(700, 34); x.fillText(decl, fx, py + 56);
-  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; const t2 = 'IDENTITÉ RÉELLE · '; x.fillText(t2, fx, py + 100); const w2 = x.measureText(t2).width; x.font = K(400, 14); x.fillText('본명', fx + w2, py + 100);
-  if (v.dn && !v.rg) { x.fillStyle = '#16120c'; x.fillRect(fx, py + 112, Math.min(260, Math.max(120, real.length * 26)), 30); }
-  else { x.fillStyle = ink; x.font = K(700, 24); x.fillText(real, fx, py + 136); }
+  /* 11-14: 페르소나 글의 «정정 전, 부대에선 신고 이름으로 불림». 이름 바로 밑에 붙이고, 본명 칸은 그만큼(12px) 내려 덩어리를 나눈다 */
+  const nb = v.dn && !v.rg ? 12 : 0;
+  if (nb) { x.fillStyle = faint; x.font = K(400, 14); x.fillText('정정 전 · 부대 호칭', fx, py + 76); }
+  x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; const t2 = 'IDENTITÉ RÉELLE · '; x.fillText(t2, fx, py + 100 + nb); const w2 = x.measureText(t2).width; x.font = K(400, 14); x.fillText('본명', fx + w2, py + 100 + nb);
+  if (v.dn && !v.rg) { x.fillStyle = '#16120c'; x.fillRect(fx, py + 112 + nb, Math.min(260, Math.max(120, real.length * 26)), 30); }
+  else { x.fillStyle = ink; x.font = K(700, 24); x.fillText(real, fx, py + 136 + nb); }
   [['국적', v.na], ['성별 · 나이', v.sx + ' · ' + (v.ag || '-') + '세'], ['키 · 생일', (v.ht ? v.ht + 'cm' : '-') + ' · ' + (v.bd || '-')]].forEach(([k, val], i) => {
     const yy = py + 180 + i * 34; x.fillStyle = faint; x.font = K(400, 14); x.fillText(k, fx, yy); x.fillStyle = ink; x.font = K(700, 17); x.fillText(val, fx + 92, yy); });
   const h = hash(decl + (v.cs || '')), mat = String(h % 9000000 + 1000000);
@@ -223,6 +226,23 @@ function book(v) {
   x.fillStyle = faint; x.font = '700 14px "Courier Prime"'; x.textAlign = 'right'; x.fillText('CALLSIGN', W - P - 40, P + 90); x.textAlign = 'left';
   [['계급', v.rk], ['주특기', v.ms], ['배속', 'PNE MEUTE · Camp Simoun'], ['배속 사유', v.wy]].forEach(([k, val], i) => {
     const yy = P + 154 + i * 34; x.fillStyle = faint; x.font = K(400, 14); x.fillText(k, rx, yy); x.fillStyle = ink; x.font = K(700, 18); x.fillText(val, rx + 100, yy); });
+  /* 11-14 누님 «넣어»: 페르소나 글에만 있던 입대 전 · 말투를 수첩에도. 입대 전은 기록 줄(넘치면 두 줄), 말투는 교관이 파란 펜으로 적은 메모 */
+  let ny = P + 154 + 4 * 34;
+  if (v.ex.length) { x.fillStyle = faint; x.font = K(400, 14); x.fillText('입대 전', rx, ny); x.fillStyle = ink; x.font = K(700, 18);
+    /* 11-14 누님 «직접적어서 여러개 넣으면 어떻게됨?»: 면 폭(maxw)에 맞춰 항목 단위로 줄을 바꾸고, 3줄을 넘으면 마지막 줄 끝에 «외 N개» */
+    const maxw = W - P - 40 - (rx + 100), lines = [''];
+    v.ex.forEach(it => { const cur = lines[lines.length - 1], t = cur ? cur + ' · ' + it : it;
+      if (x.measureText(t).width <= maxw || !cur) lines[lines.length - 1] = t; else lines.push(it); });
+    if (lines.length > 3) { const left = v.ex.length - lines.slice(0, 3).join(' · ').split(' · ').length; lines.length = 3;
+      while (lines[2].includes(' · ') && x.measureText(lines[2] + ' 외 ' + left + '개').width > maxw) { lines[2] = lines[2].slice(0, lines[2].lastIndexOf(' · ')); }
+      lines[2] += ' 외 ' + (v.ex.length - lines.join(' · ').split(' · ').length) + '개'; }
+    lines.forEach((l, i) => x.fillText(l, rx + 100, ny + i * 34)); ny += lines.length * 34; }
+  if (v.tn) { x.save(); x.translate(rx + 100, ny + 12); x.rotate(-0.025); x.fillStyle = '#2f4f6a'; x.font = K(700, 18);
+    /* 말투 직접 쓰기가 길면 두 줄까지, 그래도 넘치면 말줄임 */
+    const mw = W - P - 40 - (rx + 100); let t = '※ 말투: ' + v.tn, t2 = '';
+    if (x.measureText(t).width > mw) { let k = t.length; while (k > 1 && x.measureText(t.slice(0, k)).width > mw) k--; const sp = t.lastIndexOf(' ', k); if (sp > 6) k = sp; t2 = t.slice(k).trim(); t = t.slice(0, k);
+      while (t2.length > 1 && x.measureText(t2).width > mw) t2 = t2.slice(0, -2) + '…'; }
+    x.fillText(t, 0, 0); if (t2) x.fillText(t2, 0, 30); x.restore(); }
   inkify(x, P, P, W - 2 * P, H - 2 * P, [px, py, pw, ph]);
   stamp(x, rx + 110, H - P - 150, -0.18, '#5b3a2a', ['ENGAGÉ', 'AUBAGNE'], true, h ^ 3);
   if (v.kp) stamp(x, rx + 330, H - P - 200, 0.1, '#2f4f6a', ['KÉPI BLANC', '4e RE · CASTELNAUDARY'], false, h ^ 5);
