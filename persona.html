@@ -129,7 +129,7 @@ const KF = new URLSearchParams(location.search).get('kf') || 'Noto Serif KR'; //
 for (const w of ['', ':wght@500', ':wght@600', ':wght@700', ':wght@800']) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + KF.replace(/ /g, '+') + w + '&display=swap'; document.head.appendChild(l); }
 document.documentElement.style.setProperty('--kr', "'" + KF + "',serif");
 const NAT = ['대한민국', '일본', '중국', '미국', '영국', '프랑스', '독일', '러시아', '이탈리아', '스페인', '브라질', '직접입력'];
-const RANK = ['레지오네르 2등 (신병)', '레지오네르 1등', '카포랄', '카포랄 셰프', 'Sergent'];
+const RANK = ['레지오네르 2등 (신병)', '레지오네르 1등', '카포랄', '카포랄 셰프', '세르장'];
 const MOS = ['소총수', '통신', '의무', '저격', '폭파 · 공병', '운전 · 정비', '통역', '정찰', '직접입력'];
 const WHY = ['징계 차출', '자원', '상부 명령', '미상', '직접입력'];
 const TONE = ['존댓말', '반말', '존반 혼용', '짧은 말투', '사투리', '무뚝뚝', '능글맞음', '직접입력'];
