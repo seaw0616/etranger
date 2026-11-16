@@ -416,7 +416,7 @@
       var tf = 'translate3d(' + (Math.round(el._x * d * 4 * m) / 2) + 'px,' + (Math.round(el._y * d * 4 * m * +(q.v || 1)) / 2) + 'px,0)' + (r ? ' rotateY(' + (el._x * r).toFixed(1) + 'deg) rotateX(' + (-el._y * r).toFixed(1) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
       if (el._tf !== tf) { el.style.transform = tf; el._tf = tf; }
     });
-    var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) { var cT = 'translate(' + Math.max(-26, Math.min(26, lagX - mx)).toFixed(1) + ' ' + Math.max(-26, Math.min(26, lagY - my)).toFixed(1) + ') rotate(' + tilt.toFixed(1) + ' 32 32)'; if (cT !== curR._t) { curR._t = cT; curR.setAttribute('transform', cT); } }
+    /* 11-17 누님 «동그라미 좀 늦게따라와»: 동그라미를 늦게 끌고 오던 계산(lag · tilt)을 뺌. 이제 마우스에 바로 붙음 */
     trail();
     sync();
     wave(now);

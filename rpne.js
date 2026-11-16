@@ -17,6 +17,8 @@
   };
   var EXTRA = [['짤', '투투 근황.jpg', 'Sable_Chien', '1h', 0, 77], ['내기', '다음 출격 생환 내기 판 엶', 'Vodka_Sniper', '52m', 0, 46]];
   var st = { sort: 'best', tab: 'feed', q: '', open: -1, vote: {}, joined: true };
+  try { var sv = JSON.parse(localStorage.getItem('rpne-vote') || '{}'); if (sv && typeof sv === 'object') { st.vote = sv.v || {}; if (sv.j === false) st.joined = false; } } catch (e) {}
+  var keep = function () { try { localStorage.setItem('rpne-vote', JSON.stringify({ v: st.vote, j: st.joined })); } catch (e) {} };
   // 레딧처럼 선 아이콘(이모지 · 특수문자 안 씀)
   var I = {
     up: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3 3.5 10H7v6.5h6V10h3.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
@@ -91,14 +93,14 @@
     var b = e.target.closest && e.target.closest('[data-rx]'); if (!b || !b.closest('.rx')) return;
     e.preventDefault(); e.stopPropagation();
     var k = b.getAttribute('data-rx'), i = +b.getAttribute('data-i');
-    if (k === 'up' || k === 'dn') { var d = k === 'up' ? 1 : -1; st.vote[i] = st.vote[i] === d ? 0 : d; }
+    if (k === 'up' || k === 'dn') { var d = k === 'up' ? 1 : -1; st.vote[i] = st.vote[i] === d ? 0 : d; keep(); }
     else if (k === 'open') { st.open = i; setTimeout(function () { var f = document.querySelector('.rx-feed'); if (f) f.scrollIntoView({ block: 'start' }); }, 0); }
     else if (k === 'close') st.open = -1;
     else if (k === 'tab') { st.tab = b.getAttribute('data-t'); st.open = -1; }
     else if (k === 'topic') { st.q = '!커뮤 ' + b.getAttribute('data-t'); st.tab = 'feed'; }
     else if (k === 'share') { toast('링크 복사됨'); return; }
     else if (k === 'create') { toast('글쓰기는 기지 인원만'); return; }
-    else if (k === 'join') st.joined = !st.joined;
+    else if (k === 'join') { st.joined = !st.joined; keep(); }
     draw();
   }, true);
   document.addEventListener('input', function (e) { if (e.target.id === 'rxq') { st.q = e.target.value; st.open = -1; st.tab = 'feed'; var tb = document.querySelector('.rx-toolbox'); if (tb) tb.innerHTML = tools(); var f = document.querySelector('.rx-feed'); if (f) f.innerHTML = feed(); } });

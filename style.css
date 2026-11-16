@@ -1298,3 +1298,109 @@ html.c-hot #cur{opacity:0}
 @media (prefers-reduced-motion:reduce){.rx *{transition:none!important}}
 .rx-sub{width:24px;height:24px;border-radius:50%;object-fit:cover;flex:none}
 .rx .rx-op{background:none;padding:0;border-radius:0;color:#4da3ff}
+
+/* 11-17 메일 · 메신저 탭 */
+.msgp .mh3{display:none}
+.mtabs{display:flex;gap:4px;margin:4px 0 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.mtabs button{position:relative;height:44px;padding:0 20px;border:0;background:none;color:#9aa3a8;font:700 16px/1 'Noto Sans KR',sans-serif;cursor:pointer}
+.mtabs button.on{color:#f0e6d6}
+.mtabs button.on::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:#dd9d4c}
+.mtabs button i{font-style:normal;margin-left:4px;padding:1px 7px;border-radius:10px;background:rgba(221,157,76,.18);color:#dd9d4c;font-size:12px}
+.mtabs button:focus-visible{outline:2px solid #6aa6ff;outline-offset:2px}
+.mpane[hidden]{display:none}
+
+/* 11-17 대원 파일 안 메신저 · 메일 알림 카드 */
+.mtabs{display:none}
+.fmsg{margin-top:40px}
+.fmsg h3{margin:0 0 14px;font-size:20px;letter-spacing:.06em}
+.mmail{display:flex;gap:12px;align-items:flex-start;margin:0 0 12px;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(221,157,76,.28)}
+.mmail svg{width:22px;height:22px;flex:none;color:#dd9d4c;margin-top:2px}
+.mmail b{display:block;font-size:13px;color:#dd9d4c;letter-spacing:.04em}
+.mmail span{display:block;margin-top:2px;font-size:13px;color:#9aa3a8}
+.mmail p{margin:6px 0 0;font-size:16px;line-height:1.5;color:#f0e6d6;font-weight:600}
+.fmed{margin-top:40px}.fmed h3{margin:0 0 12px;font-size:20px;letter-spacing:.06em}.fmed p{margin:0;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.05);border-left:3px solid #c0503f;font-size:17px;line-height:1.5;color:#f0e6d6}
+.croster a .crk{display:block;font-style:normal;margin:4px 0 2px;font-size:13px;font-weight:700;color:#dd9d4c;letter-spacing:.02em}
+
+/* 대원 파일 → 인원 관계 카드(관계 문서와 같은 종이) */
+.relc{position:relative;display:block;margin-top:44px;padding:22px 26px 20px;border-radius:3px;background:#e8e1cf linear-gradient(180deg,rgba(255,255,255,.35),rgba(0,0,0,.04));color:#1f1b15;text-decoration:none;box-shadow:0 26px 50px -24px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.25);transform:rotate(-.6deg);transition:transform .22s cubic-bezier(.23,1,.32,1),box-shadow .22s cubic-bezier(.23,1,.32,1)}
+.relc:hover{transform:rotate(0) translateY(-3px);box-shadow:0 34px 60px -24px rgba(0,0,0,.85),0 0 0 1px rgba(0,0,0,.25)}
+.relc:active{transform:scale(.985)}
+.relc:focus-visible{outline:3px solid #dd9d4c;outline-offset:4px}
+.relc .rch{display:flex;flex-direction:column;gap:4px;padding-bottom:12px;border-bottom:2px solid #1f1b15}
+.relc .rch small{font:700 13px/1.3 var(--go);letter-spacing:.06em;color:#5d5546}
+.relc .rch b{font:800 22px/1.2 var(--my);letter-spacing:.06em;color:#14110c}
+.relc .rcm{position:relative;display:block;height:190px;margin:14px 6px 6px}
+.relc .rcm svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.relc .rcm line{stroke:#a3302a;stroke-width:1.6;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+.relc .rcn{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;transform:translate(-50%,-50%)}
+.relc .rcn i{display:block;width:46px;height:46px;border-radius:50%;background:#2a2620 center 20%/cover;box-shadow:0 0 0 2px #e8e1cf,0 0 0 3.5px #1f1b15;filter:grayscale(1) contrast(1.05)}
+.relc .rcn.me i{width:62px;height:62px;filter:none;box-shadow:0 0 0 2px #e8e1cf,0 0 0 4px #a3302a}
+.relc .rcn b{font:900 13px/1 var(--st);letter-spacing:.08em;color:#14110c;background:#e8e1cf;padding:1px 4px}
+.relc .rcf{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px;border-top:1px solid rgba(31,27,21,.35);font:700 15px/1.3 var(--go);color:#5d5546}
+.relc .rcf b{font:900 15px/1 var(--st);letter-spacing:.08em;color:#a3302a}
+.relc .rcf em{font-style:normal;font-weight:800;font-size:16px;color:#14110c;border-bottom:2px solid #14110c;padding-bottom:1px}
+.relc .rcs{position:absolute;right:22px;top:20px;padding:5px 9px 4px 13px;border:2.5px solid #b2372d;border-radius:3px;color:#b2372d;font:900 14px/1 var(--go);letter-spacing:.35em;transform:rotate(-8deg);opacity:.85;mix-blend-mode:multiply}
+@media (max-width:820px){.relc{margin-top:32px;padding:18px 18px 16px}.relc .rcm{height:170px}.relc .rch b{font-size:20px}}
+@media (prefers-reduced-motion:reduce){.relc,.relc:hover{transition:none;transform:none}}
+
+/* 낙서 지우기 · 먹칠은 눌러야 보임 */
+.phw:has(.scr:not(.gone)),.pbw:has(.scr:not(.gone)){cursor:pointer}
+.scr.gone{opacity:0;transform:scale(1.04);transition:opacity .45s cubic-bezier(.23,1,.32,1),transform .45s cubic-bezier(.23,1,.32,1)}
+.rd{cursor:pointer}
+.rd:hover:not(:focus),html.clr .rd:hover:not(:focus){background:var(--s2);color:transparent}
+@media (prefers-reduced-motion:reduce){.scr.gone{transition:none}}
+@media (max-width:820px){.relc,.relc:hover{transform:none}}
+
+/* 안 딴 업적: 제목 먹칠 */
+.am .ai.off{opacity:1}
+.am .ai.off .akr{display:inline-block;max-width:100%;height:1.05em;margin:0;vertical-align:-.12em;background:#0b0c10;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.am .ai.off span{color:var(--t3)}
+.apg+.apg{margin-top:44px}.apg h3{margin:0 0 14px;font-size:20px;letter-spacing:.06em;color:var(--t1)}
+.net .sub+.apg{margin-top:40px}
+.apt{display:inline-block;margin-right:10px;padding:3px 10px;border-radius:12px;color:#fff;font-size:13px;font-weight:700;line-height:1.3;vertical-align:1px;white-space:nowrap}
+.apt{min-width:5.4em;text-align:center;box-sizing:border-box}
+.apt{min-width:6.2em;padding-left:6px;padding-right:6px}.apl td:nth-child(2),.apl td:nth-child(3){white-space:nowrap}
+@media (max-width:767px){.apl .apt{display:block;width:max-content;margin:0 0 6px}.apl td{vertical-align:top}}
+
+/* ① 업적 먹칠: 사이트 먹칠과 같은 색 */
+.am .ai.off .akr{background:var(--s2);box-shadow:none;border-radius:0}
+/* ② 결재 딱지: 테두리 도장꼴 */
+.apt{background:transparent!important;color:var(--c);border:1.5px solid var(--c);border-radius:2px;padding:2px 6px;letter-spacing:.06em;font-size:13px;line-height:1.35}
+/* ③ 관계 카드: 실제 평정 기록 종이를 줄인 꼴 */
+.relc2{display:block;margin-top:44px;color:inherit;text-decoration:none}
+.relc2 .rlmini{zoom:.5;pointer-events:none;transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s cubic-bezier(.23,1,.32,1)}
+.relc2:hover .rlmini{transform:translateY(-6px)}
+.relc2:focus-visible{outline:3px solid #dd9d4c;outline-offset:6px}
+.relc2 .rcgo{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:14px;font-size:16px;font-weight:800;color:var(--t1)}
+.relc2 .rcgo em{font-style:normal;color:#dd9d4c;transition:transform .2s cubic-bezier(.23,1,.32,1)}
+.relc2:hover .rcgo em{transform:translateX(4px)}
+@media (max-width:767px){.relc2{margin-top:32px}.relc2 .rlmini{zoom:.36}}
+@media (prefers-reduced-motion:reduce){.relc2 .rlmini,.relc2 .rcgo em{transition:none}}
+
+/* 결재 딱지 색 변수 이름 바꿈 */
+.apt{color:var(--apc);border-color:var(--apc)}
+/* 관계 카드: 늘 문서 폭으로 그리고 줄임(줄이는 값은 fitRel) */
+.relc2 .rlmini{width:1180px;zoom:.44}
+/* 관계도: 폰에서도 PC 꼴 그대로(폰에서 줄이던 규칙 9개를 PC 값으로 되돌림) */
+@media (max-width:820px){
+ .rlch{width:1094px;height:600px;max-width:none}
+ .rlch .rlph{width:118px;height:150px}
+ .rlch .rln b{font-size:14px}
+ .rlch .rln.on .rlph{width:340px;height:440px}
+ .rlch .rln.on b::before,.rlch .rln.on b::after{display:block}
+ .rlch #rlsv::before{font-size:180px}
+ .relc2 .rlmini .rlsh{padding:20px 56px 22px 70px}
+ .relc2 .rlmini .rlhd{flex-wrap:nowrap}
+}
+.apt{border:1.5px solid var(--apc)}
+.file>div{min-width:0}.relc2{max-width:100%;min-width:0;overflow:hidden}
+.apt,.apl .apt{display:inline;min-width:0;width:auto;margin:0 6px 0 0;padding:0;border:0!important;background:none!important;color:var(--apc);font-size:inherit;font-weight:800;letter-spacing:0;line-height:inherit;white-space:nowrap;vertical-align:baseline}
+@media (max-width:767px){.apl td:nth-child(3){white-space:normal;word-break:keep-all}}
+@media (max-width:767px){.apl table,.apl tbody,.apl tr,.apl td{display:block;width:auto}.apl thead{display:none}.apl tr{padding:16px 4px;border-bottom:1px solid rgba(255,255,255,.08)}.apl td{padding:0;border:0;white-space:normal}.apl td:nth-child(1){font-size:16px;line-height:1.5;margin-bottom:8px}.apl td:nth-child(2),.apl td:nth-child(3){display:inline-block;font-size:14px;white-space:nowrap}.apl td:nth-child(2){margin-right:14px;color:var(--t2)}.apl td:nth-child(2)::after{content:"";display:inline-block;width:3px;height:3px;margin-left:14px;border-radius:50%;background:var(--t3);vertical-align:3px}}
+/* 11-17 누님 «이렇게딱붙는게싫다고»: 표 줄 강조 띠를 양옆 14화소 넓혀 글자 둘레 여백(글자 자리는 그대로) */
+.net table{margin-left:-14px;margin-right:-14px;width:calc(100% + 28px)}.net th:first-child,.net td:first-child{padding-left:14px}.net th:last-child,.net td:last-child{padding-right:14px}
+@media (max-width:767px){.apl table{margin:0 -14px;width:calc(100% + 28px)}.apl tr{padding:16px 14px}.apl td:first-child,.apl td:last-child{padding-left:0;padding-right:0}}
+/* 11-17 누님 «밑에 업적나오는거싫어 · 무전가리잖아»: 폰 알림은 위쪽 메뉴 아래로 */
+@media (max-width:767px){#toast{top:104px;bottom:auto}}
+/* «짤리잖아»: 화살표 줄은 자르지 않고, 줄인 종이만 자름 */
+.relc2{overflow:visible}.relc2 .rlmini{overflow:hidden}.relc2 .rcgo{padding-right:2px}
