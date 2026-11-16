@@ -1037,3 +1037,7 @@ body::after{will-change:transform;contain:strict}
 #mqi{will-change:transform}
 #bgx{will-change:transform;contain:paint}
 body::after{animation:none!important}
+
+/* 11-17 마우스 렉: 십자선과 가운데 점은 컴퓨터가 직접 그리는 진짜 커서 그림으로(바빠도 늦지 않음). 도는 고리 · 꺾쇠는 그대로 따라오는 장식 */
+@media (pointer:fine){html,body,a,button,input,#vl{cursor:url(img/cur.svg) 32 32,crosshair}html.c-hot,html.c-hot body,html.c-hot a,html.c-hot button,html.c-hot input,html.c-hot #vl{cursor:url(img/cur-hot.svg) 32 32,pointer}html.c-txt input,html.c-txt textarea{cursor:text}}
+#cur .ch,#cur .ce{display:none}
