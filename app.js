@@ -409,10 +409,11 @@
     DD.forEach(function (el) {
       var P = el._p || (el._p = { q: { v: el.dataset.v, s: el.dataset.s }, d: +el.dataset.d, m: +(el.dataset.m || 1), k: +(el.dataset.k || .08), r: +(el.dataset.r || 0), base: el.classList.contains('big') ? ' translateY(-56%)' : '' }), q = P.q, d = P.d, m = P.m, k = P.k, r = P.r, base = P.base;
       el._x = (el._x || 0) + (tx - (el._x || 0)) * k; el._y = (el._y || 0) + (ty - (el._y || 0)) * k;
-      var tf = 'translate3d(' + (el._x * d * 2 * m).toFixed(1) + 'px,' + (el._y * d * 2 * m * +(q.v || 1)).toFixed(1) + 'px,0)' + (r ? ' rotateY(' + (el._x * r).toFixed(2) + 'deg) rotateX(' + (-el._y * r).toFixed(2) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
+      // 11-17 렉: 0.1픽셀 단위로 매 장면 다시 쓰던 것을 0.5픽셀 · 0.1도 단위로(눈에 안 보이는 떨림에서는 다시 그리지 않음)
+      var tf = 'translate3d(' + (Math.round(el._x * d * 4 * m) / 2) + 'px,' + (Math.round(el._y * d * 4 * m * +(q.v || 1)) / 2) + 'px,0)' + (r ? ' rotateY(' + (el._x * r).toFixed(1) + 'deg) rotateX(' + (-el._y * r).toFixed(1) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
       if (el._tf !== tf) { el.style.transform = tf; el._tf = tf; }
     });
-    var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) curR.setAttribute('transform', 'translate(' + Math.max(-26, Math.min(26, lagX - mx)) + ' ' + Math.max(-26, Math.min(26, lagY - my)) + ') rotate(' + tilt + ' 32 32)');
+    var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) { var cT = 'translate(' + Math.round(Math.max(-26, Math.min(26, lagX - mx))) + ' ' + Math.round(Math.max(-26, Math.min(26, lagY - my))) + ') rotate(' + Math.round(tilt) + ' 32 32)'; if (cT !== curR._t) { curR._t = cT; curR.setAttribute('transform', cT); } }
     trail();
     sync();
     wave(now);
