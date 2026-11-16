@@ -1,7 +1,7 @@
 (function () {
   var $ = function (s) { return document.querySelector(s); }, root = document.documentElement, D = window.D;
   var audio = $('#bgm');
-  var vol = .8, muted = false, vg = 1;
+  var vol = .15, muted = false, vg = 1;
   try { var sv = parseFloat(localStorage.getItem('etr-vol')); if (sv >= 0 && sv <= 1) vol = sv; } catch (e) {}
   function setV() { var v = muted ? 0 : vol, r = $('#vl'); audio.volume = v; vg = v / .8; if (out) out.gain.value = vg; r.value = muted ? 0 : vol; r.style.setProperty('--v', v * 100 + '%'); root.classList.toggle('muted', v === 0); }
   $('#vl').addEventListener('input', function (e) { vol = +e.target.value; muted = false; try { localStorage.setItem('etr-vol', vol); } catch (x) {} setV(); });
@@ -250,7 +250,7 @@
         '<svg class="slant" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><polygon points="1010,0 1440,0 1440,900 830,900" fill="#15181e" fill-opacity=".85"/></svg>' +
         '<div class="big" data-d="34" data-m="-1" data-k=".07" data-r="7"><div class="g1" translate="no">ÉTRANGER</div><div class="g2" translate="no">ÉTRANGER</div></div>' +
         '<div class="layer" data-d="46" data-m=".6" data-v=".35" data-k=".16" data-s="1.04" style="background-image:url(' + bgPick('front') + ')"></div>' +
-        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1></div>';
+        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1><a class="hrec" href="persona.html">신병 등록부 →</a></div>';
     }
   };
   function closeLy() { if (!$('#lyrics').hidden) ly(); }
@@ -409,14 +409,14 @@
     if (now - last > 2500 && !reduce) { x = innerWidth * (.5 + .3 * Math.sin(now / 1900)); y = innerHeight * (.47 + .1 * Math.cos(now / 1300)); }
     sx += ((x / innerWidth - .5) - sx) * .08; sy += ((y / innerHeight - .5) - sy) * .08;
     var tx = x / innerWidth - .5, ty = y / innerHeight - .5;
-    DD.forEach(function (el) {
+    if (!lite) DD.forEach(function (el) {
       var P = el._p || (el._p = { q: { v: el.dataset.v, s: el.dataset.s }, d: +el.dataset.d, m: +(el.dataset.m || 1), k: +(el.dataset.k || .08), r: +(el.dataset.r || 0), base: el.classList.contains('big') ? ' translateY(-56%)' : '' }), q = P.q, d = P.d, m = P.m, k = P.k, r = P.r, base = P.base;
       el._x = (el._x || 0) + (tx - (el._x || 0)) * k; el._y = (el._y || 0) + (ty - (el._y || 0)) * k;
       // 11-17 렉: 0.1픽셀 단위로 매 장면 다시 쓰던 것을 0.5픽셀 · 0.1도 단위로(눈에 안 보이는 떨림에서는 다시 그리지 않음)
       var tf = 'translate3d(' + (Math.round(el._x * d * 4 * m) / 2) + 'px,' + (Math.round(el._y * d * 4 * m * +(q.v || 1)) / 2) + 'px,0)' + (r ? ' rotateY(' + (el._x * r).toFixed(1) + 'deg) rotateX(' + (-el._y * r).toFixed(1) + 'deg)' : '') + (q.s ? ' scale(' + q.s + ')' : '') + base;
       if (el._tf !== tf) { el.style.transform = tf; el._tf = tf; }
     });
-    var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) { var cT = 'translate(' + Math.round(Math.max(-26, Math.min(26, lagX - mx))) + ' ' + Math.round(Math.max(-26, Math.min(26, lagY - my))) + ') rotate(' + Math.round(tilt) + ' 32 32)'; if (cT !== curR._t) { curR._t = cT; curR.setAttribute('transform', cT); } }
+    var dx = mx - tiltX; tiltX = mx; tilt += dx * .5; lagX += (mx - lagX) * .26; lagY += (my - lagY) * .26; if (!reduce) { var cT = 'translate(' + Math.max(-26, Math.min(26, lagX - mx)).toFixed(1) + ' ' + Math.max(-26, Math.min(26, lagY - my)).toFixed(1) + ') rotate(' + tilt.toFixed(1) + ' 32 32)'; if (cT !== curR._t) { curR._t = cT; curR.setAttribute('transform', cT); } }
     trail();
     sync();
     wave(now);

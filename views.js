@@ -147,7 +147,7 @@
     document.querySelectorAll('.rln').forEach(function (b) { var q = P[b.dataset.c]; b.style.left = q[0] + '%'; b.style.top = q[1] + '%'; b.classList.toggle('on', b.dataset.c === relCur); });
     $('#rlsv').setAttribute('data-me', relMe().name); $('#rlsv').innerHTML = relLines(); $('#rlls').innerHTML = relList(); $('#rlme').textContent = relMe().name; relDraw(); }
   var S = {
-    ach: ['업적', function () { return '<p class="sub">' + Object.keys(eggs).length + ' / ' + ACH.length + ' 달성</p><div class="ach">' + ACH.map(function (a) { var on = eggs[a[0]]; return '<div class="' + (on ? 'on' : '') + '">' + (on ? a[1] : '잠긴 업적') + '<span>' + (on ? a[2] + '<em>달성</em>' : '조건 비공개') + '</span></div>'; }).join('') + '</div>'; }],
+    ach: ['업적', function () { return '<p class="sub">' + Object.keys(eggs).length + ' / ' + ACH.length + ' 달성</p><div class="ach">' + ACH.map(function (a) { var on = eggs[a[0]]; return '<div class="' + (on ? 'on' : '') + '">' + a[1] + '<span>' + (on ? a[2] + '<em>달성</em>' : '조건 · ' + a[2]) + '</span></div>'; }).join('') + '</div>'; }],
     rel: ['인원 관계', function () { if (D.chars.some(function (c) { return c.id === user.id; })) relCur = user.id; return '<div class="rlh"><p class="rll">조 내 결속 <i>불량</i></p><span class="rls">대외비</span></div><p class="rlp">각 인원은 타 인원의 전출 사유 및 신상 약점을 상호 인지함. 과거 불문 원칙의 유일한 예외.</p><p class="rlp">임무 외 협조 사례 없음. 비번 시 행적 상호 미보고.</p><div class="rlf"><div class="rltabs" id="rlm">' + relMapIn() + '</div><div id="rlb" class="rlpaper">' + relInner() + '</div></div>'; }],
     dash: ['현황', function () {
       var me = D.chars.filter(function (c) { return c.id === user.id; })[0];
@@ -158,10 +158,25 @@
     manual: ['임무 규정', function () { return tbl(['항목', '규정'], [['호출', 'NATO 음성 알파벳을 사용한다'], ['이름', '콜사인만 사용한다'], ['과거', '묻지 않는다'], ['미끼 임무', '거부할 수 없다']]); }],
     notice: ['공지', function () { return tbl(['구분', '제목', '작성', '시각'], [['긴급', '외부 접속 감지. 통신실은 확인 바람', '지휘소', (function () { try { var g = localStorage.getItem('etr-gt'); if (/^[0-2][0-9]:[0-5][0-9]$/.test(g || '')) return g; } catch (x) {} return (user && user.t) || '05:12'; })()], ['보급', '금주 식수는 계량 배급함. 각자 수통 지참 바람', '취사장', '04:58'], ['일반', '일몰 후 마을 시장 출입을 금함. 준수할 것', '지휘소', '어제']]); }],
     mail: ['메일', function () { shard(); return tbl(['보낸 곳', '제목'], myMail()); }],
-    chat: ['메신저', function () { return ''; }],
+    chat: ['메일 · 메신저', function () { return ''; }],
     inner: ['대원 전용 게시판', function () { return T.inner ? tbl(T.inner[0], T.inner[1]) : LOCKED; }],
     files: ['개인파일 열람', function (sub) { if (sub) return strip(V.people(sub), true); return tbl(['콜사인', '계급', '상태', '열람'], D.chars.map(function (c) { return ['<span class="cs" translate="no">' + c.name + '</span>', c.rows[1][1], user.id === c.id ? '본인' : '기록 말소', '<a class="ln" href="#net/files/' + c.id + '">열람</a>']; })); }],
-    board: ['게시판', function () { return tbl(['말머리', '제목', '작성', '추천'], D.posts.map(function (p) { return [p[0], p[1], p[2], p[5]]; })); }],
+    board: ['PNE 커뮤', function () {
+      var col = function (n) { var h = 0; for (var i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) % 360; return 'hsl(' + h + ',60%,60%)'; };
+      var tm = function (w) { return w ? w : '방금'; };
+      var all = D.posts.map(function (p) { return { tag: p[0], title: p[1], who: p[2], when: tm(p[3]), up: p[5] || 0, view: p[4] || 0, lock: 0 }; })
+        .concat(T.inner ? T.inner[1].map(function (p) { return { tag: p[0], title: p[1], who: p[2], when: p[3], up: null, view: null, lock: 1 }; }) : []);
+      var hot = all.filter(function (x) { return !x.lock; }).sort(function (a, b) { return b.up - a.up; });
+      var top = hot[0];
+      var by = function (x) { return '<span class="rdot" style="background:' + col(x.who) + '"></span>u/' + x.who + ' • ' + x.when; };
+      var row = function (x) { return '<tr' + (x.lock ? ' class="lk"' : '') + '><td class="ru">' + (x.lock ? '🔒' : x.up) + '</td><td><b><span class="rt">[' + x.tag + ']</span> ' + x.title + '</b><small>' + by(x) + (x.lock ? ' • <em>대원 전용</em>' : '') + '</small></td><td class="rc">' + (x.lock ? '·' : x.view) + '</td></tr>'; };
+      var wd = function (k, nm) { return '<div class="wd"><h5>' + nm + '</h5>' + S[k][1]() + '</div>'; };
+      return '<div class="rpg"><div class="rmain">' + (window.__RPNE_BANNER ? '<div class="rbn"><img src="img/rpne.png" alt=""></div>' : '') +
+        '<div class="rhd"><b translate="no">r/PNE</b><span>PNE의 커뮤입니다</span></div>' +
+        '<div class="rtop"><p class="rk">⇧1위 글</p><div class="rcard"><p class="rsub" translate="no">r/PNE</p><h4><span class="rt">[' + top.tag + ']</span> ' + top.title + '</h4><p class="rby">' + by(top) + '</p><p class="rft"><span class="rvote">⇧ ' + top.up + ' ⇩</span><span>조회 ' + top.view + '</span><span>↗ Share</span></p></div></div>' +
+        '<table class="rtb"><thead><tr><th>⇧</th><th>글</th><th>조회</th></tr></thead><tbody>' + all.filter(function (x) { return x !== top; }).sort(function (a, b) { return (b.lock - a.lock) || ((b.up || 0) - (a.up || 0)); }).map(row).join('') + '</tbody></table></div>' +
+        '<aside class="rpw">' + wd('calendar', '일정표') + wd('duty', '근무표') + wd('meal', '식단') + '</aside></div>';
+    }],
     approval: ['전자결재', function () { return T.approval ? tbl(T.approval[0], T.approval[1]) : LOCKED; }],
     leave: ['휴가 · 외출', function () { return tbl(['신청자', '구분', '결과'], [['DARLING', '마을 외출', '반려'], ['HYDE', '마을 외출', '반려'], ['CHASE', '휴가', '해당 없음(기록 없는 인원)']]); }],
     duty: ['근무표', function () { return tbl(['시간', '초소', '통신실', '영창 감시'], [['00–06', 'PHANTOM', 'CHASE', 'HYDE'], ['06–12', 'DARLING', 'CHASE', 'PHANTOM'], ['12–18', 'HYDE', 'DARLING', 'CHASE']]); }],
@@ -174,12 +189,14 @@
     term: ['터미널', function () { return '<pre id="tout">명령어 목록은 help</pre><form id="tf"><span>&gt;</span><input id="ti" autocomplete="off" aria-label="명령 입력"></form>'; }]
   };
   var AG = [['ACCESS', '침입', ['login', 'all4', 'first', 'guest', 'logout', 'admin', 'fail5', 'clue4', 'shard4', 'root', 'fullpow']], ['FILES', '열람', ['menu', 'camp', 'campall', 'f_phantom', 'f_darling', 'f_chase', 'f_hyde', 'redact', 'redact5', 'logo', 'album', 'bare', 'forensic', 'unredact', 'eaves', 'private4']], ['TERMINAL', '단말', ['term', 'whoami', 'ls', 'rosterf', 'sudo', 'clear', 'badcmd', 'sebby', 'cat', 'zero']], ['SERVICE', '복무', ['lyric', 'lyric5', 'pause', 'loop', 'radio10', 'cipher', 'radioall', 'stay10', 'stay30', 'click100', 'night', 'pasta', 'all']]];
+  // 11-17 로그인 없앰: 로그인으로만 딸 수 있던 업적 9개 뺌(누님 «목록에서 빼기»)
+  var GONE = ['login', 'all4', 'first', 'guest', 'logout', 'admin', 'fail5', 'clue4', 'root']; ACH = ACH.filter(function (a) { return GONE.indexOf(a[0]) < 0; }); AG.forEach(function (g) { g[2] = g[2].filter(function (k) { return GONE.indexOf(k) < 0; }); });
   V.ach = function () {
     var by = {}; ACH.forEach(function (a) { by[a[0]] = a; });
     var n = ACH.filter(function (a) { return eggs[a[0]]; }).length, T = ACH.length, back = location.hash.indexOf('#net') === 0 ? '#net' : '#home';
     return '<div class="page net am"><section><a class="back" href="' + back + '">뒤로</a><div class="amh"><div><h2 class="en" translate="no">ACHIEVEMENT</h2><p class="cko">훈장 대신 남는 기록</p></div><p class="amc"><b>' + n + '</b><span>/ ' + T + '</span></p></div><div class="amb"><i style="width:' + (n / T * 100) + '%"></i></div>' + AG.map(function (g) {
       var d = g[2].filter(function (k) { return eggs[k]; }).length;
-      return '<div class="ag"><div class="agl"><b translate="no">' + g[0] + '</b><small>' + g[1] + ' ' + d + ' / ' + g[2].length + '</small></div><div class="agi">' + g[2].map(function (k) { var a = by[k]; return eggs[k] ? '<div class="ai on"><b>' + a[1] + '</b><span>' + a[2] + '</span></div>' : '<div class="ai"><i style="width:' + Math.min(100, a[1].length * 24 + 24) + 'px"></i><span>기록 말소</span></div>'; }).join('') + '</div></div>';
+      return '<div class="ag"><div class="agl"><b translate="no">' + g[0] + '</b><small>' + g[1] + ' ' + d + ' / ' + g[2].length + '</small></div><div class="agi">' + g[2].map(function (k) { var a = by[k]; return eggs[k] ? '<div class="ai on"><b>' + a[1] + '</b><span>' + a[2] + '</span></div>' : '<div class="ai off"><b>' + a[1] + '</b><span>' + a[2] + '</span></div>'; }).join('') + '</div></div>';
     }).join('') + '</section></div>';
   };
   var GLOCK = { inner: 1, medical: 1, approval: 1, rel: 1 }, chatCur = 'meute', CM = {}, CP = {};
@@ -218,7 +235,7 @@
     if (pk) { CNT.pr = CNT.pr || {}; CNT.pr[pk] = 1; sv(); if (Object.keys(CNT.pr).length >= 6) egg('eaves'); }
     if (xu) { CNT.xp = CNT.xp || {}; CNT.xp[xu] = 1; sv(); if (Object.keys(CNT.xp).length >= 4) egg('private4'); } }
   function chatDraw(toEnd) { var m = $('.msg'); if (!m) return; m.innerHTML = chatInner(); var b = $('#mb'); b.scrollTop = toEnd ? b.scrollHeight : 0; }
-  function chatPage(EN, who) { setTimeout(chatDraw, 0); return '<div class="page net msgp"><section><div class="mh"><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN.chat + '</h2>' + who + '</div><div class="msg"></div></section></div>'; }
+  function chatPage(EN, who) { setTimeout(chatDraw, 0); return '<div class="page net msgp"><section><div class="mh"><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN.chat + '</h2>' + who + '</div><div class="mailbox"><h3>메일</h3>' + (shard(), tbl(['보낸 곳', '제목'], myMail())) + '</div><h3 class="mh3">메신저</h3><div class="msg"></div></section></div>'; }
   function nowT() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
   function chatSend(t) {
     var id = chatCur, l = cmsg(id), x = xr(id), who, r, low = nm(t), k, eg = EG.filter(function (e) { return e[0].some(function (w) { return low.indexOf(w) >= 0; }); })[0];
@@ -237,21 +254,22 @@
     if (sec === 'ach') { visited.ach = 1; return V.ach(); }
     if (!user) return '<div class="page login"><h2>내부망 로그인</h2><form id="lf"><label>콜사인<input id="u" autocomplete="off"></label><label>암호<span class="pwf"><input id="p" type="password" autocomplete="off"><button type="button" id="pe" aria-label="암호 보기"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 7s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6z"/><circle cx="10" cy="7" r="2.6"/><path class="sl" d="M3 13L17 1"/></svg></button></span></label><p id="ph" class="ph"></p><p id="le" class="sub"></p><div id="clue"></div><button class="pri">접속</button></form><button id="gs" class="ln">손님으로 접속</button><a class="ln" href="persona.html">처음 왔다면 신병 등록부 →</a>' + memo() + '</div>';
     var cur = S[sec] ? sec : 'dash';
-    var G = [['', ['dash']], ['소통', ['notice', 'mail', 'chat', 'board', 'inner', 'petition']], ['행정', ['calendar', 'approval', 'duty', 'leave', 'supply', 'meal']], ['인사 · 부대', ['files', 'rel', 'medical', 'map', 'manual', 'phone', 'docs']], ['기타', ['ach', 'term']]];
-    if (S[sec]) { visited[sec] = 1; if (Object.keys(visited).length >= Object.keys(S).length - 1) egg('menu'); }
+    var G = [['', ['dash']], ['소통', ['notice', 'chat', 'board', 'petition']], ['행정', ['approval', 'leave', 'supply']], ['인사 · 부대', ['files', 'rel', 'medical']], ['기타', ['term']]];
+    if (S[sec]) { visited[sec] = 1; if ([].concat.apply([], G.map(function (g) { return g[1]; })).every(function (k) { return k === 'dash' || visited[k]; })) egg('menu'); }
     var who = '<p class="sub">접속 계정: <span translate="no">' + (user.name || user.id.toUpperCase()) + '</span></p>';
-    var EN = { dash: 'STATUS', notice: 'NOTICE', mail: 'MAIL', chat: 'MESSENGER', board: 'BOARD', petition: 'PETITION', calendar: 'SCHEDULE', approval: 'APPROVAL', duty: 'DUTY ROSTER', leave: 'LEAVE', supply: 'SUPPLY', files: 'PERSONNEL', rel: 'RELATIONS', medical: 'MEDICAL', map: 'FACILITY', manual: 'ORDERS', phone: 'DIRECTORY', docs: 'ARCHIVE', ach: 'ACHIEVEMENT', term: 'TERMINAL', meal: 'MESS', inner: 'CLASSIFIED' };
+    var EN = { dash: 'STATUS', notice: 'NOTICE', mail: 'MAIL', chat: 'INBOX', board: 'r/PNE', petition: 'PETITION', calendar: 'SCHEDULE', approval: 'APPROVAL', duty: 'DUTY ROSTER', leave: 'LEAVE', supply: 'SUPPLY', files: 'PERSONNEL', rel: 'RELATIONS', medical: 'MEDICAL', map: 'FACILITY', manual: 'ORDERS', phone: 'DIRECTORY', docs: 'ARCHIVE', ach: 'ACHIEVEMENT', term: 'TERMINAL', meal: 'MESS', inner: 'CLASSIFIED' };
     var GN = { '소통': 'COMMS', '행정': 'DUTY', '인사 · 부대': 'ROSTER', '기타': 'ETC' };
     if (!S[sec]) {
       var gs = G.filter(function (g) { return g[0]; });
       return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mtop">' + who + '<a class="ln" href="#net/dash">현황 보기</a></div><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
     }
     if (user.id === 'guest' && (GLOCK[cur] || (cur === 'files' && sub))) return '<div class="page net"><section><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + '<div class="lock">' + [64, 82, 48, 74, 58].map(function (w) { return '<div class="r"><span><i></i></span><p><i style="width:' + w + '%"></i></p></div>'; }).join('') + '</div><p class="lockm">등록 인원만 열람 가능.</p></section></div>';
+    if (cur === 'board' && window.__RPNE) return '<div class="page net rxp"><section><a class="back" href="#net">뒤로</a>' + window.__RPNE.page({ posts: D.posts, inner: T.inner ? T.inner[1] : [], wd: function (k) { return S[k][1](); } }) + '</section></div>';
     if (cur === 'chat') return chatPage(EN, who);
     return '<div class="page net"><section><a class="back" href="#net' + (sub ? '/' + cur : '') + '">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + S[cur][1](sub) + '</section></div>';
   };
 
-  var CT = [['', 'CAMP SIMOUN'], ['pne', 'PNE'], ['meute', 'MEUTE'], ['map', 'FACILITY']];
+  var CT = [['', 'CAMP SIMOUN'], ['pne', 'PNE'], ['meute', 'MEUTE'], ['map', 'FACILITY'], ['manual', 'RULES'], ['phone', 'DIRECTORY'], ['docs', 'ARCHIVE']];
   var rw = function (x) { return '<div class="r"><span>' + x[0] + '</span><p>' + x[1] + '</p></div>'; };
   var PINS = [
     [51, 40, 'Baraquements', '컨테이너 막사'], [31.5, 38.5, 'Cuisine', '취사장', 1], [52, 16, 'Armurerie', '무기고'], [73, 40, 'Atelier', '정비고'], [64, 29, 'Transmissions', '통신실', 1],
@@ -278,11 +296,15 @@
       f: [['막사', '컨테이너'], ['무기고 · 정비고', '출입 기록 필수'], ['의무대', '진통제 재고 부족'], ['취사장', '천막'], ['통신실', '외부 접속 감지 중'], ['초소', '근무표 참조'], ['지휘소', '인가자 외 출입 금지'], ['영창', '상습 입실자 DARLING 지정석']], two: 1,
       top: '<figure class="cmw"><img class="cmap" src="bg/map.webp" alt="캠프 시문 전경" onerror="this.parentNode.remove()">' + PINS.map(function (q, n) { return '<div class="pin' + (q[4] ? ' l' : '') + '" style="left:' + q[0] + '%;top:' + q[1] + '%;animation-delay:' + (420 + n * 45) + 'ms"><i></i><u></u><span><b translate="no">' + q[2] + '</b><small>' + q[3] + '</small></span></div>'; }).join('') + '</figure>' }
   };
+  var CDOC = { manual: ['RULES', '임무 규정'], phone: ['DIRECTORY', '전화번호부'], docs: ['ARCHIVE', '규정 · 자료실'] };
   V.camp = function (sec) {
+    var nav = function (k) { return '<nav class="ctab" aria-label="캠프 시문 메뉴">' + CT.map(function (t) { return '<a translate="no" class="' + (t[0] === k ? 'on' : '') + '" href="#camp' + (t[0] ? '/' + t[0] : '') + '">' + t[1] + '</a>'; }).join('') + '</nav>'; };
+    if (CDOC[sec]) return '<div class="page camp"><section>' + nav(sec) + '<div class="cg one"><div><h2 class="en" translate="no">' + CDOC[sec][0] + '</h2><p class="cko">' + CDOC[sec][1] + '</p><div class="cdoc">' + S[sec][1]() + '</div></div></div></section></div>';
     var k = CD[sec] ? sec : '', d = CD[k];
-    return '<div class="page camp"><section><nav class="ctab" aria-label="캠프 시문 메뉴">' + CT.map(function (t) { return '<a translate="no" class="' + (t[0] === k ? 'on' : '') + '" href="#camp' + (t[0] ? '/' + t[0] : '') + '">' + t[1] + '</a>'; }).join('') + '</nav><div class="cg"><div><h2 class="en" translate="no">' + d.en + '</h2><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><span>' + d.vs + '</span></aside></div>' + (d.x ? d.x() : '') + '</section></div>';
+    return '<div class="page camp"><section>' + nav(k) + '<div class="cg"><div><h2 class="en" translate="no">' + d.en + '</h2><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><span>' + d.vs + '</span></aside></div>' + (d.x ? d.x() : '') + (k === 'map' ? '<div class="cdoc"><h3>시설 안내도</h3>' + S.map[1]() + '</div>' : '') + '</section></div>';
   };
-  V.me = function () {
+  V.me = function () { visited.ach = 1; return V.ach(); };
+  V.me0 = function () {
     if (!user) return V.net();
     var c = D.chars.filter(function (x) { return x.id === user.id; })[0];
     if (!c) return '<div class="page"><h2>내 정보</h2><div class="r"><span>계정</span><p translate="no">' + user.name + '</p></div><div class="r"><span>권한</span><p>손님. 미등록 사용자</p></div></div>';
@@ -377,4 +399,8 @@
     addEventListener('keydown', function (e) { if (!box) return; if (e.key === 'Escape') close(); else if (e.key === 'ArrowRight') show(at + 1); else if (e.key === 'ArrowLeft') show(at - 1); });
 addEventListener('hashchange', close);
   })();
+  // 11-17 로그인 없앰: 대원 전용 자료를 처음부터 다 불러 둔다(먹칠은 눌러야 보임)
+  if (window.__OPEN) { var O_ = window.__OPEN; Object.assign(OV, O_.J.OV); Object.assign(RN, O_.J.RN); Object.assign(CR, O_.J.CR); EG.push.apply(EG, O_.J.EG); Object.assign(T, O_.J.T);
+    Object.keys(O_.M).forEach(function (k) { var M = O_.M[k]; Object.assign(MAIL, M.MAIL); Object.assign(XR, M.XR); Object.assign(CS, M.CS); LOADED[k] = 1; });
+    applyOV(); CK = 1; user = { id: 'admin', t: nowT() }; }
 })();
