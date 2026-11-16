@@ -238,7 +238,7 @@
   // ---------- 화면 전환 ----------
   var view = $('#view');
   var BGN = { sky: 3, camp: 6, front: 4 }, BGC = {};
-  function bgPick(k, nw) { if (!BGC[k] || nw) { var o = BGC[k]; do { BGC[k] = 1 + Math.floor(Math.random() * BGN[k]); } while (nw && BGN[k] > 1 && BGC[k] === o); } var u = 'bg/' + k + BGC[k] + (k === 'sky' ? '.jpg' : '.webp'); if (k === 'sky') { var x = document.getElementById('bgx'); if (x) { var bb = u.replace(/\.jpg$/, ''); x.style.setProperty('--bgi', 'url(' + bb + '_i.jpg)'); x.style.setProperty('--bgh', 'url(' + bb + '_h.jpg)'); } } return u; }
+  function bgPick(k, nw) { if (!BGC[k] || nw) { var o = BGC[k]; do { BGC[k] = 1 + Math.floor(Math.random() * BGN[k]); } while (nw && BGN[k] > 1 && BGC[k] === o); } var u = 'bg/' + k + BGC[k] + '.webp'; if (k === 'sky') { var x = document.getElementById('bgx'); if (x) { var bb = u.replace(/\.webp$/, ''); x.style.setProperty('--bgi', 'url(' + bb + '_i.jpg)'); x.style.setProperty('--bgh', 'url(' + bb + '_h.jpg)'); } } return u; }
   bgPick('sky');
   setInterval(function () { var h = document.querySelector('.home'); if (document.hidden || !h) return; h.classList.add('bgswap'); setTimeout(function () { var L = { 10: 'sky', 22: 'camp', 46: 'front' }; Object.keys(L).forEach(function (d) { var el = h.querySelector('.layer[data-d="' + d + '"]'); if (el) el.style.backgroundImage = 'url(' + bgPick(L[d], 1) + ')'; }); h.classList.remove('bgswap'); }, 900); }, 90000);
   var V = {
@@ -279,7 +279,7 @@
   function pick(x, y) { var d = document.elementFromPoint(x, y), h = d && d.closest ? d.closest(SEL) : null; return h && !h.disabled ? h : null; }
   function findAim(x, y) {
     var h = pick(x, y); if (h) return h;
-    for (var i = 0; i < 8; i++) { h = pick(x + Math.cos(i * .785) * 14, y + Math.sin(i * .785) * 14); if (h) return h; }
+    for (var i = 0; i < 8; i += 2) { h = pick(x + Math.cos(i * .785) * 14, y + Math.sin(i * .785) * 14); if (h) return h; }
     return null;
   }
   function aim(x, y) {
@@ -288,7 +288,8 @@
     root.classList.toggle('c-txt', !!h && h.matches('input:not([type=range]),textarea'));
     root.classList.toggle('c-hot', !!h && !h.matches('input:not([type=range]),textarea'));
   }
-  var aq = 0, ax = 0, ay = 0; addEventListener('mousemove', function (e) { ax = e.clientX; ay = e.clientY; if (!aq) { aq = 1; requestAnimationFrame(function () { aq = 0; if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 4) return; aim.x = ax; aim.y = ay; aim(ax, ay); }); } });
+  // 자동 조준은 0.09초에 한 번만(11-17 렉: 매 장면 9곳 검사가 전체 시간의 17%), 폰에서는 끔
+  var aq = 0, ax = 0, ay = 0, aT = 0; addEventListener('mousemove', function (e) { ax = e.clientX; ay = e.clientY; if (lite || aq) return; var nw = performance.now(); if (nw - aT < 90) { aq = 1; setTimeout(function () { aq = 0; aT = performance.now(); if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); }, 90 - (nw - aT)); return; } aT = nw; if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); });
   document.addEventListener('click', function (e) {
     if (aimBusy || !assist || !e.isTrusted || !assist.isConnected) return;
     var t = e.target; if (t.closest && t.closest(SEL)) return;
@@ -302,6 +303,9 @@
     if (reduce) return;
     var n = performance.now(), ang = -1.05, i, t = e.target;
     var X = e.clientX, Y = e.clientY, vw = $('#view'), j, cr = [], rim = [], arcs = [];
+    // 모바일(손가락 화면)은 빛 한 번 + 고리 하나만: 파편 · 광선 · 구멍 · 화면 흔들림 뺌(11-17 누님 «모바일로들어가면 마우스이펙트 좀 간소하게»)
+    if (lite) { fx.push({ k: 'glow', x: X, y: Y, n: n, l: 380 }); fx.push({ k: 'ring', x: X, y: Y, n: n, l: 520, R: 90 }); }
+    else {
     vw.classList.remove('shk'); void vw.offsetWidth; vw.classList.add('shk');
     fx.push({ k: 'glow', x: X, y: Y, n: n, l: 460 });
     fx.push({ k: 'ring', x: X, y: Y, n: n, l: 640, R: 130 });
@@ -313,6 +317,7 @@
     for (i = 0; i < 5; i++) arcs.push([12 + Math.random() * 16, Math.random() * 6.28, .4 + Math.random() * .7]);
     fx.push({ k: 'hole', x: X, y: Y, n: n, l: 1200, cr: cr, rim: rim, arcs: arcs });
     for (i = 0; i < 64; i++) { var d = Math.random() * Math.PI * 2, v = 60 + Math.random() * 360; fx.push({ x: X, y: Y, vx: Math.cos(d) * v, vy: Math.sin(d) * v, n: n, l: 500 + Math.random() * 800, s: .8 + Math.random() * 1.5, w: Math.random() < .3 }); }
+    }
     if (!assist && t.closest && !t.closest('a,button,input,label,.rd,#lyrics,[onclick]')) {
       var o = document.querySelector('.cw'); if (o) o.remove();
       var b = document.createElement('b'); b.className = 'cw'; b.setAttribute('translate', 'no'); b.textContent = WD[wi++ % WD.length];
@@ -322,6 +327,7 @@
   });
   addEventListener('mouseup', function () { root.classList.remove('c-down'); });
   var reduce = false;
+  var lite = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || innerWidth < 768;
   function drawFx(n) {
     fx = fx.filter(function (f) { return n - f.n < f.l; });
     trx.save(); trx.lineCap = 'round';
@@ -361,7 +367,7 @@
     var n = performance.now(), l = trp[trp.length - 1];
     if (l && Math.abs(l[0] - mx) + Math.abs(l[1] - my) > 320) trp = [];
     l = trp[trp.length - 1];
-    if ((!l || l[0] !== mx || l[1] !== my) && !root.classList.contains('c-off')) trp.push([mx, my, n]);
+    if (!lite && (!l || l[0] !== mx || l[1] !== my) && !root.classList.contains('c-off')) trp.push([mx, my, n]);
     while (trp.length && n - trp[0][2] > 260) trp.shift();
     if (!trd && trp.length < 2 && !fx.length) return;
     trx.clearRect(0, 0, innerWidth, innerHeight);

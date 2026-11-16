@@ -276,7 +276,7 @@
     map: { en: 'FACILITY', ko: '시설 안내', v: '공식 지도에 <i>없음</i>', vs: '캠프 시문 배치',
       b: ['인근 마을에 오아시스 및 국경 시장 소재. 무장세력 영향권. 일몰 후 시장 폐쇄.'],
       f: [['막사', '컨테이너'], ['무기고 · 정비고', '출입 기록 필수'], ['의무대', '진통제 재고 부족'], ['취사장', '천막'], ['통신실', '외부 접속 감지 중'], ['초소', '근무표 참조'], ['지휘소', '인가자 외 출입 금지'], ['영창', '상습 입실자 DARLING 지정석']], two: 1,
-      top: '<figure class="cmw"><img class="cmap" src="bg/map.jpg" alt="캠프 시문 전경" onerror="this.parentNode.remove()">' + PINS.map(function (q, n) { return '<div class="pin' + (q[4] ? ' l' : '') + '" style="left:' + q[0] + '%;top:' + q[1] + '%;animation-delay:' + (420 + n * 45) + 'ms"><i></i><u></u><span><b translate="no">' + q[2] + '</b><small>' + q[3] + '</small></span></div>'; }).join('') + '</figure>' }
+      top: '<figure class="cmw"><img class="cmap" src="bg/map.webp" alt="캠프 시문 전경" onerror="this.parentNode.remove()">' + PINS.map(function (q, n) { return '<div class="pin' + (q[4] ? ' l' : '') + '" style="left:' + q[0] + '%;top:' + q[1] + '%;animation-delay:' + (420 + n * 45) + 'ms"><i></i><u></u><span><b translate="no">' + q[2] + '</b><small>' + q[3] + '</small></span></div>'; }).join('') + '</figure>' }
   };
   V.camp = function (sec) {
     var k = CD[sec] ? sec : '', d = CD[k];
