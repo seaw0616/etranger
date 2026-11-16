@@ -178,7 +178,12 @@
     chat: ['메신저', function () { return ''; }],
     inner: ['대원 전용 게시판', function () { return T.inner ? tbl(T.inner[0], T.inner[1]) : LOCKED; }],
     files: ['개인파일 열람', function (sub) { if (sub) { chatOwner = sub; chatCur = 'meute'; shard(); setTimeout(function () { chatDraw(); }, 0); var cc = D.chars.filter(function (c) { return c.id === sub; })[0], md = (T.medical && cc) ? T.medical[1].filter(function (r) { return r[0] === cc.name; }) : [];
-      return strip(V.people(sub), true) + (md.length ? '<section class="fmed"><h3>의무대 기록</h3>' + md.map(function (r) { return '<p>' + r[1] + '</p>'; }).join('') + '</section>' : '') + '<section class="fmsg"><h3>메신저</h3><div class="msg"></div></section>'; } return tbl(['콜사인', '열람'], D.chars.map(function (c) { return ['<span class="cs" translate="no">' + c.name + '</span>', '<a class="ln" href="#net/files/' + c.id + '">열람</a>']; })); }],
+      var base = strip(V.people(sub), true), ni = base.lastIndexOf('<div class="pnav">'), nm = cc ? cc.name : '';
+      var med = '<div class="fxc"><p class="fxh"><b translate="no">MEDICAL</b><span>의무대 기록</span></p><div class="fxmed"><header><span>MEUTE 의무대</span><b>진료 기록</b></header>'
+        + '<div class="fxr"><span>대상</span><p translate="no">' + nm + '</p></div>' + (md.length ? md.map(function (r) { return '<div class="fxr"><span>소견</span><p>' + r[1] + '</p></div>'; }).join('') : '<div class="fxr"><span>소견</span><p>기록 없음</p></div>')
+        + '<div class="fxr"><span>담당</span><p>의무병 <b translate="no">CHASE</b></p></div><i class="fxst">의무대</i></div></div>';
+      var msg = '<div class="fxc"><p class="fxh"><b translate="no">EVIDENCE 02</b><span>압수 단말</span></p>' + phCard() + '</div>';
+      return base.slice(0, ni) + '<section class="fx">' + med + msg + '</section><div class="pnw"><p class="fxh"><b translate="no">PERSONNEL</b><span>다른 대원 파일</span></p>' + base.slice(ni) + '</div>'; } return tbl(['콜사인', '열람'], D.chars.map(function (c) { return ['<span class="cs" translate="no">' + c.name + '</span>', '<a class="ln" href="#net/files/' + c.id + '">열람</a>']; })); }],
     board: ['PNE 커뮤', function () {
       var col = function (n) { var h = 0; for (var i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) % 360; return 'hsl(' + h + ',60%,60%)'; };
       var tm = function (w) { return w ? w : '방금'; };
@@ -259,6 +264,67 @@
     if (xu) { CNT.xp = CNT.xp || {}; CNT.xp[xu] = 1; sv(); if (Object.keys(CNT.xp).length >= 4) egg('private4'); } }
   function chatDraw(toEnd) { var m = $('.msg'); if (!m) return; m.innerHTML = chatInner(); var b = $('#mb'); b.scrollTop = toEnd ? b.scrollHeight : 0; }
   function chatPage(EN, who) { chatOwner = null; setTimeout(chatDraw, 0); return '<div class="page net msgp"><section><div class="mh"><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN.chat + '</h2>' + who + '</div><div class="msg"></div></section></div>'; }
+
+  // 11-17 압수 단말: 잠금 화면 카드 → 휴대폰 열기 → 메신저 앱(방 목록 · 말풍선)
+  var PHV = { room: null };
+  var SVGX = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var SVGB = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SVGM = '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4.5" width="15" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m3 5.5 7 5.5 7-5.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+  var SVGS = '<svg class="psg" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5.5" width="3" height="6.5" rx=".6"/><rect x="10" y="3" width="3" height="9" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6" opacity=".3"/></svg>';
+  function phOwner() { return D.chars.filter(function (c) { return c.id === chatOwner; })[0] || D.chars[0]; }
+  function phChar(w) { return D.chars.filter(function (c) { return c.name === w; })[0]; }
+  function phAvW(w, cls) { var c = phChar(w); return c && PH[c.id] ? '<i class="pav ' + (cls || '') + '" style="background-image:url(' + PH[c.id] + ')"></i>' : '<i class="pav pini ' + (cls || '') + '">' + esc(String(w).replace(/[^A-Za-zÀ-ÿ가-힣]/g, '').charAt(0) || '?') + '</i>'; }
+  function phMe(w) { return w === 'ME' || w === phOwner().name; }
+  function phInfo(r) {
+    var o = phOwner();
+    if (r.id === 'meute') return { n: 'ÉQUIPE MEUTE', s: '단체방 · 4명', av: '<i class="pav pgr" style="background-image:url(img/group.webp?v=143)"></i>' };
+    if (r.id.indexOf('mail:') === 0) return { n: '메일함', s: r.s, av: '<i class="pav pini pml">' + SVGM + '</i>' };
+    if (r.id.indexOf(':') > 0) return { n: r.n, s: '개인 대화', av: '<i class="pav pini">' + esc(String(r.n).replace(/[^A-Za-zÀ-ÿ가-힣]/g, '').charAt(0)) + '</i>' };
+    var other = r.id.split('-').filter(function (k) { return k !== o.id; })[0], c = D.chars.filter(function (x) { return x.id === other; })[0];
+    return { n: c ? c.name : r.n, s: '1:1 대화', av: c ? phAvW(c.name) : '' };
+  }
+  function phLast(r) { var l = cmsg(r.id); return l[l.length - 1] || { w: '', t: '', h: '' }; }
+  function phCard() {
+    var o = phOwner(), rs = rooms(), nt = rs.filter(function (r) { return r.id.indexOf('mail:') !== 0; }).map(function (r) { return { r: r, m: phLast(r) }; }).filter(function (x) { return !phMe(x.m.w); }).slice(0, 3);
+    var mails = (MAIL[o.id] || []).length;
+    return '<button class="phev" data-ph="1" aria-label="' + o.name + ' 압수 단말 열기"><span class="phm"><span class="phs"><span class="plt">' + nowT() + '</span><span class="pld">압수 단말 · 잠김</span>'
+      + nt.map(function (x) { var i = phInfo(x.r); return '<span class="pnt">' + i.av + '<span><b translate="no">' + i.n + '</b><em>' + esc(x.m.t) + '</em></span></span>'; }).join('')
+      + '<span class="pul">눌러서 잠금 해제</span></span></span><span class="phi"><b><span translate="no">' + o.name + '</span>의 휴대 단말</b><span>압수 · 감청 중</span><span class="phn">대화방 ' + rs.filter(function (r) { return r.id.indexOf('mail:') !== 0; }).length + '개' + (mails ? ' · 메일 ' + mails + '통' : '') + '</span><em>단말 열기</em></span><i class="phtag">EVIDENCE 02</i></button>';
+  }
+  function phList() {
+    return '<header class="pah"><div><b>메시지</b><span><span translate="no">' + phOwner().name + '</span> 단말 · 감청 중</span></div></header><div class="pls">' + rooms().map(function (r) { var i = phInfo(r), m = phLast(r), mail = r.id.indexOf('mail:') === 0; return '<button class="plr" data-pr="' + r.id + '">' + i.av + '<span class="plc"><b translate="no">' + i.n + '</b><em>' + (mail ? '메일이 전송되었습니다' : (phMe(m.w) ? '나: ' : '') + esc(m.t)) + '</em></span><time>' + (m.h || '') + '</time></button>'; }).join('') + '</div>';
+  }
+  function phRoom(id) {
+    var r = rooms().filter(function (x) { return x.id === id; })[0]; if (!r) return phList();
+    var i = phInfo(r), l = cmsg(id), h = '';
+    if (id.indexOf('mail:') === 0) h = l.map(function (m) { return '<div class="mmail">' + SVGM + '<div><b>메일이 전송되었습니다</b><span>보낸 곳 · ' + esc(m.w) + '</span><p>' + esc(m.t) + '</p></div></div>'; }).join('');
+    else l.forEach(function (m, k) {
+      var me = phMe(m.w), pv = l[k - 1], nx = l[k + 1], first = !pv || pv.w !== m.w || mbrk(pv, m), last = !nx || nx.w !== m.w || mbrk(m, nx);
+      if (!pv ? mday(m.h) === 0 : mday(pv.h) !== mday(m.h)) h += '<div class="pdy"><span>' + (mday(m.h) ? '오늘' : esc(m.h)) + '</span></div>';
+      h += '<div class="prw' + (me ? ' me' : '') + (first ? ' f' : '') + '">' + (me ? '' : first ? phAvW(m.w, 'sm') : '<i class="pav sm ph0"></i>') + '<div class="pcl">' + (!me && first ? '<b class="pnm" translate="no">' + esc(m.w) + '</b>' : '') + '<div class="pbr"><p class="pbb">' + esc(m.t) + '</p>' + (last && mday(m.h) ? '<time>' + m.h + '</time>' : '') + '</div></div></div>';
+    });
+    return '<header class="pah rm"><button class="pbk" data-pb="1" aria-label="대화방 목록">' + SVGB + '</button>' + i.av + '<div><b translate="no">' + i.n + '</b><span>' + i.s + '</span></div></header><div class="pmb" id="pmb">' + h + '</div><div class="pin2"><span>감청 전용 · 송신 불가</span></div>';
+  }
+  function phDraw() { var a = document.getElementById('papp'); if (!a) return; a.innerHTML = PHV.room ? phRoom(PHV.room) : phList(); var b = document.getElementById('pmb'); if (b) b.scrollTop = b.scrollHeight; }
+  function phOpen() {
+    if (document.getElementById('phv')) return; PHV.room = null;
+    var v = document.createElement('div'); v.id = 'phv'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-label', phOwner().name + ' 압수 단말');
+    v.innerHTML = '<div class="pfr"><button class="phx" data-px="1" aria-label="닫기">' + SVGX + '</button><div class="psc"><div class="psb"><span>' + nowT() + '</span><span class="psi">' + SVGS + 'LTE<i class="pbt"><i></i></i>21%</span></div><div id="papp" class="papp"></div><div class="plk"><b>' + nowT() + '</b><span>잠금 해제</span></div></div></div>';
+    document.body.appendChild(v); document.documentElement.classList.add('phopen'); phDraw();
+    if (window.__sfx) window.__sfx('login');
+    setTimeout(function () { var k = v.querySelector('.plk'); if (k) k.classList.add('go'); setTimeout(function () { if (k) k.remove(); }, 700); }, 450);
+  }
+  function phClose() { var v = document.getElementById('phv'); if (!v) return; v.classList.add('out'); document.documentElement.classList.remove('phopen'); setTimeout(function () { v.remove(); }, 200); }
+  document.addEventListener('click', function (e) {
+    var t = e.target; if (!t.closest) return;
+    if (t.closest('[data-ph]')) { e.preventDefault(); phOpen(); return; }
+    if (!document.getElementById('phv')) return;
+    var r = t.closest('[data-pr]'); if (r) { PHV.room = r.getAttribute('data-pr'); roomEgg(PHV.room); phDraw(); return; }
+    if (t.closest('[data-pb]')) { PHV.room = null; phDraw(); return; }
+    if (t.closest('[data-px]') || t.id === 'phv') phClose();
+  });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.getElementById('phv')) { if (PHV.room) { PHV.room = null; phDraw(); } else phClose(); } });
+  addEventListener('hashchange', phClose);
   function nowT() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
   function chatSend(t) {
     var id = chatCur, l = cmsg(id), x = xr(id), who, r, low = nm(t), k, eg = EG.filter(function (e) { return e[0].some(function (w) { return low.indexOf(w) >= 0; }); })[0];
@@ -277,19 +343,20 @@
     if (sec === 'ach') { visited.ach = 1; return V.ach(); }
     if (!user) return '<div class="page login"><h2>내부망 로그인</h2><form id="lf"><label>콜사인<input id="u" autocomplete="off"></label><label>암호<span class="pwf"><input id="p" type="password" autocomplete="off"><button type="button" id="pe" aria-label="암호 보기"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 7s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6z"/><circle cx="10" cy="7" r="2.6"/><path class="sl" d="M3 13L17 1"/></svg></button></span></label><p id="ph" class="ph"></p><p id="le" class="sub"></p><div id="clue"></div><button class="pri">접속</button></form><button id="gs" class="ln">손님으로 접속</button><a class="ln" href="persona.html">처음 왔다면 신병 등록부 →</a>' + memo() + '</div>';
     var cur = S[sec] ? sec : 'dash';
-    var G = [['', ['dash']], ['캠프 시문', ['c:', 'c:pne', 'c:meute', 'c:map']], ['행정반', ['notice', 'board', 'petition', 'approval']], ['인사 · 부대', ['files', 'rel']]], CL = { 'c:': '캠프 시문', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': '시설 안내' };
+    var G = [['', ['dash']], ['캠프 시문', ['c:', 'c:pne', 'c:map']], ['행정반', ['notice', 'board', 'petition', 'approval']], ['인사 · 부대', ['c:meute', 'rel']]], CL = { 'c:': '캠프 시문', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': '시설 안내' };
     if (S[sec]) { visited[sec] = 1; if ([].concat.apply([], G.map(function (g) { return g[1]; })).every(function (k) { return k === 'dash' || k.indexOf('c:') === 0 || visited[k]; })) egg('menu'); }
-    var who = '<p class="sub">접속 계정: <span translate="no">' + (user.name || user.id.toUpperCase()) + '</span></p>';
+    var who = '';
     var EN = { dash: 'STATUS', notice: 'NOTICE', mail: 'MAIL', chat: 'MESSENGER', board: 'r/PNE', petition: 'PETITION', calendar: 'SCHEDULE', approval: 'APPROVAL', duty: 'DUTY ROSTER', leave: 'LEAVE', supply: 'SUPPLY', files: 'PERSONNEL', rel: 'RELATIONS', medical: 'MEDICAL', map: 'FACILITY', manual: 'ORDERS', phone: 'DIRECTORY', docs: 'ARCHIVE', ach: 'ACHIEVEMENT', term: 'TERMINAL', meal: 'MESS', inner: 'CLASSIFIED' };
     var GN = { '캠프 시문': 'CAMP', '행정반': 'BUREAU', '인사 · 부대': 'ROSTER' };
     if (!S[sec]) {
       var gs = G.filter(function (g) { return g[0]; });
-      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mtop">' + who + '<a class="ln" href="#net/dash">현황 보기</a></div><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a href="#camp' + (c ? '/' + c : '') + '"' + (k === 'c:pne' || k === 'c:meute' ? ' translate="no"' : '') + '>' + CL[k] + '</a>'; } return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
+      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a href="#camp' + (c ? '/' + c : '') + '"' + (k === 'c:pne' || k === 'c:meute' ? ' translate="no"' : '') + '>' + CL[k] + '</a>'; } return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
     }
     if (user.id === 'guest' && (GLOCK[cur] || (cur === 'files' && sub))) return '<div class="page net"><section><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + '<div class="lock">' + [64, 82, 48, 74, 58].map(function (w) { return '<div class="r"><span><i></i></span><p><i style="width:' + w + '%"></i></p></div>'; }).join('') + '</div><p class="lockm">등록 인원만 열람 가능.</p></section></div>';
     if (cur === 'board' && window.__RPNE) return '<div class="page net rxp"><section><a class="back" href="#net">뒤로</a>' + window.__RPNE.page({ posts: D.posts, inner: T.inner ? T.inner[1] : [], wd: function (k) { return S[k][1](); } }) + '</section></div>';
     if (cur === 'chat') return chatPage(EN, who);
-    return '<div class="page net"><section><a class="back" href="#net' + (sub ? '/' + (cur === 'rel' ? 'files/' + sub : cur) : '') + '">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + S[cur][1](sub) + '</section></div>';
+    if (cur === 'files' && !sub) { setTimeout(function () { location.replace('#camp/meute'); }, 0); return ''; }
+    return '<div class="page net"><section><a class="back" href="' + (sub ? (cur === 'rel' ? '#net/files/' + sub : cur === 'files' ? '#camp/meute' : '#net/' + cur) : '#net') + '">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + S[cur][1](sub) + '</section></div>';
   };
 
   var CT = [['', 'CAMP SIMOUN'], ['pne', 'PNE'], ['meute', 'MEUTE'], ['map', 'FACILITY']];
@@ -324,7 +391,7 @@
     var nav = function (k) { return '<nav class="ctab" aria-label="캠프 시문 메뉴">' + CT.map(function (t) { return '<a translate="no" class="' + (t[0] === k ? 'on' : '') + '" href="#camp' + (t[0] ? '/' + t[0] : '') + '">' + t[1] + '</a>'; }).join('') + '</nav>'; };
     if (CDOC[sec]) return '<div class="page camp"><section>' + nav(sec) + '<div class="cg one"><div><h2 class="en" translate="no">' + CDOC[sec][0] + '</h2><p class="cko">' + CDOC[sec][1] + '</p><div class="cdoc">' + S[sec][1]() + '</div></div></div></section></div>';
     var k = CD[sec] ? sec : '', d = CD[k];
-    return '<div class="page camp"><section>' + nav(k) + '<div class="cg"><div><h2 class="en" translate="no">' + d.en + '</h2><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><span>' + d.vs + '</span></aside></div>' + (d.x ? d.x() : '') + '</section></div>';
+    return '<div class="page camp"><section><a class="back" href="#net">뒤로</a>' + nav(k) + '<div class="cg"><div><div class="cht"><h2 class="en" translate="no">' + d.en + '</h2><span class="cvs">' + d.vs + '</span></div><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><em class="cvm">' + d.vs + '</em></aside></div>' + (d.x ? d.x() : '') + '</section></div>';
   };
   V.me = function () { visited.ach = 1; return V.ach(); };
   V.me0 = function () {

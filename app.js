@@ -250,7 +250,7 @@
         '<svg class="slant" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><polygon points="1010,0 1440,0 1440,900 830,900" fill="#15181e" fill-opacity=".85"/></svg>' +
         '<div class="big" data-d="34" data-m="-1" data-k=".07" data-r="7"><div class="g1" translate="no">ÉTRANGER</div><div class="g2" translate="no">ÉTRANGER</div></div>' +
         '<div class="layer" data-d="46" data-m=".6" data-v=".35" data-k=".16" data-s="1.04" style="background-image:url(' + bgPick('front') + ')"></div>' +
-        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1><a class="hrec" href="persona.html">신병 등록부 →</a></div>';
+        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1></div>';
     }
   };
   function closeLy() { if (!$('#lyrics').hidden) ly(); }
