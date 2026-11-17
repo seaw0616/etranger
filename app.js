@@ -41,6 +41,7 @@
     audio.play().then(function () { root.classList.add('playing'); }).catch(function () {});
     wsz(); route(); radio();
     if (new Date().getHours() < 5) E('night');
+    if (window.matchMedia && matchMedia('(pointer:fine)').matches && innerWidth >= 1024) E('pc');
     setTimeout(function () { E('stay10'); }, 6e5); setTimeout(function () { E('stay30'); }, 18e5);
   }
   $('#enter').addEventListener('click', enter);
