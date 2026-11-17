@@ -1543,3 +1543,74 @@ html.phopen{overflow:hidden}
 @media (max-width:560px){#phv{padding:0}.pfr{width:100%;height:100dvh;padding:0;border-radius:0;box-shadow:none}.psc{border-radius:0}.psb::after{display:none}.phx{top:10px;right:12px;z-index:5;background:rgba(0,0,0,.35)}}
 @media (prefers-reduced-motion:reduce){.pul,#phv,.pfr{animation:none}.plk{transition:none}.phev{transition:none}}
 @media (max-width:560px){.phx{top:58px;right:14px;width:40px;height:40px}}
+
+/* 압수 단말: PC 넘기기 단추 · 끌기 · 얇은 스크롤 막대 */
+.pscb{position:absolute;right:-56px;top:50%;display:flex;flex-direction:column;gap:10px;transform:translateY(-50%)}
+.pscb button{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;transition:background .15s,transform .15s}
+.pscb button:hover{background:#dd9d4c;color:#15120c}
+.pscb button:active{transform:scale(.94)}
+.pscb button:focus-visible{outline:2px solid #dd9d4c;outline-offset:3px}
+.pscb svg{width:22px;height:22px}
+.pls,.pmb{cursor:grab;scrollbar-width:thin;scrollbar-color:rgba(221,157,76,.55) transparent;user-select:none}
+.pls.dg,.pmb.dg{cursor:grabbing}
+.pmb .pbb{user-select:text}
+.pls::-webkit-scrollbar,.pmb::-webkit-scrollbar{width:6px}
+.pls::-webkit-scrollbar-thumb,.pmb::-webkit-scrollbar-thumb{border-radius:3px;background:rgba(221,157,76,.55)}
+@media (max-width:560px),(pointer:coarse){.pscb{display:none}.pls,.pmb{cursor:auto}}
+
+/* r/PNE 댓글 단추 */
+.rx-cf{position:relative;align-items:center}
+.rx-cv{display:inline-flex;align-items:center;gap:2px;border-radius:999px;transition:background .15s}
+.rx-cv button,.rx-cbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:32px;height:32px;padding:0 8px;border:0;border-radius:999px;background:none;color:var(--tx2);font:inherit;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
+.rx-cv button{padding:0;width:32px}
+.rx-cv button:hover,.rx-cbtn:hover,.rx-cbtn.on{background:rgba(255,255,255,.08);color:var(--tx)}
+.rx-cv.up{background:var(--or)}.rx-cv.dn{background:var(--bl)}
+.rx-cv.up b,.rx-cv.dn b,.rx-cv.up button,.rx-cv.dn button{color:#fff}
+.rx-cv.up button:first-child svg path,.rx-cv.dn button:last-child svg path{fill:#fff}
+.rx-mw{position:relative}
+.rx-mn{position:absolute;left:0;top:calc(100% + 6px);z-index:5;display:flex;flex-direction:column;min-width:140px;padding:6px;border-radius:12px;background:#1a1d24;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 16px 30px -12px rgba(0,0,0,.8)}
+.rx-mn button{padding:10px 12px;border:0;border-radius:8px;background:none;color:var(--tx);font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.rx-mn button:hover{background:rgba(255,255,255,.07)}
+.rx-sv{margin-left:8px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700;color:var(--tx2)}
+.rx-rb{margin:10px 0 4px;padding:12px 14px;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.rx-rbi{margin:0 0 6px;font-size:13px;color:var(--tx2)}
+.rx-rbm{margin:0;font-size:15px;color:var(--tx)}
+.rx-rbb{display:flex;justify-content:flex-end;margin-top:10px}
+.rx-rbb button{padding:8px 16px;border:0;border-radius:999px;background:rgba(255,255,255,.1);color:var(--tx);font:inherit;font-weight:700;cursor:pointer}
+.rx-cm.hid .rx-ch{opacity:.7}
+@media (max-width:767px){.rx-mn{left:auto;right:0}}
+.apr{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:rgba(221,157,76,.14);color:#dd9d4c;font-style:normal;font-weight:700;font-size:12px}
+
+/* 11-17 계급표(캠프 시문 > PNE): 신병 등록부 계급표와 같은 종이 서류 모양 */
+.gp{position:relative;margin-top:56px;padding:32px 32px 26px;background:#e8e1cf;color:#2a2419;box-shadow:0 24px 48px rgba(0,0,0,.5)}
+.gp::before{content:'';position:absolute;inset:0;background:url(img/grain.png);opacity:.35;mix-blend-mode:multiply;pointer-events:none}
+.gp>*{position:relative}
+.gph{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;padding-bottom:14px;border-bottom:3px double #2a2419}
+.gph small{display:block;font:700 13px 'Courier New',monospace;letter-spacing:.06em;color:#5e5442}
+.gp .gph h3{margin:0;font:900 46px/.9 var(--st);letter-spacing:.03em;color:#2a2419}
+.gp .gph h3 span{display:block;margin-top:8px;font:800 20px var(--my);letter-spacing:0}
+.gph p{max-width:430px;margin:0;font:400 15px/1.75 var(--my);color:#4f4636;word-break:keep-all}
+.gpg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 28px;margin-top:22px;align-items:start}
+.gpt{display:flex;align-items:baseline;gap:8px;padding:4px 10px;background:#2a2419;color:#e8e1cf;font:900 14px var(--st);letter-spacing:.12em}
+.gpt small{font:700 13px var(--my);letter-spacing:0}
+.gpt.of{background:#1b2130;box-shadow:inset 0 -2px 0 #b8954a}
+.gpc,.gpr{display:grid;grid-template-columns:1.618fr 20px 1fr;align-items:center}
+.gpc{padding:8px 8px 5px;border-bottom:1px solid #2a2419;font:700 12.5px var(--my);color:#5e5442}
+.gpr{min-height:56px;padding:7px 8px;border-bottom:1px solid rgba(42,36,25,.28)}
+.gpr b{display:block;font:800 16px/1.35 var(--my);word-break:keep-all}
+.gpr i{display:block;margin-top:1px;font:400 12px/1.4 'Courier New',monospace;font-style:normal;color:#5e5442}
+.gpr small{display:block;margin-top:2px;font:400 12px/1.45 var(--my);color:#5e5442;word-break:keep-all}
+.gpr .eq{text-align:center;font:700 15px 'Courier New',monospace;color:#5e5442}
+.gpx{margin:12px 0 0;padding:8px 10px;border:1.5px dashed #a3232c;color:#8a1f26;font:800 14px var(--my);text-align:center}
+.gpn{margin:18px 0 0;padding-top:12px;border-top:1px solid rgba(42,36,25,.28);font:400 14px/1.75 var(--my);color:#4f4636;word-break:keep-all}
+.gpn a{color:#8a4f1d;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:980px){.gpg{grid-template-columns:minmax(0,1fr);gap:22px}.gph{flex-direction:column;align-items:flex-start;gap:12px}}
+@media (max-width:440px){.gp{margin-top:40px;padding:22px 16px 18px}.gp .gph h3{font-size:38px}}
+
+/* 11-17 누님 «모바일은 커서없애고 애니메이션효과 많이덜고», «모바일 부하 신경써»: 손가락 화면 · 좁은 화면 */
+@media (pointer:coarse),(max-width:767px){
+  #cur,#tr{display:none!important}
+  html,body,a,button{cursor:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;scroll-behavior:auto!important}
+  *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}

@@ -304,6 +304,7 @@
   var fx = [], WD = ['RAYÉ', 'DEUX FOIS', 'SANS NOM', 'ENCORE VIVANT', 'NOM EFFACÉ', 'SANS DRAPEAU'], wi = 0;
   addEventListener('pointerdown', function (e) {
     if (reduce) return;
+    if (e.target.closest && e.target.closest('#phv')) return; /* 11-17 누님: 압수 단말 안에서는 사격 효과 없음 */
     var n = performance.now(), ang = -1.05, i, t = e.target;
     var X = e.clientX, Y = e.clientY, vw = $('#view'), j, cr = [], rim = [], arcs = [];
     // 모바일(손가락 화면)은 빛 한 번 + 고리 하나만: 파편 · 광선 · 구멍 · 화면 흔들림 뺌(11-17 누님 «모바일로들어가면 마우스이펙트 좀 간소하게»)
@@ -329,8 +330,9 @@
     }
   });
   addEventListener('mouseup', function () { root.classList.remove('c-down'); });
-  var reduce = false;
   var lite = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || innerWidth < 768;
+  /* 11-17 누님 «모바일은 커서없애고 애니메이션효과 많이덜고»: 폰에서는 누를 때 효과 · 꼬리 · 저절로 도는 움직임 · 물결 흐름을 끔. 움직임 줄이기 설정을 켠 PC 도 같게 */
+  var reduce = lite || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   function drawFx(n) {
     fx = fx.filter(function (f) { return n - f.n < f.l; });
     trx.save(); trx.lineCap = 'round';

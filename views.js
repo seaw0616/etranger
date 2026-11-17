@@ -134,7 +134,7 @@
   };
   V.field = function () {
     if (!mem()) return need();
-    return '<div class="page"><h2>현장</h2><div class="cols"><section><h3>PNE</h3><p>정부가 공식 부인하는 부대. 편제에도, 훈장에도, 기록에도, 사망자 명단에도 없다. 입대로 한 번, 차출로 또 한 번 지워진 인간들.</p><div class="r"><span>편제</span><p>4인조 × 4 + 지휘 요소</p></div><div class="r"><span>계급</span><p>서류에만 있고, 현장에서는 오래 산 놈이 위</p></div><div class="r"><span>무전</span><p>NATO 음성 알파벳</p></div><div class="r"><span>관례</span><p>과거는 묻지 않는다</p></div></section><section><h3>MEUTE</h3><p>기지에서 가장 위험한 놈들을 모은 조. 공식은 차출, 실질은 징계. 윗선은 죽기를 바라며 사지로 보내지만 살아서 돌아온다.</p><div class="r"><span>임무</span><p>추격 · 제거, 감시, 심문, 회수 · 호송, 은폐, 미끼</p></div></section><section><h3>구역</h3><p>막사, 무기고, 정비고, 의무대, 취사장, 통신실, 초소, 지휘소, 영창.</p><p>마을에는 오아시스와 국경 시장. 무장세력 영향권. 해가 지면 시장은 닫힌다.</p></section></div></div>';
+    return '<div class="page"><h2>현장</h2><div class="cols"><section><h3>PNE</h3><p>정부가 공식 부인하는 부대. 편제에도, 훈장에도, 기록에도, 사망자 명단에도 없다. 입대로 한 번, 차출로 또 한 번 지워진 인간들.</p><div class="r"><span>편제</span><p>4인조 × 4 + 지휘 요소</p></div><div class="r"><span>계급</span><p>서류에만 있고 현장에서는 오래 산 놈이 위</p></div><div class="r"><span>무전</span><p>NATO 음성 알파벳</p></div><div class="r"><span>관례</span><p>과거는 묻지 않는다</p></div></section><section><h3>MEUTE</h3><p>기지에서 가장 위험한 놈들을 모은 조. 공식은 차출, 실질은 징계. 윗선은 죽기를 바라며 사지로 보내지만 살아서 돌아온다.</p><div class="r"><span>임무</span><p>추격 · 제거, 감시, 심문, 회수 · 호송, 은폐, 미끼</p></div></section><section><h3>구역</h3><p>막사, 무기고, 정비고, 의무대, 취사장, 통신실, 초소, 지휘소, 영창.</p><p>마을에는 오아시스와 국경 시장. 무장세력 영향권. 해가 지면 시장은 닫힌다.</p></section></div></div>';
   };
 
   var MAIL = { guest: [['시스템', '손님 계정 메일 수신 불가']] };
@@ -216,12 +216,17 @@
   var AG = [['ACCESS', '침입', ['login', 'all4', 'first', 'guest', 'logout', 'admin', 'fail5', 'clue4', 'shard4', 'root', 'fullpow']], ['FILES', '열람', ['menu', 'logo', 'camp', 'campall', 'f_phantom', 'f_darling', 'f_chase', 'f_hyde', 'eaves', 'private4']], ['CLASSIFIED', '기밀', ['redact', 'redact5', 'bare', 'album', 'forensic']], ['SERVICE', '복무', ['cat', 'lyric', 'lyric5', 'pause', 'loop', 'radio10', 'cipher', 'radioall', 'stay10', 'stay30', 'click100', 'night', 'pasta', 'all']]];
   // 11-17 로그인 없앰: 로그인으로만 딸 수 있던 업적 9개 뺌(누님 «목록에서 빼기»)
   var GONE = ['login', 'all4', 'first', 'guest', 'logout', 'admin', 'fail5', 'clue4', 'root', 'term', 'whoami', 'ls', 'rosterf', 'sudo', 'clear', 'badcmd', 'sebby', 'zero', 'shard4', 'unredact', 'fullpow']; GONE.forEach(function (k) { delete eggs[k]; }); ACH = ACH.filter(function (a) { return GONE.indexOf(a[0]) < 0; }); AG.forEach(function (g) { g[2] = g[2].filter(function (k) { return GONE.indexOf(k) < 0; }); }); AG = AG.filter(function (g) { return g[2].length; });
+  var MENU = ['notice', 'board', 'petition', 'approval', 'rel'];
+  if (CNT.xp && CNT.xp.mail) { delete CNT.xp.mail; sv(); }
+  function prog(k) { var n = function (o) { return Object.keys(o || {}).length; }, al = [].concat.apply([], Object.keys(PX).map(function (x) { return PX[x].map(function (q) { return q[0]; }); }));
+    var P = { menu: [MENU.filter(function (x) { return (CNT.vs || {})[x]; }).length, MENU.length], campall: [Math.min(4, n(CNT.cv)), 4], eaves: [Math.min(6, n(CNT.pr)), 6], private4: [Math.min(4, n(CNT.xp)), 4], redact5: [Math.min(5, n(CNT.rx)), 5], album: [al.filter(function (x) { return (CNT.al || {})[x]; }).length, al.length], click100: [Math.min(100, CNT.ck || 0), 100], radio10: [Math.min(10, CNT.rd || 0), 10], lyric5: [Math.min(5, CNT.ly || 0), 5] }[k];
+    return P ? '<em class="apr">' + P[0] + ' / ' + P[1] + '</em>' : ''; }
   V.ach = function () {
     var by = {}; ACH.forEach(function (a) { by[a[0]] = a; });
     var n = ACH.filter(function (a) { return eggs[a[0]]; }).length, T = ACH.length, back = location.hash.indexOf('#net') === 0 ? '#net' : '#home';
     return '<div class="page net am"><section><a class="back" href="' + back + '">뒤로</a><div class="amh"><div><h2 class="en" translate="no">ACHIEVEMENT</h2><p class="cko">훈장 대신 남는 기록</p></div><p class="amc"><b>' + n + '</b><span>/ ' + T + '</span></p></div><div class="amb"><i style="width:' + (n / T * 100) + '%"></i></div>' + AG.map(function (g) {
       var d = g[2].filter(function (k) { return eggs[k]; }).length;
-      return '<div class="ag"><div class="agl"><b translate="no">' + g[0] + '</b><small>' + g[1] + ' ' + d + ' / ' + g[2].length + '</small></div><div class="agi">' + g[2].map(function (k) { var a = by[k]; return eggs[k] ? '<div class="ai on"><b>' + a[1] + '</b><span>' + a[2] + '</span></div>' : '<div class="ai off"><b><i class="akr" style="width:' + (a[1].length * .92 + .4).toFixed(2) + 'em" aria-label="미달성 업적"></i></b><span>' + a[2] + '</span></div>'; }).join('') + '</div></div>';
+      return '<div class="ag"><div class="agl"><b translate="no">' + g[0] + '</b><small>' + g[1] + ' ' + d + ' / ' + g[2].length + '</small></div><div class="agi">' + g[2].map(function (k) { var a = by[k]; return eggs[k] ? '<div class="ai on"><b>' + a[1] + '</b><span>' + a[2] + '</span></div>' : '<div class="ai off"><b><i class="akr" style="width:' + (a[1].length * .92 + .4).toFixed(2) + 'em" aria-label="미달성 업적"></i></b><span>' + a[2] + prog(k) + '</span></div>'; }).join('') + '</div></div>';
     }).join('') + '</section></div>';
   };
   var GLOCK = { inner: 1, medical: 1, approval: 1, rel: 1 }, chatCur = 'meute', CM = {}, CP = {}, chatOwner = null;
@@ -259,7 +264,7 @@
     return '<div class="ml">' + rs.map(function (r) { var l = cmsg(r.id), z = l[l.length - 1]; return '<button class="mr' + (r.id === cur.id ? ' on' : '') + '" data-r="' + r.id + '"><b translate="no">' + r.n + '</b><time>' + z.h + '</time><span>' + esc(z.t) + '</span></button>'; }).join('') + '</div><div class="mt"><div class="mth"><b translate="no">' + cur.n + '</b><span>' + cur.s + '</span></div><div class="mb" id="mb">' + html + '</div><form id="mf" class="mc"><input id="mi" autocomplete="off" aria-label="메시지 입력" placeholder="' + (user.id === 'guest' ? '외부 접속자 메시지 전송 불가' : user.id === 'admin' ? '감청 전용. 송신 불가' : '메시지 입력') + '"' + (user.id === 'guest' || user.id === 'admin' ? ' disabled' : '') + '><button class="mbt"' + (user.id === 'guest' || user.id === 'admin' ? ' disabled' : '') + '>전송</button></form></div>';
   }
   function roomEgg(id) { if (!user || user.id === 'guest' || id === 'meute') return; var pk = null, xu = null;
-    if (user.id === 'admin') { if (id.indexOf(':') > 0) xu = id.split(':')[0]; else if (id.indexOf('-') > 0) pk = id; } else if (xr(id)) xu = user.id; else pk = [user.id, id].sort().join('-');
+    if (user.id === 'admin') { if (id.indexOf('mail:') === 0) return; if (id.indexOf(':') > 0) xu = id.split(':')[0]; else if (id.indexOf('-') > 0) pk = id; } else if (xr(id)) xu = user.id; else pk = [user.id, id].sort().join('-');
     if (pk) { CNT.pr = CNT.pr || {}; CNT.pr[pk] = 1; sv(); if (Object.keys(CNT.pr).length >= 6) egg('eaves'); }
     if (xu) { CNT.xp = CNT.xp || {}; CNT.xp[xu] = 1; sv(); if (Object.keys(CNT.xp).length >= 4) egg('private4'); } }
   function chatDraw(toEnd) { var m = $('.msg'); if (!m) return; m.innerHTML = chatInner(); var b = $('#mb'); b.scrollTop = toEnd ? b.scrollHeight : 0; }
@@ -309,7 +314,7 @@
   function phOpen() {
     if (document.getElementById('phv')) return; PHV.room = null;
     var v = document.createElement('div'); v.id = 'phv'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-label', phOwner().name + ' 압수 단말');
-    v.innerHTML = '<div class="pfr"><button class="phx" data-px="1" aria-label="닫기">' + SVGX + '</button><div class="psc"><div class="psb"><span>' + nowT() + '</span><span class="psi">' + SVGS + 'LTE<i class="pbt"><i></i></i>21%</span></div><div id="papp" class="papp"></div><div class="plk"><b>' + nowT() + '</b><span>잠금 해제</span></div></div></div>';
+    v.innerHTML = '<div class="pfr"><button class="phx" data-px="1" aria-label="닫기">' + SVGX + '</button><div class="pscb"><button data-ps="-1" aria-label="위로 넘기기"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 12.5 10 7.5l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button data-ps="1" aria-label="아래로 넘기기"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="psc"><div class="psb"><span>' + nowT() + '</span><span class="psi">' + SVGS + 'LTE<i class="pbt"><i></i></i>21%</span></div><div id="papp" class="papp"></div><div class="plk"><b>' + nowT() + '</b><span>잠금 해제</span></div></div></div>';
     document.body.appendChild(v); document.documentElement.classList.add('phopen'); phDraw();
     if (window.__sfx) window.__sfx('login');
     setTimeout(function () { var k = v.querySelector('.plk'); if (k) k.classList.add('go'); setTimeout(function () { if (k) k.remove(); }, 700); }, 450);
@@ -325,6 +330,14 @@
   });
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.getElementById('phv')) { if (PHV.room) { PHV.room = null; phDraw(); } else phClose(); } });
   addEventListener('hashchange', phClose);
+  function phSc() { return document.querySelector('#phv .pmb') || document.querySelector('#phv .pls'); }
+  function phScroll(d) { var s = phSc(); if (s) s.scrollBy({ top: d * s.clientHeight * 0.7, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('#phv [data-ps]'); if (b) phScroll(+b.getAttribute('data-ps')); }, true);
+  addEventListener('keydown', function (e) { if (!document.getElementById('phv')) return; var k = { ArrowDown: .35, ArrowUp: -.35, PageDown: 1, PageUp: -1 }[e.key]; if (k) { e.preventDefault(); phScroll(k); } });
+  var phDg = null;
+  document.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' || e.button !== 0) return; var s = e.target.closest && e.target.closest('#phv .pmb, #phv .pls'); if (!s) return; phDg = { s: s, y: e.clientY, t: s.scrollTop, m: 0 }; });
+  addEventListener('pointermove', function (e) { if (!phDg) return; var dy = e.clientY - phDg.y; if (Math.abs(dy) > 4) { phDg.m = 1; phDg.s.classList.add('dg'); } if (phDg.m) phDg.s.scrollTop = phDg.t - dy; });
+  addEventListener('pointerup', function () { if (!phDg) return; var m = phDg.m, s = phDg.s; phDg = null; s.classList.remove('dg'); if (m) { var stop = function (ev) { ev.stopPropagation(); ev.preventDefault(); removeEventListener('click', stop, true); }; addEventListener('click', stop, true); setTimeout(function () { removeEventListener('click', stop, true); }, 50); } });
   function nowT() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
   function chatSend(t) {
     var id = chatCur, l = cmsg(id), x = xr(id), who, r, low = nm(t), k, eg = EG.filter(function (e) { return e[0].some(function (w) { return low.indexOf(w) >= 0; }); })[0];
@@ -343,14 +356,15 @@
     if (sec === 'ach') { visited.ach = 1; return V.ach(); }
     if (!user) return '<div class="page login"><h2>내부망 로그인</h2><form id="lf"><label>콜사인<input id="u" autocomplete="off"></label><label>암호<span class="pwf"><input id="p" type="password" autocomplete="off"><button type="button" id="pe" aria-label="암호 보기"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 7s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6z"/><circle cx="10" cy="7" r="2.6"/><path class="sl" d="M3 13L17 1"/></svg></button></span></label><p id="ph" class="ph"></p><p id="le" class="sub"></p><div id="clue"></div><button class="pri">접속</button></form><button id="gs" class="ln">손님으로 접속</button><a class="ln" href="persona.html">처음 왔다면 신병 등록부 →</a>' + memo() + '</div>';
     var cur = S[sec] ? sec : 'dash';
-    var G = [['', ['dash']], ['캠프 시문', ['c:', 'c:pne', 'c:map']], ['행정반', ['notice', 'board', 'petition', 'approval']], ['인사 · 부대', ['c:meute', 'rel']]], CL = { 'c:': '캠프 시문', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': '시설 안내' };
-    if (S[sec]) { visited[sec] = 1; if ([].concat.apply([], G.map(function (g) { return g[1]; })).every(function (k) { return k === 'dash' || k.indexOf('c:') === 0 || visited[k]; })) egg('menu'); }
+    var G = [['', ['dash']], ['캠프 시문', ['c:', 'c:pne', 'c:map']], ['행정반', ['notice', 'board', 'petition', 'approval']], ['인사 · 부대', ['c:meute', 'rel']]], CL = { 'c:': 'CAMP SIMOUN', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': 'FACILITY' };
+    MENU = [].concat.apply([], G.map(function (g) { return g[1]; })).filter(function (k) { return k !== 'dash' && k.indexOf('c:') !== 0; });
+    if (S[sec]) { visited[sec] = 1; CNT.vs = CNT.vs || {}; CNT.vs[sec] = 1; sv(); if (MENU.every(function (k) { return CNT.vs[k]; })) egg('menu'); }
     var who = '';
     var EN = { dash: 'STATUS', notice: 'NOTICE', mail: 'MAIL', chat: 'MESSENGER', board: 'r/PNE', petition: 'PETITION', calendar: 'SCHEDULE', approval: 'APPROVAL', duty: 'DUTY ROSTER', leave: 'LEAVE', supply: 'SUPPLY', files: 'PERSONNEL', rel: 'RELATIONS', medical: 'MEDICAL', map: 'FACILITY', manual: 'ORDERS', phone: 'DIRECTORY', docs: 'ARCHIVE', ach: 'ACHIEVEMENT', term: 'TERMINAL', meal: 'MESS', inner: 'CLASSIFIED' };
     var GN = { '캠프 시문': 'CAMP', '행정반': 'BUREAU', '인사 · 부대': 'ROSTER' };
     if (!S[sec]) {
       var gs = G.filter(function (g) { return g[0]; });
-      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a href="#camp' + (c ? '/' + c : '') + '"' + (k === 'c:pne' || k === 'c:meute' ? ' translate="no"' : '') + '>' + CL[k] + '</a>'; } return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
+      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a href="#camp' + (c ? '/' + c : '') + '"' + ' translate="no"' + '>' + CL[k] + '</a>'; } return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
     }
     if (user.id === 'guest' && (GLOCK[cur] || (cur === 'files' && sub))) return '<div class="page net"><section><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + '<div class="lock">' + [64, 82, 48, 74, 58].map(function (w) { return '<div class="r"><span><i></i></span><p><i style="width:' + w + '%"></i></p></div>'; }).join('') + '</div><p class="lockm">등록 인원만 열람 가능.</p></section></div>';
     if (cur === 'board' && window.__RPNE) return '<div class="page net rxp"><section><a class="back" href="#net">뒤로</a>' + window.__RPNE.page({ posts: D.posts, inner: T.inner ? T.inner[1] : [], wd: function (k) { return S[k][1](); } }) + '</section></div>';
@@ -359,7 +373,7 @@
     return '<div class="page net"><section><a class="back" href="' + (sub ? (cur === 'rel' ? '#net/files/' + sub : cur === 'files' ? '#camp/meute' : '#net/' + cur) : '#net') + '">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + S[cur][1](sub) + '</section></div>';
   };
 
-  var CT = [['', 'CAMP SIMOUN'], ['pne', 'PNE'], ['meute', 'MEUTE'], ['map', 'FACILITY']];
+  var CT = [['', 'CAMP SIMOUN'], ['pne', 'PNE'], ['map', 'FACILITY']];
   var rw = function (x) { return '<div class="r"><span>' + x[0] + '</span><p>' + x[1] + '</p></div>'; };
   var PINS = [
     [51, 40, 'Baraquements', '컨테이너 막사'], [31.5, 38.5, 'Cuisine', '취사장', 1], [52, 16, 'Armurerie', '무기고'], [73, 40, 'Atelier', '정비고'], [64, 29, 'Transmissions', '통신실', 1],
@@ -376,7 +390,19 @@
       } },
     pne: { en: 'PNE', ko: 'Peloton de Neutralisation Étrangère', v: '두 번 <i>지워진</i> 인간들', vs: '피네',
       b: ['정부 공식 미승인 부대. 편제, 서훈, 기록, 전사자 명단 미등재.', '입대 시 1회, 차출 시 1회, 총 2회 기록 말소.'],
-      f: [['차출', '기준 비공개. 통보 당일 전속, 기록 없음'], ['편제', '4인조 × 4 + 지휘 요소'], ['조', '대개 고정. 조 간 마찰 상시'], ['계급', '서류상으로만 존재. 현장 서열은 생존 기간순'], ['콜사인', '차출 때 부여. 거부 불가. 부대 안에서는 콜사인만 사용'], ['무전', 'NATO 음성 알파벳'], ['지휘관', '본국 장교. 서류상 타 부대 소속. 현장 방문 드묾'], ['관례', '과거 불문'], ['미끼 임무', '거부 불가'], ['내선', '지휘소 101 · 통신실 203 · 의무대 305 · 영창 없음']] },
+      f: [['차출', '기준 비공개. 통보 당일 전속, 기록 없음'], ['편제', '4인조 × 4 + 지휘 요소'], ['조', '대개 고정. 조 간 마찰 상시'], ['계급', '서류상으로만 존재. 현장 서열은 생존 기간순'], ['콜사인', '차출 때 부여. 거부 불가. 부대 안에서는 콜사인만 사용'], ['무전', 'NATO 음성 알파벳'], ['지휘관', '본국 장교. 서류상 타 부대 소속. 현장 방문 드묾'], ['관례', '과거 불문'], ['미끼 임무', '거부 불가'], ['내선', '지휘소 101 · 통신실 203 · 의무대 305 · 영창 없음']],
+      /* 계급표: 순서 · 한국군 대응은 나토 계급 부호 순서(위키백과 «Ranks in the French Army» · 나토 육군 계급 표 · «Military ranks of South Korea»).
+         장교는 작품 설정대로 본국 국적자만(11-17 누님 결정 «가상 설정으로 유지») */
+      x: function () {
+        var G = [['HOMMES DU RANG', '병', '', [['레지오네르 2등', 'Légionnaire de 2e classe', '이병'], ['레지오네르 1등', 'Légionnaire de 1re classe', '일병'], ['카포랄', 'Caporal', '상병'], ['카포랄 셰프', 'Caporal-chef', '병장'], ['카포랄 셰프 1등', 'Caporal-chef de 1re classe', '병장', '한국군에는 없는 계급. 11년 넘게 복무한 병장급']]],
+          ['SOUS-OFFICIERS', '부사관', '', [['세르장', 'Sergent', '하사'], ['세르장 셰프', 'Sergent-chef', '중사'], ['아쥐당', 'Adjudant', '상사'], ['아쥐당 셰프', 'Adjudant-chef', '원사'], ['마조르', 'Major', '원사', '한국군에는 없는 계급. 부사관 맨 위']]],
+          ['OFFICIERS', '장교 · 본국 국적자만', ' of', [['수 리외트낭', 'Sous-lieutenant', '소위'], ['리외트낭', 'Lieutenant', '중위'], ['카피텐', 'Capitaine', '대위'], ['코망당', 'Commandant', '소령'], ['리외트낭 콜로넬', 'Lieutenant-colonel', '중령'], ['콜로넬', 'Colonel', '대령'], ['제네랄 드 브리가드', 'Général de brigade', '준장'], ['제네랄 드 디비지옹', 'Général de division', '소장'], ['제네랄 드 코르 다르메', "Général de corps d'armée", '중장'], ['제네랄 다르메', "Général d'armée", '대장']]]];
+        return '<section class="gp" aria-label="계급표"><div class="gph"><div><small translate="no">TABLEAU DES GRADES</small><h3 translate="no">GRADES<span>계급표</span></h3></div><p>외인부대 계급을 한국군 계급과 나란히 놓았습니다. 같은 줄이 같은 급이고 아래로 갈수록 높은 계급입니다.</p></div><div class="gpg">' +
+          G.map(function (g, gi) { return '<div><div class="gpt' + g[2] + '" translate="no">' + g[0] + '<small>' + g[1] + '</small></div><div class="gpc"><span>외인부대</span><span></span><span>한국군</span></div>' +
+            g[3].map(function (r) { return '<div class="gpr"><span><b>' + r[0] + '</b><i translate="no">' + r[1] + '</i></span><span class="eq" aria-hidden="true">=</span><span><b>' + r[2] + '</b>' + (r[3] ? '<small>' + r[3] + '</small>' : '') + '</span></div>'; }).join('') +
+            (gi === 1 ? '<p class="gpx">외국인 대원은 마조르까지</p>' : '') + '</div>'; }).join('') +
+          '</div><p class="gpn">장교는 본국 국적자만 될 수 있습니다. 장교와 부사관은 검은 케피, 병은 흰 케피를 씁니다. <a href="persona.html">신병 등록부</a>에서 계급을 골라 페르소나를 만들 수 있습니다.</p></section>';
+      } },
     meute: { en: 'MEUTE', ko: '특별 편성 조', v: '<i>버리는</i> 조', vs: '뫼트',
       b: ['정규 중대 전출자로 편성. 전출 사유는 여성 문제, 명령 불복종, 사고. 공식 사유 차출, 실질 징계 조치. 복무 종료 조건은 사망 또는 형기 만료.', '전투 능력 최상위, 지휘 통제 불가. 고위험 임무 반복 투입 후 전원 생환. PNE 내 최장기 복무 조.'],
       f: [['임무', '추격 · 제거, 감시, 심문, 회수 · 호송, 은폐, 미끼'], ['운용', '소모성 임무 및 미끼 임무 우선 투입'], ['상부', '조 전원 상부 불신. 감시 대상']],
@@ -391,7 +417,7 @@
     var nav = function (k) { return '<nav class="ctab" aria-label="캠프 시문 메뉴">' + CT.map(function (t) { return '<a translate="no" class="' + (t[0] === k ? 'on' : '') + '" href="#camp' + (t[0] ? '/' + t[0] : '') + '">' + t[1] + '</a>'; }).join('') + '</nav>'; };
     if (CDOC[sec]) return '<div class="page camp"><section>' + nav(sec) + '<div class="cg one"><div><h2 class="en" translate="no">' + CDOC[sec][0] + '</h2><p class="cko">' + CDOC[sec][1] + '</p><div class="cdoc">' + S[sec][1]() + '</div></div></div></section></div>';
     var k = CD[sec] ? sec : '', d = CD[k];
-    return '<div class="page camp"><section><a class="back" href="#net">뒤로</a>' + nav(k) + '<div class="cg"><div><div class="cht"><h2 class="en" translate="no">' + d.en + '</h2><span class="cvs">' + d.vs + '</span></div><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><em class="cvm">' + d.vs + '</em></aside></div>' + (d.x ? d.x() : '') + '</section></div>';
+    return '<div class="page camp"><section><a class="back" href="#net">뒤로</a>' + (k === 'meute' ? '' : nav(k)) + '<div class="cg"><div><div class="cht"><h2 class="en" translate="no">' + d.en + '</h2><span class="cvs">' + d.vs + '</span></div><p class="cko">' + d.ko + '</p>' + (d.top || '') + '<div class="cb">' + d.b.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div><div class="cf' + (d.two ? ' two' : '') + '">' + d.f.map(rw).join('') + '</div></div><aside class="cv"><b>' + d.v + '</b><em class="cvm">' + d.vs + '</em></aside></div>' + (d.x ? d.x() : '') + '</section></div>';
   };
   V.me = function () { visited.ach = 1; return V.ach(); };
   V.me0 = function () {
@@ -415,7 +441,7 @@
     if (id === 'me') return say(['CHASE', '네 정보? 우리가 먼저 봤어.']);
     if (id === 'net') return say(p[1] === 'files' && WHO[p[2]] ? WHO[p[2]] : SAY[p[1]]);
   };
-  var TERM = { help: 'ls  whoami  cat 파일  eggs  clear', ls: 'roster.txt  orders.txt  toutou.jpg', whoami: function () { return user.id; }, eggs: function () { return '달성한 업적 ' + Object.keys(eggs).length + ' / ' + ACH.length; }, 'cat roster.txt': 'PHANTOM DARLING CHASE HYDE — 전원 기록 말소', 'cat orders.txt': '권한 없음.', 'cat toutou.jpg': function () { show(); egg('cat', '투투 발견'); return '샴 짬타이거 투투.'; }, sebby: function () { egg('sebby', '건드리면 안 되는 이름'); return '거기까지 해라.'; }, sudo: '이 부대는 없는 부대.' };
+  var TERM = { help: 'ls  whoami  cat 파일  eggs  clear', ls: 'roster.txt  orders.txt  toutou.jpg', whoami: function () { return user.id; }, eggs: function () { return '달성한 업적 ' + Object.keys(eggs).length + ' / ' + ACH.length; }, 'cat roster.txt': 'PHANTOM DARLING CHASE HYDE. 전원 기록 말소', 'cat orders.txt': '권한 없음.', 'cat toutou.jpg': function () { show(); egg('cat', '투투 발견'); return '샴 짬타이거 투투.'; }, sebby: function () { egg('sebby', '건드리면 안 되는 이름'); return '거기까지 해라.'; }, sudo: '이 부대는 없는 부대.' };
   function show() { setTimeout(function () { var o = $('#tout'); if (!o) return; var i = new Image(); i.src = 'assets/toutou.png'; i.alt = '투투'; i.className = 'tcat'; o.appendChild(i); }, 0); }
   window.__sayA = function (k) { setTimeout(function () { say(SAYA[k]); }, 60); };
 
