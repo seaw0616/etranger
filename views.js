@@ -355,17 +355,19 @@
   }
   V.net = function (sec, sub) {
     if (sec === 'ach') { visited.ach = 1; return V.ach(); }
-    if (!user) return '<div class="page login"><h2>내부망 로그인</h2><form id="lf"><label>콜사인<input id="u" autocomplete="off"></label><label>암호<span class="pwf"><input id="p" type="password" autocomplete="off"><button type="button" id="pe" aria-label="암호 보기"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 7s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6z"/><circle cx="10" cy="7" r="2.6"/><path class="sl" d="M3 13L17 1"/></svg></button></span></label><p id="ph" class="ph"></p><p id="le" class="sub"></p><div id="clue"></div><button class="pri">접속</button></form><button id="gs" class="ln">손님으로 접속</button><a class="ln" href="persona.html">처음 왔다면 신병 등록부 →</a>' + memo() + '</div>';
+    if (!user) return '<div class="page login"><h2>내부망 로그인</h2><form id="lf"><label>콜사인<input id="u" autocomplete="off"></label><label>암호<span class="pwf"><input id="p" type="password" autocomplete="off"><button type="button" id="pe" aria-label="암호 보기"><svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 7s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6z"/><circle cx="10" cy="7" r="2.6"/><path class="sl" d="M3 13L17 1"/></svg></button></span></label><p id="ph" class="ph"></p><p id="le" class="sub"></p><div id="clue"></div><button class="pri">접속</button></form><button id="gs" class="ln">손님으로 접속</button><a class="ln" href="#persona">처음 왔다면 신병 등록부 →</a>' + memo() + '</div>';
     var cur = S[sec] ? sec : 'dash';
-    var G = [['', ['dash']], ['캠프 시문', ['c:', 'c:pne', 'c:map']], ['행정반', ['notice', 'board', 'petition', 'approval']], ['인사 · 부대', ['c:meute', 'rel']]], CL = { 'c:': 'CAMP SIMOUN', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': 'FACILITY' };
+    var G = [['', ['dash']], ['세계관', ['c:', 'c:pne', 'c:map']], ['대원 정보', ['c:meute', 'rel']], ['행정반', ['notice', 'board', 'petition', 'approval']]], CL = { 'c:': 'CAMP SIMOUN', 'c:pne': 'PNE', 'c:meute': 'MEUTE', 'c:map': 'FACILITY' };
+    // 11-19 친구분 «메뉴 이름이 뭐가 뭔지 모름 · 정보와 컨셉 요소 구분» → 누님 «세계관,대원정보,행정반 이런순으로», «부대생활을 따로 뺄 필요는 없잖아»: 한글 이름 · 한 줄 설명 · 놀거리 딱지
+    var CK = { 'c:': '캠프 시문', 'c:pne': '부대 소개', 'c:meute': '대원 파일', 'c:map': '시설 지도' }, XD = { 'c:': '기지 개요 · 주둔지', 'c:pne': '소속 부대 · 편제', 'c:meute': '네 사람 신상 파일', 'c:map': '기지 안 장소', rel: '누가 누구와 얽혔나', notice: '행정반 공지', board: '대원 게시판', petition: '건의함', approval: '결재 서류' }, FUN = { petition: 1, approval: 1 };
     MENU = [].concat.apply([], G.map(function (g) { return g[1]; })).filter(function (k) { return k !== 'dash' && k.indexOf('c:') !== 0; });
     if (S[sec]) { visited[sec] = 1; CNT.vs = CNT.vs || {}; CNT.vs[sec] = 1; sv(); if (MENU.every(function (k) { return CNT.vs[k]; })) egg('menu'); }
     var who = '';
     var EN = { dash: 'STATUS', notice: 'NOTICE', mail: 'MAIL', chat: 'MESSENGER', board: 'r/PNE', petition: 'PETITION', calendar: 'SCHEDULE', approval: 'APPROVAL', duty: 'DUTY ROSTER', leave: 'LEAVE', supply: 'SUPPLY', files: 'PERSONNEL', rel: 'RELATIONS', medical: 'MEDICAL', map: 'FACILITY', manual: 'ORDERS', phone: 'DIRECTORY', docs: 'ARCHIVE', ach: 'ACHIEVEMENT', term: 'TERMINAL', meal: 'MESS', inner: 'CLASSIFIED' };
-    var GN = { '캠프 시문': 'CAMP', '행정반': 'BUREAU', '인사 · 부대': 'ROSTER' };
+    var GN = { '세계관': 'CAMP', '대원 정보': 'ROSTER', '행정반': 'BUREAU' }, GD = { '세계관': '캠프 시문 · 부대 소개 · 시설 지도', '대원 정보': '네 사람 프로필 · 관계도', '행정반': '공지 · 대원 커뮤 · 놀거리' };
     if (!S[sec]) {
       var gs = G.filter(function (g) { return g[0]; });
-      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b translate="no">' + GN[g[0]] + '</b><small>' + g[0] + '</small></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a href="#camp' + (c ? '/' + c : '') + '"' + ' translate="no"' + '>' + CL[k] + '</a>'; } return '<a href="#net/' + k + '">' + S[k][0] + (user.id === 'guest' && GLOCK[k] ? '<small>등록 인원 전용</small>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
+      return '<div class="page net"><section><a class="back" href="#home">뒤로</a><div class="mg"><div class="mgl">' + gs.map(function (g, i) { return '<button class="mgb' + (i ? '' : ' on') + '" data-g="' + i + '"><b>' + g[0] + '</b><small translate="no">' + GN[g[0]] + '</small><p>' + GD[g[0]] + '</p></button>'; }).join('') + '</div><div class="mgr">' + gs.map(function (g, i) { return '<div class="mgp"' + (i ? ' hidden' : '') + ' data-p="' + i + '">' + g[1].map(function (k) { if (CL[k]) { var c = k.slice(2); return '<a class="xc" href="#camp' + (c ? '/' + c : '') + '"><small translate="no">' + CL[k] + '</small><b>' + CK[k] + '</b><span>' + XD[k] + '</span></a>'; } return '<a class="xc' + (FUN[k] ? ' fun' : '') + '" href="#net/' + k + '"><small translate="no">' + (EN[k] || '') + (FUN[k] ? '<i>놀거리</i>' : '') + '</small><b>' + S[k][0] + '</b><span>' + (XD[k] || '') + '</span>' + (user.id === 'guest' && GLOCK[k] ? '<em>등록 인원 전용</em>' : '') + '</a>'; }).join('') + '</div>'; }).join('') + '</div></div></section></div>';
     }
     if (user.id === 'guest' && (GLOCK[cur] || (cur === 'files' && sub))) return '<div class="page net"><section><a class="back" href="#net">뒤로</a><h2 class="en" translate="no">' + EN[cur] + '</h2><p class="sub">' + S[cur][0] + '</p>' + who + '<div class="lock">' + [64, 82, 48, 74, 58].map(function (w) { return '<div class="r"><span><i></i></span><p><i style="width:' + w + '%"></i></p></div>'; }).join('') + '</div><p class="lockm">등록 인원만 열람 가능.</p></section></div>';
     if (cur === 'board' && window.__RPNE) return '<div class="page net rxp"><section><a class="back" href="#net">뒤로</a>' + window.__RPNE.page({ posts: D.posts, inner: T.inner ? T.inner[1] : [], wd: function (k) { return S[k][1](); } }) + '</section></div>';
@@ -402,7 +404,7 @@
           G.map(function (g, gi) { return '<div><div class="gpt' + g[2] + '" translate="no">' + g[0] + '<small>' + g[1] + '</small></div><div class="gpc"><span>외인부대</span><span></span><span>한국군</span></div>' +
             g[3].map(function (r) { return '<div class="gpr"><span><b>' + r[0] + '</b><i translate="no">' + r[1] + '</i></span><span class="eq" aria-hidden="true">=</span><span><b>' + r[2] + '</b>' + (r[3] ? '<small>' + r[3] + '</small>' : '') + '</span></div>'; }).join('') +
             (gi === 1 ? '<p class="gpx">외국인 대원은 마조르까지</p>' : '') + '</div>'; }).join('') +
-          '</div><p class="gpn">장교는 본국 국적자만 될 수 있습니다. 장교와 부사관은 검은 케피, 병은 흰 케피를 씁니다. <a href="persona.html">신병 등록부</a>에서 계급을 골라 페르소나를 만들 수 있습니다.</p></section>';
+          '</div><p class="gpn">장교는 본국 국적자만 될 수 있습니다. 장교와 부사관은 검은 케피, 병은 흰 케피를 씁니다. <a href="#persona">신병 등록부</a>에서 계급을 골라 페르소나를 만들 수 있습니다.</p></section>';
       } },
     meute: { en: 'MEUTE', ko: '특별 편성 조', v: '<i>버리는</i> 조', vs: '뫼트',
       b: ['정규 중대 전출자로 편성. 전출 사유는 여성 문제, 명령 불복종, 사고. 공식 사유 차출, 실질 징계 조치. 복무 종료 조건은 사망 또는 형기 만료.', '전투 능력 최상위, 지휘 통제 불가. 고위험 임무 반복 투입 후 전원 생환. PNE 내 최장기 복무 조.'],
@@ -424,9 +426,9 @@
   V.me0 = function () {
     if (!user) return V.net();
     var c = D.chars.filter(function (x) { return x.id === user.id; })[0];
-    if (!c) return '<div class="page"><h2>내 정보</h2><div class="r"><span>계정</span><p translate="no">' + user.name + '</p></div><div class="r"><span>권한</span><p>손님. 미등록 사용자</p></div></div>';
+    if (!c) return '<div class="page"><h2>업적</h2><div class="r"><span>계정</span><p translate="no">' + user.name + '</p></div><div class="r"><span>권한</span><p>손님. 미등록 사용자</p></div></div>';
     var r = function (a, b) { return '<div class="r"><span>' + a + '</span><p>' + b + '</p></div>'; };
-    return '<div class="page"><h2>내 정보</h2>' + strip(V.people(c.id), true) + '<div class="file mest"><div>' + r('휴가', '잔여 0일') + r('포상', '없음') + r('기록', '말소') + r('최근 접속', '지금 · 통신실 중계기') + r('암호 변경', '미지원') + '</div></div></div>';
+    return '<div class="page"><h2>업적</h2>' + strip(V.people(c.id), true) + '<div class="file mest"><div>' + r('휴가', '잔여 0일') + r('포상', '없음') + r('기록', '말소') + r('최근 접속', '지금 · 통신실 중계기') + r('암호 변경', '미지원') + '</div></div></div>';
   };
   function auth() { var a = $('#auth'); if (a) a.textContent = user ? '로그아웃' : '로그인'; document.documentElement.classList.toggle('clr', !!user && user.id !== 'guest'); }
   auth();

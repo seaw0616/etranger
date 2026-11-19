@@ -1625,3 +1625,59 @@ html.phopen{overflow:hidden}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;scroll-behavior:auto!important}
   *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 }
+
+/* 11-19 친구분 피드백 · 누님 고르심: 단추 위 꺾쇠(가) */
+#lk{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:97;opacity:0;transition:opacity .15s,transform .18s cubic-bezier(.16,1,.3,1),width .18s cubic-bezier(.16,1,.3,1),height .18s cubic-bezier(.16,1,.3,1)}
+#lk.on{opacity:1}
+#lk b{position:absolute;width:9px;height:9px;border:2px solid var(--ac)}
+#lk b:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}#lk b:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}#lk b:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}#lk b:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.menu a:hover,.menu a.aim{color:var(--t1);background-color:rgba(221,157,76,.16)}
+@media (pointer:coarse),(max-width:767px){#lk{display:none}}
+
+/* 11-19 친구분 «가사는 오버레이로» → 누님 고르심: 왼쪽 아래 작은 가사 창(무전 줄 위, 지금 부르는 줄은 그대로 주황 · 가운데로 따라감) */
+#lyrics{top:auto;right:auto;left:24px;bottom:104px;width:400px;height:300px;padding:0 18px 22px;background:rgba(12,13,17,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(230,232,238,.14);border-radius:4px;box-shadow:0 24px 50px -20px rgba(0,0,0,.9)}
+#lyrics .lw{columns:1}
+#lyrics .lyh{top:0;margin:0 -18px 6px;padding:0 12px 0 16px;height:42px;align-items:center;justify-content:space-between;background:#16181d;border-bottom:1px solid rgba(230,232,238,.1)}
+#lyrics .lyh::before{content:'\266A  FRONTLINE \00B7  가사';font:700 13px/1 var(--go);letter-spacing:.06em;color:var(--ac);white-space:pre}
+#lyrics p{font-size:16px}#lyrics span{font-size:13px}
+@media (max-width:820px){#lyrics{top:auto;left:12px;right:12px;width:auto;bottom:64px;height:260px}}
+
+/* 11-19 내부망 탭(누님 «② 탭 넣기»): 한글 제목 크게 · 영어 작게 · 한 줄 설명, 오른쪽은 카드, 놀거리는 점선 딱지 */
+.mgl .mgb{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:4px;align-items:baseline;text-align:left}
+.mgl .mgb b{font:800 clamp(30px,4.2vw,58px)/1.05 var(--go);-webkit-text-stroke:0;color:rgba(238,241,243,.32);letter-spacing:-.01em}
+.mgl .mgb.on b,.mgl .mgb:hover b{color:var(--t1)}
+.mgl .mgb small{font:700 12px/1 var(--st);letter-spacing:.12em;color:var(--ac);opacity:.85}
+.mgl .mgb p{grid-column:1/-1;margin:0;font:500 14px/1.4 var(--go);color:var(--t2)}
+.mgl .mgb:not(.on) p{opacity:.6}
+.mgp{display:flex;flex-direction:column;gap:10px}
+.mgp a.xc{display:flex;flex-direction:column;gap:5px;padding:14px 16px;border:1px solid var(--ln);background:rgba(14,15,19,.78);color:var(--t1);text-decoration:none;min-width:240px}
+.mgp a.xc b{font:800 19px/1.2 var(--go)}.mgp a.xc small{font:700 11px/1 var(--st);letter-spacing:.1em;color:var(--ac)}.mgp a.xc span{font:500 13px/1.4 var(--go);color:var(--t2)}.mgp a.xc em{font:600 12px/1 var(--go);font-style:normal;color:var(--t3)}
+.mgp a.xc.fun{border-style:dashed;background:rgba(14,15,19,.5)}.mgp a.xc.fun b{font-size:16px;color:var(--t2)}
+.mgp a.xc small i{font-style:normal;margin-left:6px;padding:2px 6px;border:1px solid var(--ln);color:var(--t2);font:600 11px/1 var(--go);letter-spacing:0}
+@media (max-width:820px){.mgl .mgb b{font-size:26px}.mgp a.xc{min-width:0}}
+/* 11-19 홈 인원 명부(누님 «가 인원 명부» → «더 예쁘게»): 배너 V 꼴. 청회 서류철 꼬리표 + 빨간 등급 꼬리표 · 테이프 사진 · 말소 도장(올리면 열람) · 주황 경고 띠 */
+.rost{position:fixed;left:clamp(24px,3.9vw,56px);top:86px;z-index:15;width:330px;transform:rotate(-1deg);filter:drop-shadow(0 20px 22px rgba(0,0,0,.55))}
+.rost .rs-t{display:inline-flex;align-items:center;gap:10px;height:30px;margin-left:14px;padding:0 14px;background:#1f2a2d;color:#eef1f3;border-radius:6px 6px 0 0;font:400 13px/1 'Black Ops One',var(--st);letter-spacing:.06em}
+.rost .rs-t i{font-style:normal;background:#a3302a;color:#f3e9d8;font:400 11px/1 'Black Ops One',var(--st);letter-spacing:.12em;padding:4px 7px;transform:rotate(-4deg)}
+.rost .rs-p{background:#e6dfcf url(img/grain.png);background-blend-mode:multiply;border-top:4px solid #c9b48a;padding:12px 16px 12px}
+.rost h3{margin:0 0 4px;padding-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1f2a2d;font:800 18px/1 var(--go);color:#1f2a2d}
+.rost h3 small{font:400 11px/1 'Black Ops One',var(--st);letter-spacing:.1em;color:#8a7c62}
+.rost a{display:grid;grid-template-columns:20px 38px 1fr auto;gap:12px;align-items:center;padding:5px 6px;margin:0 -6px;border-bottom:1px dashed rgba(31,42,45,.28);color:#1f2a2d;text-decoration:none;transition:background .15s}
+.rost .rs-no{font:400 12px/1 'Black Ops One',var(--st);color:#8a7c62}
+.rost .rs-pic{position:relative;display:block;width:38px;height:38px;transform:rotate(-3deg)}
+.rost a:nth-of-type(even) .rs-pic{transform:rotate(2.5deg)}
+.rost .rs-pic img{display:block;width:38px;height:38px;object-fit:cover;object-position:top;border:3px solid #fbf8f1;box-shadow:0 3px 5px rgba(58,42,20,.45);filter:sepia(.22) saturate(.85);transition:filter .15s}
+.rost .rs-pic::before{content:'';position:absolute;left:50%;top:-6px;z-index:1;width:26px;height:9px;transform:translateX(-50%) rotate(-6deg);background:rgba(221,201,150,.85);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.rost .rs-nm b{display:block;font:400 18px/1 'Black Ops One',var(--st);letter-spacing:.04em}
+.rost .rs-nm small{display:block;margin-top:5px;font:600 12px/1 var(--go);color:#5a5244}
+.rost .rs-st s,.rost .rs-st u{display:inline-block;text-decoration:none;font:800 12px/1 var(--go);padding:4px 7px;transform:rotate(-6deg)}
+.rost .rs-st s{border:1.5px solid #a3302a;color:#a3302a;opacity:.8}
+.rost .rs-st u{display:none;background:#a3302a;color:#f3e9d8;transform:none}
+.rost a:hover,.rost a.aim{background:rgba(221,157,76,.18)}
+.rost a:hover .rs-st s,.rost a.aim .rs-st s{display:none}.rost a:hover .rs-st u,.rost a.aim .rs-st u{display:inline-block}
+.rost a:hover .rs-pic img,.rost a.aim .rs-pic img{filter:none}
+.rost .rs-hz{height:7px;margin:10px -16px 0;background:repeating-linear-gradient(-45deg,#dd9d4c 0 9px,#1f2a2d 9px 18px)}
+.rost p{display:none}.rost p u{text-decoration:none;color:#a3302a}
+@media (max-height:780px) and (min-width:821px){.rost{top:78px;width:290px}.rost .rs-p{padding:8px 14px 8px}.rost h3{padding-bottom:6px;font-size:16px}.rost a{padding:3px 6px;grid-template-columns:20px 30px 1fr auto}.rost .rs-pic,.rost .rs-pic img{width:30px;height:30px}.rost .rs-pic img{border-width:2px}.rost .rs-nm b{font-size:15px}.rost .rs-nm small{margin-top:3px}.rost .rs-hz,.rost p,.rost h3{display:none}}
+@media (max-width:820px){.rost{left:14px;top:110px;width:184px}.rost .rs-t{height:24px;font-size:11px;margin-left:8px;padding:0 9px}.rost .rs-t i{font-size:9px;padding:3px 5px}.rost .rs-p{padding:8px 10px}.rost h3{font-size:14px}.rost h3 small,.rost .rs-no,.rost .rs-nm small,.rost .rs-st,.rost p{display:none}.rost a{grid-template-columns:34px 1fr;gap:9px;padding:5px 4px;margin:0 -4px}.rost .rs-pic,.rost .rs-pic img{width:34px;height:34px}.rost .rs-pic img{border-width:2px}.rost .rs-nm b{font-size:13px}.rost .rs-hz{margin:8px -10px 0;height:5px}}
+html.pers #radio,html.pers .mq{display:none}

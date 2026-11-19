@@ -168,6 +168,8 @@ body.off .ftab button.on{box-shadow:inset 0 3px 0 #b8954a}
 @media (max-width:980px){.sheet{padding:30px 22px 28px}.hd h1{font-size:38px}.slip{margin:22px 0 0}}
 @media (max-width:440px){.f,.ck{grid-template-columns:1fr}.f .w{grid-column:auto}.ph{grid-template-columns:100px 1fr}.up{width:100px;height:130px}.hd{flex-direction:column;align-items:flex-start}.hd .no{text-align:left}}
 @media (prefers-reduced-motion:reduce){.btn:active{transform:none}.btn{transition:none}}
+
+html.inapp body>header{display:none!important}
 </style></head><body>
 <header><div class="wrap"><a class="logo" href="index.html" translate="no">ÉTRANGER<span> : FRONTLINE</span></a><a class="home" href="index.html">홈페이지로</a></div></header>
 <main class="wrap"><div class="desk">
@@ -237,6 +239,9 @@ body.off .ftab button.on{box-shadow:inset 0 3px 0 #b8954a}
  <p class="rkn"><span class="only-r">장교(소위 이상)는 본국 국적자만 될 수 있어서, 외국인 대원은 마조르까지 오릅니다.</span><span class="only-o">외인부대 장교는 본국 국적자만 될 수 있습니다.</span> 줄을 누르면 그 계급으로 정해집니다.</p>
 </div></dialog>
 <script>
+// 11-19 사이트 안 탭으로 붙임: 혼자 열리면 사이트 안 탭(#persona)으로 옮기고, 안에서는 자기 위 띠를 숨기고 홈 링크는 사이트 쪽을 움직인다
+if (window.top === window.self) { location.replace('index.html#persona'); } else { document.documentElement.classList.add('inapp'); document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="index.html"]'); if (!a) return; e.preventDefault(); window.top.location.hash = a.getAttribute('href').split('#')[1] || 'home'; }); }
+
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 /* 한글 글꼴은 여기 한 곳. 굵기마다 따로 불러야 없는 굵기 때문에 통째로 실패하지 않는다 */
 const KF = new URLSearchParams(location.search).get('kf') || 'Noto Serif KR'; // 11-13 누님이 A·B·C 비교본에서 B 고르심

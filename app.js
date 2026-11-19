@@ -25,8 +25,9 @@
     $('#bars').innerHTML = STEP.map(function (s, i) { var v = Math.max(0, Math.min(1, p * 4 - i)); return '<div><span>' + s + '</span><i style="width:' + v * 100 + '%"></i></div>'; }).join('');
   }
   function bootStep() {
-    tick++; code(2); var p = tick / 75; panel(p);
-    if (p >= 1) { clearInterval(timer); booted = true; $('#granted').hidden = false; }
+    // 11-19 친구분 «사이트 먼가 말소됨 하고 꺼지는데» → 누님 «줄이고 자동으로 넘김»: 5초 남짓 → 3.5초, 접속 화면은 1초 보인 뒤 저절로 들어간다(단추를 먼저 눌러도 됨)
+    tick++; code(2); var p = tick / 50; panel(p);
+    if (p >= 1) { clearInterval(timer); booted = true; $('#granted').hidden = false; setTimeout(enter, 1000); }
   }
   timer = setInterval(bootStep, 70);
   addEventListener('keydown', function () { if (!booted && !$('#boot').hidden) { code(6); tick += 2; } });
@@ -34,16 +35,28 @@
   // 11-13 누님 «여기서 홈페이지로 가면 다시 터미널 뜨는데 이거 번거로워»: 이 탭에서 한 번 접속했으면(신병 등록부에서 돌아올 때 등) 터미널 연출을 건너뛴다. 탭을 닫았다 새로 열면 다시 나온다
   var seen = false;
   try { seen = sessionStorage.getItem('etr-entered') === '1'; } catch (e) { seen = false; /* 저장소가 막힌 브라우저는 예전처럼 터미널부터 보여 준다 */ }
+  var entered = false;
   function enter() {
+    if (entered) return; entered = true; // 저절로 들어가기와 단추 누르기가 겹쳐도 한 번만
     try { sessionStorage.setItem('etr-entered', '1'); } catch (e) { /* 저장소가 막혀도 접속은 그대로 진행. 다음 방문에 터미널이 다시 나올 뿐 */ }
     $('#boot').hidden = true; $('#app').hidden = false;
     setV();
-    audio.play().then(function () { root.classList.add('playing'); }).catch(function () {});
+    // 저절로 들어가면 브라우저가 소리를 막는다 → 막히면 화면을 처음 누르거나 키를 칠 때 튼다. 그 누름이 재생 단추였으면 단추 쪽이 이미 틀었으니 건드리지 않는다
+    audio.play().then(function () { root.classList.add('playing'); }).catch(function () {
+      var once = function () { removeEventListener('pointerdown', once, true); removeEventListener('keydown', once, true); setTimeout(function () { if (audio.paused && !root.classList.contains('playing')) audio.play().then(function () { root.classList.add('playing'); }).catch(function () { /* 그래도 막히면 재생 단추로 틀 수 있음 */ }); }, 0); };
+      addEventListener('pointerdown', once, true); addEventListener('keydown', once, true);
+    });
     wsz(); route(); radio();
     if (new Date().getHours() < 5) E('night');
     // 11-17 누님 «PC로 들어갓는데 업적달성안됨»: 창 너비는 배율 · 창 크기에 따라 1024보다 작아지므로 마우스가 있고 폰 · 태블릿이 아닌지로 본다
+    // 11-19 누님 «모바일로했는데 왜 pc접속 업적이 되냐»: 화면 성질(pointer · hover)은 폰이 «마우스 있음»으로 잘못 알리기도 하고(펜 달린 폰 · 데스크톱 모드), 데스크톱 모드는 기기 이름에서 Android 를 지운다.
+    // 그래서 성질로 미리 정하지 않고, 접속 뒤 실제 마우스가 움직인 것(pointerType mouse)을 본 때에만 준다. 손가락이 먼저 닿으면 폰으로 보고 끝낸다.
     var mob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (window.matchMedia && matchMedia('(pointer:fine) and (hover:hover)').matches && !mob) E('pc');
+    if (!mob && window.PointerEvent) {
+      var pcStop = function () { removeEventListener('pointermove', pcMove); removeEventListener('pointerdown', pcMove); removeEventListener('touchstart', pcStop); };
+      var pcMove = function (ev) { if (ev.pointerType === 'mouse') { pcStop(); E('pc'); } else if (ev.pointerType === 'touch' || ev.pointerType === 'pen') pcStop(); };
+      addEventListener('pointermove', pcMove); addEventListener('pointerdown', pcMove); addEventListener('touchstart', pcStop, { passive: true });
+    }
     setTimeout(function () { E('stay10'); }, 6e5); setTimeout(function () { E('stay30'); }, 18e5);
   }
   $('#enter').addEventListener('click', enter);
@@ -254,9 +267,13 @@
         '<svg class="slant" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><polygon points="1010,0 1440,0 1440,900 830,900" fill="#15181e" fill-opacity=".85"/></svg>' +
         '<div class="big" data-d="34" data-m="-1" data-k=".07" data-r="7"><div class="g1" translate="no">ÉTRANGER</div><div class="g2" translate="no">ÉTRANGER</div></div>' +
         '<div class="layer" data-d="46" data-m=".6" data-v=".35" data-k=".16" data-s="1.04" style="background-image:url(' + bgPick('front') + ')"></div>' +
-        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1></div>';
+        '<h1 class="title" data-d="30" data-m=".7" data-k=".045"><span class="t1">군단만이</span><b>조국이다</b><span class="t2"><u>이름이</u><s>지워진</s></span><span class="t3"><em>사냥개들</em>의 전선</span></h1></div>' +
+        // 11-19 친구분 «인물 프로필이 4뎁스 · 첫 페이지에 중요 정보를» → 누님 고르심 «가 인원 명부»: 시선이 처음 닿는 왼쪽 위에 두고, 이름을 누르면 바로 프로필
+        '<nav class="rost" aria-label="대원 파일"><div class="rs-t"><span translate="no">PNE MEUTE</span><i translate="no">SECRET</i></div><div class="rs-p"><h3>인원 명부<small translate="no">DOSSIER · 04</small></h3>' + D.chars.map(function (c, n) { return '<a href="#net/files/' + c.id + '"><span class="rs-no" translate="no">0' + (n + 1) + '</span><span class="rs-pic"><img src="img/' + c.id + '.webp" alt="" loading="lazy"></span><span class="rs-nm"><b translate="no">' + c.name + '</b><small>' + (c.rows && c.rows[1] ? c.rows[1][1] : '') + '</small></span><span class="rs-st"><s>말소</s><u>열람 ▶</u></span></a>'; }).join('') + '<div class="rs-hz"></div><p>이름을 누르면 <u>신상 파일 열람</u></p></div></nav>';
     }
   };
+  // 11-19 친구분 «신병 등록부 사이트에 붙여서 bgm 안끊기게 + 헤더 상단 통일» → 누님 «조아요»: 신병 등록부를 사이트 안 탭(#persona)으로 띄워 위 띠 · 음악을 그대로 둔다
+  V.persona = function () { var h = document.querySelector('header.top'), t = h ? Math.round(h.getBoundingClientRect().bottom) : 72; return '<iframe class="pfr" src="persona.html" title="신병 등록부" style="position:fixed;left:0;right:0;top:' + t + 'px;bottom:auto;width:100%;max-width:none;height:calc(100% - ' + t + 'px);margin:0;border:0;border-radius:0;transform:none;z-index:19;background:#0c0d10"></iframe>'; };
   function closeLy() { if (!$('#lyrics').hidden) ly(); }
   function route() {
     closeLy();
@@ -267,6 +284,7 @@
     if (first) draw(); else setTimeout(draw, 340);
     if (!first && window.__onroute) window.__onroute(id, p);
     root.classList.toggle('inner', id !== 'home');
+    root.classList.toggle('pers', id === 'persona'); // 신병 등록부를 볼 때는 아래 무전 줄 · 글자 띠가 등록부 단추를 덮지 않게 숨김
     var links = [].slice.call(document.querySelectorAll('.menu a:not(#auth)')), exact = links.some(function (a) { return location.hash.indexOf(a.getAttribute('href')) === 0 && a.getAttribute('href') !== '#net'; }); links.forEach(function (a) { var f = a.getAttribute('href'); a.classList.toggle('on', f === '#net' ? (id === 'net' && !exact) : location.hash.indexOf(f) === 0); });
   }
   addEventListener('hashchange', route);
@@ -294,7 +312,19 @@
     if (h !== assist) { if (assist) assist.classList.remove('aim'); assist = h; if (h) h.classList.add('aim'); }
     root.classList.toggle('c-txt', !!h && h.matches('input:not([type=range]),textarea'));
     root.classList.toggle('c-hot', !!h && !h.matches('input:not([type=range]),textarea'));
+    lockTo(h && !h.matches('input,textarea') ? h : null);
   }
+  // 11-19 친구분 «마우스 오버 피드백이 너무 약해» → 누님 고르심(가): 누를 수 있는 곳에 올리면 주황 꺾쇠 넷이 그 단추를 감싸고, 누르는 동안 조여든다. 커서는 글자를 안 가리는 작은 주황 고리(img/cur-hot.svg)
+  var lk = null;
+  function lockTo(h) {
+    if (!lk) { lk = document.createElement('div'); lk.id = 'lk'; lk.setAttribute('aria-hidden', 'true'); lk.innerHTML = '<b></b><b></b><b></b><b></b>'; document.body.appendChild(lk); }
+    if (!h) { lk.classList.remove('on'); return; }
+    var r = h.getBoundingClientRect(), q = root.classList.contains('c-down') ? 3 : 7;
+    lk.style.transform = 'translate(' + (r.left - q) + 'px,' + (r.top - q) + 'px)'; lk.style.width = (r.width + q * 2) + 'px'; lk.style.height = (r.height + q * 2) + 'px'; lk.classList.add('on');
+  }
+  addEventListener('scroll', function () { if (lk) lk.classList.remove('on'); }, { passive: true });
+  addEventListener('mousedown', function () { setTimeout(function () { if (assist) lockTo(assist); }, 0); });
+  addEventListener('mouseup', function () { setTimeout(function () { if (assist) lockTo(assist); }, 0); });
   // 자동 조준은 0.09초에 한 번만(11-17 렉: 매 장면 9곳 검사가 전체 시간의 17%), 폰에서는 끔
   var aq = 0, ax = 0, ay = 0, aT = 0; addEventListener('mousemove', function (e) { ax = e.clientX; ay = e.clientY; if (lite || aq) return; var nw = performance.now(); if (nw - aT < 90) { aq = 1; setTimeout(function () { aq = 0; aT = performance.now(); if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); }, 90 - (nw - aT)); return; } aT = nw; if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); });
   document.addEventListener('click', function (e) {
