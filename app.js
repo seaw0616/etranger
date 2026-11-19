@@ -41,7 +41,9 @@
     audio.play().then(function () { root.classList.add('playing'); }).catch(function () {});
     wsz(); route(); radio();
     if (new Date().getHours() < 5) E('night');
-    if (window.matchMedia && matchMedia('(pointer:fine)').matches && innerWidth >= 1024) E('pc');
+    // 11-17 누님 «PC로 들어갓는데 업적달성안됨»: 창 너비는 배율 · 창 크기에 따라 1024보다 작아지므로 마우스가 있고 폰 · 태블릿이 아닌지로 본다
+    var mob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (window.matchMedia && matchMedia('(pointer:fine) and (hover:hover)').matches && !mob) E('pc');
     setTimeout(function () { E('stay10'); }, 6e5); setTimeout(function () { E('stay30'); }, 18e5);
   }
   $('#enter').addEventListener('click', enter);
@@ -101,7 +103,8 @@
   })();
   window.__rq = RQ;
   var FQ = { PHANTOM: .7, DARLING: 1.4, CHASE: 1, HYDE: .5 }, said = {};
-  function E(k) { if (window.__egg) window.__egg(k); }
+  // 재방문(터미널 건너뜀) 때는 업적 장치(views.js)가 뜨기 전에 불릴 수 있다. 그때는 줄 세워 두었다가 장치가 뜨면 준다
+  function E(k) { if (window.__egg) window.__egg(k); else (window.__eggQ = window.__eggQ || []).push(k); }
   var ri = 0, actx, out, wet, bedG;
   // 소리: ui-sound-design 규칙(컨텍스트 하나, 0.001까지 감쇠, 시작값 먼저 지정, 끝난 노드 해제)
   function ac() {
@@ -331,7 +334,8 @@
     }
   });
   addEventListener('mouseup', function () { root.classList.remove('c-down'); });
-  var lite = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || innerWidth < 768;
+  // 폰 · 태블릿만 가볍게(커서 · 효과 끔). 창 너비로 가르면 좁힌 PC 창도 폰으로 잡혀서 뺐다
+  var lite = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   /* 11-17 누님 «모바일은 커서없애고 애니메이션효과 많이덜고»: 폰에서는 누를 때 효과 · 꼬리 · 저절로 도는 움직임 · 물결 흐름을 끔. 움직임 줄이기 설정을 켠 PC 도 같게 */
   var reduce = lite || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   function drawFx(n) {

@@ -50,13 +50,14 @@
   var fails = {};
   var nm = function (t) { return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC').trim().toLowerCase(); };
   var ACH = [['login', '신원 도용', '다른 사람 계정으로 로그인'], ['all4', '네 명 전부', '네 계정 모두 로그인'], ['cat', '짬타이거', '투투를 찾는다'], ['sebby', '거기까지 해라', '건드리면 안 되는 이름'], ['pasta', '파스타 참사', '식단을 잘 본다'], ['admin', '없는 부대', '관리자로 들어가 본다'], ['lyric', '수신 기록', '가사를 연다'], ['menu', '내부 사정', '내부망 메뉴를 전부 열람'],
-    ['camp', '여기 오는 길', '캠프 시문을 찾는다'], ['campall', '현장 답사', '캠프 시문을 전부 둘러본다'], ['logo', '원점 복귀', '로고를 눌러 돌아온다'], ['f_phantom', '서류상 사망자', '팬텀의 파일을 연다'], ['f_darling', '입만 다정한', '달링의 파일을 연다'], ['f_chase', '여우 굴', '체이스의 파일을 연다'], ['f_hyde', '열지 말았어야', '하이드의 파일을 연다'], ['redact', '먹칠', '가려진 글자를 본다'], ['redact5', '검열 무력화', '가려진 글자를 다섯 군데 본다'], ['guest', '미등록 사용자', '손님으로 접속한다'], ['logout', '흔적 지우기', '로그아웃한다'], ['fail5', '다섯 번의 실패', '암호를 다섯 번 틀린다'], ['clue4', '수사 일지', '네 사람의 단서를 모두 본다'], ['first', '단번에', '틀리지 않고 로그인한다'],
+    ['camp', '여기 오는 길', '캠프 시문을 찾는다'], ['campall', '현장 답사', '캠프 시문을 전부 둘러본다'], ['logo', '원점 복귀', '로고를 눌러 돌아온다'], ['f_phantom', '서류상 사망자', '팬텀의 파일을 연다'], ['f_darling', '입만 다정한', '달링의 파일을 연다'], ['f_chase', '토끼 굴', '체이스의 파일을 연다'], ['f_hyde', '열지 말았어야', '하이드의 파일을 연다'], ['redact', '먹칠', '가려진 글자를 본다'], ['redact5', '검열 무력화', '가려진 글자를 다섯 군데 본다'], ['guest', '미등록 사용자', '손님으로 접속한다'], ['logout', '흔적 지우기', '로그아웃한다'], ['fail5', '다섯 번의 실패', '암호를 다섯 번 틀린다'], ['clue4', '수사 일지', '네 사람의 단서를 모두 본다'], ['first', '단번에', '틀리지 않고 로그인한다'],
     ['term', '첫 명령', '터미널에 명령을 친다'], ['whoami', '자기 확인', '터미널에게 누구냐고 묻는다'], ['ls', '서랍 뒤지기', '터미널의 파일 목록을 본다'], ['rosterf', '말소 명단', '터미널에서 명단을 연다'], ['sudo', '권한 없음', '터미널에서 권한을 요구한다'], ['clear', '증거 인멸', '터미널 기록을 지운다'], ['badcmd', '타자 미숙', '없는 명령을 세 번 친다'],
     ['pause', '작전 중 정숙', '음악을 끈다'], ['loop', '한 곡 더', '노래를 끝까지 듣는다'], ['lyric5', '애창곡', '가사를 다섯 번 연다'], ['radio10', '귀 기울이기', '무전을 열 줄 듣는다'], ['cipher', '감청', '암호 무전을 듣는다'], ['radioall', '교신 종료', '무전을 끝까지 듣는다'], ['stay10', '10분 잔류', '10분 동안 머문다'], ['stay30', '30분 복무', '30분 동안 머문다'], ['click100', '손가락 혹사', '백 번 클릭한다'], ['night', '야간 근무', '자정부터 새벽 다섯 시 사이에 접속한다'], ['pc', '통신실 모니터', 'PC로 접속한다'], ['shard4', '네 조각', '대원 네 명의 메일에서 서랍 이름 조각을 모은다'], ['zero', '0번 서랍', '터미널에서 숨은 파일을 연다'], ['root', '없는 부대의 주인', '관리자로 접속한다'], ['album', '기밀 사진첩', '네 사람의 서류철 사진을 전부 크게 본다'], ['bare', '맨얼굴', '낙서 없는 과거 사진을 본다'], ['eaves', '엿듣기', '1:1 대화방 여섯 개를 전부 연다'], ['private4', '사적인 연락', '네 사람의 개인 대화방을 하나씩 연다'], ['fullpow', '전권', '관리자로 네 사람의 파일을 전부 연다'], ['forensic', '감식', '흉터 증거 사진 두 장을 크게 본다'], ['unredact', '말소 해제', '같은 과거 사진을 낙서 있는 채로도, 낙서 없이도 본다'], ['all', '전원 귀환', '다른 업적을 전부 달성한다']];
   try { eggs = JSON.parse(localStorage.getItem('etr-ach')) || {}; } catch (e) {}
   var logs = {}, visited = {};
   function egg(k) { if (eggs[k] || !ACH.some(function (x) { return x[0] === k; })) return; eggs[k] = 1; try { localStorage.setItem('etr-ach', JSON.stringify(eggs)); } catch (e) {} var a = ACH.filter(function (x) { return x[0] === k; })[0]; toast(a ? a[1] : k, a ? a[2] : ''); if (window.__sayA) window.__sayA(k); if (k !== 'all' && Object.keys(eggs).length >= ACH.length - 1) egg('all'); }
   window.__egg = egg;
+  setTimeout(function () { (window.__eggQ || []).splice(0).forEach(egg); }, 0);
   var CNT = {}; try { CNT = JSON.parse(localStorage.getItem('etr-cnt')) || {}; } catch (e) {}
   function sv() { try { localStorage.setItem('etr-cnt', JSON.stringify(CNT)); } catch (e) {} }
   function cnt(k, n, a) { CNT[k] = (CNT[k] || 0) + 1; sv(); if (CNT[k] >= n) egg(a); }
@@ -410,7 +411,7 @@
     map: { en: 'FACILITY', ko: '시설 안내', v: '공식 지도에 <i>없음</i>', vs: '캠프 시문 배치',
       b: ['인근 마을에 오아시스 및 국경 시장 소재. 무장세력 영향권. 일몰 후 시장 폐쇄.'],
       f: [['막사', '컨테이너'], ['무기고 · 정비고', '출입 기록 필수'], ['의무대', '진통제 재고 부족'], ['취사장', '천막'], ['통신실', '외부 접속 감지 중'], ['초소', '근무표 참조'], ['지휘소', '인가자 외 출입 금지'], ['영창', '상습 입실자 DARLING 지정석']], two: 1,
-      top: '<figure class="cmw"><img class="cmap" src="bg/map.webp" alt="캠프 시문 전경" onerror="this.parentNode.remove()">' + PINS.map(function (q, n) { return '<div class="pin' + (q[4] ? ' l' : '') + '" style="left:' + q[0] + '%;top:' + q[1] + '%;animation-delay:' + (420 + n * 45) + 'ms"><i></i><u></u><span><b translate="no">' + q[2] + '</b><small>' + q[3] + '</small></span></div>'; }).join('') + '</figure>' }
+      top: '<figure class="cmw"><img class="cmap" src="bg/map.webp" alt="캠프 시문 전경" onerror="this.parentNode.remove()">' + PINS.map(function (q, n) { return '<div class="pin' + (q[4] ? ' l' : '') + '" style="left:' + q[0] + '%;top:' + q[1] + '%;animation-delay:' + (420 + n * 45) + 'ms"><i></i><u></u><em>' + (n + 1) + '</em><span><b translate="no">' + q[2] + '</b><small>' + q[3] + '</small></span></div>'; }).join('') + '</figure><ol class="cmleg">' + PINS.map(function (q) { return '<li><small>' + q[3] + '</small><b translate="no">' + q[2] + '</b></li>'; }).join('') + '</ol>' }
   };
   var CDOC = {};
   V.camp = function (sec) {
