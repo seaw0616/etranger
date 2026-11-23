@@ -311,7 +311,7 @@
     });
     return '<header class="pah rm"><button class="pbk" data-pb="1" aria-label="대화방 목록">' + SVGB + '</button>' + i.av + '<div><b translate="no">' + i.n + '</b><span>' + i.s + '</span></div></header><div class="pmb" id="pmb">' + h + '</div><div class="pin2"><span>감청 전용 · 송신 불가</span></div>';
   }
-  function phDraw() { var a = document.getElementById('papp'); if (!a) return; a.innerHTML = PHV.room ? phRoom(PHV.room) : phList(); var b = document.getElementById('pmb'); if (b) b.scrollTop = b.scrollHeight; }
+  function phDraw() { var a = document.getElementById('papp'); if (!a) return; a.innerHTML = PHV.room ? phRoom(PHV.room) : phList(); var b = document.getElementById('pmb'); if (b) b.scrollTop = 0; }
   function phOpen() {
     if (document.getElementById('phv')) return; PHV.room = null;
     var v = document.createElement('div'); v.id = 'phv'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-label', phOwner().name + ' 압수 단말');
