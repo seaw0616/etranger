@@ -320,6 +320,9 @@
     if (!lk) { lk = document.createElement('div'); lk.id = 'lk'; lk.setAttribute('aria-hidden', 'true'); lk.innerHTML = '<b></b><b></b><b></b><b></b>'; document.body.appendChild(lk); }
     if (!h) { lk.classList.remove('on'); return; }
     var r = h.getBoundingClientRect(), q = root.classList.contains('c-down') ? 3 : 7;
+    // 11-25 누님 «이런건 왜이렇게 길게 해놨어? 비슷하게 허술하게 해놓은거 다고쳐»: 칸(요소)이 글자보다 훨씬 넓으면(격자 칸에 늘어난 로고 등) 꺾쇠는 보이는 글자 · 그림만 감싼다
+    var g = document.createRange(); g.selectNodeContents(h); var c = g.getBoundingClientRect();
+    if (c.width > 0 && c.height > 0 && (c.width < r.width - 16 || c.height < r.height - 16)) r = { left: Math.max(r.left, c.left), top: Math.max(r.top, c.top), width: Math.min(r.right, c.right) - Math.max(r.left, c.left), height: Math.min(r.bottom, c.bottom) - Math.max(r.top, c.top) };
     lk.style.transform = 'translate(' + (r.left - q) + 'px,' + (r.top - q) + 'px)'; lk.style.width = (r.width + q * 2) + 'px'; lk.style.height = (r.height + q * 2) + 'px'; lk.classList.add('on');
   }
   addEventListener('scroll', function () { if (lk) lk.classList.remove('on'); }, { passive: true });
@@ -331,7 +334,8 @@
     if (aimBusy || !assist || !e.isTrusted || !assist.isConnected) return;
     var t = e.target; if (t.closest && t.closest(SEL)) return;
     e.stopPropagation(); e.preventDefault(); aimBusy = true;
-    if (assist.matches('input,textarea')) assist.focus(); else assist.click();
+    // 11-25 누님 «검열부분 … 네모 안쪽에 정확히 마우스가야 벗겨지고 외곽이나 조금만 바깥으로 가면 안벗겨짐»: 꺾쇠가 잡은 칸은 바깥을 눌러도 그 칸을 누른 것과 같게(먹칠처럼 포커스로 열리는 칸은 포커스까지 줌)
+    if (assist.matches('input,textarea')) assist.focus(); else { if (assist.hasAttribute('tabindex')) assist.focus(); assist.click(); }
     aimBusy = false;
   }, true);
   addEventListener('mousedown', function () { root.classList.add('c-down'); });

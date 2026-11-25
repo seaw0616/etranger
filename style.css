@@ -23,7 +23,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 /* 위쪽 */
 .top{position:fixed;left:0;right:0;top:0;height:72px;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 clamp(16px,4vw,60px)}
-.logo{font:900 24px var(--st);letter-spacing:.04em;white-space:nowrap}
+.logo{font:900 24px var(--st);letter-spacing:.04em;white-space:nowrap;justify-self:start}
 .logo span{font-size:14px;letter-spacing:.2em;color:var(--t3)}
 .player{display:flex;align-items:center;gap:14px}
 #pp{width:28px;height:28px;display:flex;align-items:center;justify-content:center;fill:var(--t1)}
