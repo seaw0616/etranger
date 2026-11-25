@@ -301,12 +301,16 @@
   addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; last = performance.now(); cur.style.transform = 'translate(' + mx + 'px,' + my + 'px)'; root.classList.remove('c-off'); });
   root.addEventListener('mouseleave', function () { root.classList.add('c-off'); });
   var SEL = 'a,button,.rd,[onclick],input,textarea,.mr,.rlt,.mgb', assist = null, aimBusy = false;
-  function pick(x, y) { var d = document.elementFromPoint(x, y), h = d && d.closest ? d.closest(SEL) : null; return h && !h.disabled ? h : null; }
-  function findAim(x, y) {
-    var h = pick(x, y); if (h) return h;
-    for (var i = 0; i < 8; i += 2) { h = pick(x + Math.cos(i * .785) * 14, y + Math.sin(i * .785) * 14); if (h) return h; }
+  // 11-25 누님 «비슷한거 다 고치라고»: 눌리는(손가락 커서) 칸인데 목록에 없어 꺾쇠 · 바깥 누름이 안 되던 칸(r/PNE 카드 · 단말 단추 · 관계도 번호)도 똑같이 잡는다
+  function hot(d) { for (var e = d, i = 0; e && e !== document.body && i < 5; e = e.parentElement, i++) if (getComputedStyle(e).cursor === 'pointer') return e; return null; }
+  function pick(x, y) { var d = document.elementFromPoint(x, y), h = d && d.closest ? (d.closest(SEL) || hot(d)) : null; return h && !h.disabled ? h : null; }
+  function findAim(x, y, R) {
+    var h = pick(x, y); if (h) return h; R = R || 14;
+    for (var i = 0; i < 8; i += 2) { h = pick(x + Math.cos(i * .785) * R, y + Math.sin(i * .785) * R); if (h) return h; }
     return null;
   }
+  // 꺾쇠가 잡은 칸 · 손가락이 닿은 가까운 칸을 «그 칸을 직접 누른 것»과 똑같이 누름(먹칠처럼 포커스로 열리는 칸은 포커스까지)
+  function fire(n) { if (n.matches('input,textarea')) n.focus(); else { if (n.hasAttribute('tabindex')) n.focus(); n.click(); } }
   function aim(x, y) {
     var h = findAim(x, y);
     if (h !== assist) { if (assist) assist.classList.remove('aim'); assist = h; if (h) h.classList.add('aim'); }
@@ -321,8 +325,10 @@
     if (!h) { lk.classList.remove('on'); return; }
     var r = h.getBoundingClientRect(), q = root.classList.contains('c-down') ? 3 : 7;
     // 11-25 누님 «이런건 왜이렇게 길게 해놨어? 비슷하게 허술하게 해놓은거 다고쳐»: 칸(요소)이 글자보다 훨씬 넓으면(격자 칸에 늘어난 로고 등) 꺾쇠는 보이는 글자 · 그림만 감싼다
-    var g = document.createRange(); g.selectNodeContents(h); var c = g.getBoundingClientRect();
-    if (c.width > 0 && c.height > 0 && (c.width < r.width - 16 || c.height < r.height - 16)) r = { left: Math.max(r.left, c.left), top: Math.max(r.top, c.top), width: Math.min(r.right, c.right) - Math.max(r.left, c.left), height: Math.min(r.bottom, c.bottom) - Math.max(r.top, c.top) };
+    var g = document.createRange(); g.selectNodeContents(h); var c = g.getBoundingClientRect(), cs = getComputedStyle(h);
+    // 바탕 · 테두리가 보이는 단추(관계도 칸 등)는 그 단추 모양을 감싸고, 칸이 안 보이는 링크만 글자를 감싼다
+    var bare = cs.backgroundImage === 'none' && (cs.backgroundColor === 'transparent' || /,\s*0\)$/.test(cs.backgroundColor)) && !parseFloat(cs.borderTopWidth) && !parseFloat(cs.borderLeftWidth);
+    if (bare && c.width > 0 && c.height > 0 && (c.width < r.width - 16 || c.height < r.height - 16)) r = { left: Math.max(r.left, c.left), top: Math.max(r.top, c.top), width: Math.min(r.right, c.right) - Math.max(r.left, c.left), height: Math.min(r.bottom, c.bottom) - Math.max(r.top, c.top) };
     lk.style.transform = 'translate(' + (r.left - q) + 'px,' + (r.top - q) + 'px)'; lk.style.width = (r.width + q * 2) + 'px'; lk.style.height = (r.height + q * 2) + 'px'; lk.classList.add('on');
   }
   addEventListener('scroll', function () { if (lk) lk.classList.remove('on'); }, { passive: true });
@@ -331,11 +337,13 @@
   // 자동 조준은 0.09초에 한 번만(11-17 렉: 매 장면 9곳 검사가 전체 시간의 17%), 폰에서는 끔
   var aq = 0, ax = 0, ay = 0, aT = 0; addEventListener('mousemove', function (e) { ax = e.clientX; ay = e.clientY; if (lite || aq) return; var nw = performance.now(); if (nw - aT < 90) { aq = 1; setTimeout(function () { aq = 0; aT = performance.now(); if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); }, 90 - (nw - aT)); return; } aT = nw; if (Math.abs(ax - aim.x) + Math.abs(ay - aim.y) < 6) return; aim.x = ax; aim.y = ay; aim(ax, ay); });
   document.addEventListener('click', function (e) {
-    if (aimBusy || !assist || !e.isTrusted || !assist.isConnected) return;
-    var t = e.target; if (t.closest && t.closest(SEL)) return;
+    if (aimBusy || !e.isTrusted) return;
+    var t = e.target; if (t.closest && (t.closest(SEL) || hot(t))) return;
+    // 11-25 누님 «검열부분 … 네모 안쪽에 정확히 마우스가야 벗겨지고 외곽이나 조금만 바깥으로 가면 안벗겨짐», «이것도 비슷한거 다 고치라고»:
+    // PC 는 꺾쇠가 잡은 칸, 폰(꺾쇠 없음)은 손가락 둘레 20px 안의 가장 가까운 칸을 누른 것으로 친다(작은 링크 · 먹칠 줄 · 뒤로 단추 모두)
+    var n = lite ? findAim(e.clientX, e.clientY, 20) : assist; if (!n || !n.isConnected) return;
     e.stopPropagation(); e.preventDefault(); aimBusy = true;
-    // 11-25 누님 «검열부분 … 네모 안쪽에 정확히 마우스가야 벗겨지고 외곽이나 조금만 바깥으로 가면 안벗겨짐»: 꺾쇠가 잡은 칸은 바깥을 눌러도 그 칸을 누른 것과 같게(먹칠처럼 포커스로 열리는 칸은 포커스까지 줌)
-    if (assist.matches('input,textarea')) assist.focus(); else { if (assist.hasAttribute('tabindex')) assist.focus(); assist.click(); }
+    fire(n);
     aimBusy = false;
   }, true);
   addEventListener('mousedown', function () { root.classList.add('c-down'); });
