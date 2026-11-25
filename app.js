@@ -35,6 +35,8 @@
   // 11-13 누님 «여기서 홈페이지로 가면 다시 터미널 뜨는데 이거 번거로워»: 이 탭에서 한 번 접속했으면(신병 등록부에서 돌아올 때 등) 터미널 연출을 건너뛴다. 탭을 닫았다 새로 열면 다시 나온다
   var seen = false;
   try { seen = sessionStorage.getItem('etr-entered') === '1'; } catch (e) { seen = false; /* 저장소가 막힌 브라우저는 예전처럼 터미널부터 보여 준다 */ }
+  // 11-25 누님 «#persona ->이주소로 접속하면 해킹화면 안나오게»: 크랙 배너에서 신병 등록부로 바로 오는 주소는 터미널 연출 없이 바로 연다
+  if (/^#persona/.test(location.hash)) seen = true;
   var entered = false;
   function enter() {
     if (entered) return; entered = true; // 저절로 들어가기와 단추 누르기가 겹쳐도 한 번만
